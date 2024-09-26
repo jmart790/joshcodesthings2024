@@ -1,6 +1,12 @@
 # joshcodesthings2024
 3rd or 4th attempt to create a new Portfolio Project. This time inspired by megamanx because I can't escape my inner nerd. :)
 
+## POC only desktop currently
+![home page](public/homepage.png)
+![select stage page](public/selectscreen1.png)
+![select stage 2 page](public/selectscreen2.png)
+![history page](public/historyscreenshot.png)
+
 ## Nuxt 3 Minimal Starter
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
