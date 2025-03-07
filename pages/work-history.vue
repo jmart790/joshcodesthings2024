@@ -25,6 +25,7 @@
       </template>
     </section>
     <div class="buttons">
+      <button @click="$router.back()">< Home</button>
       <button :disabled="activeIndex === 0" @click="prev">Prev</button>
       <button :disabled="activeIndex === yoshImages.length - 1" @click="next">Next</button>
     </div>
@@ -229,8 +230,10 @@
 
   .buttons {
     position: absolute;
-    bottom: 2rem;
-    right: 2rem;
+    bottom: 0;
+    right: 0;
+    padding: 2rem;
+    width: 100%;
     display: flex;
     gap: 1rem;
     z-index: 50;
@@ -247,6 +250,10 @@
     background: linear-gradient(to bottom, #02a7f9 0%, #47c2ff 25%, #ccf2fd 50%, #00aaff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+
+  .buttons button:first-of-type {
+    margin-right: auto;
   }
 
   .buttons button:hover:not(:disabled) {
