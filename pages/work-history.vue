@@ -25,8 +25,8 @@
       </template>
     </section>
     <div class="buttons">
-      <button @click="prev">Prev</button>
-      <button @click="next">Next</button>
+      <button :disabled="activeIndex === 0" @click="prev">Prev</button>
+      <button :disabled="activeIndex === yoshImages.length - 1" @click="next">Next</button>
     </div>
   </div>
 </template>
@@ -249,9 +249,17 @@
     -webkit-text-fill-color: transparent;
   }
 
-  .buttons button:hover {
+  .buttons button:hover:not(:disabled) {
     background: linear-gradient(to bottom, #fe9900 0%, #fe9900 25%, #f9e5bd 50%, #ff9900 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+
+  .buttons button:disabled {
+    background: linear-gradient(to bottom, #484645 0%, #7d7b78 25%, #b0aeaa 50%, #3b3a3a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    cursor: not-allowed;
+     filter: drop-shadow(-2px 2px 1px black);
   }
 </style>
