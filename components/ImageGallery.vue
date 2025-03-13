@@ -2,16 +2,21 @@
   <div class="image-gallery">
     <div class="wrap">
       <div class="girl"></div>
-      <!-- <div class="list">
-        <h1>TMNT x Demon Slayer</h1>
-        <div 
-          v-for="image in images"
-          :key="image"
-           class="item"
-          >
-          <div class="img" :style="`background-image: url(${image});`"/>
+
+      <div class="container">
+        <div class="wrapper">
+          <div class="list">
+            <!-- <h1>TMNT x Demon Slayer</h1> -->
+            <div 
+              v-for="image in images"
+              :key="image"
+               class="item"
+              >
+              <div class="img" :style="`background-image: url(${image});`"/>
+            </div>
+          </div>
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -38,17 +43,10 @@
     width: 100%;
     min-height: 100%;
     overflow: hidden;
+    position: relative;
   }
   .wrap {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    position: relative;
-    text-align: center;
-    -webkit-perspective: 2500px;
-    perspective: 2500px;
-    -webkit-perspective-origin: 100% 50%;
-    perspective-origin: 100% 50%;
+
   }
   .girl {
     background: url('/artgirl_standingproud.webp') center no-repeat;
@@ -57,9 +55,9 @@
     width: 450px;
     height: 600px;
     bottom: 0%;
-    top: 10%;
+    top: 30%;
     position: absolute;
-    filter: drop-shadow(-2px 2px 8px black);
+    filter: drop-shadow(-2px 2px 6px pink);
   }
   h1 {
     font-family: "Press Start 2P", cursive, Arial, sans-serif;
@@ -67,44 +65,57 @@
     font-size: 4em;
     position: sticky;
   }
-  .list {
-    position: relative;
-    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
-    width: 50%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    overflow: auto;
-    margin-inline: auto;
-  }
-  .list::-webkit-scrollbar {
-    display: none;
-  }
-  .item {
-    /* filter: grayscale(100%); */
-    height: 400px;
-    /* margin: 20px; */
-    display: inline-block;
-    position: relative;
-    transform: perspective(1000px);
+
+
+
+  .container {
+    border: 5px solid orange;
+    /* height: 70vh; */
+    margin: 0;
+  padding: 0;
+  perspective: 685px;
+  position: relative;
+}
+.wrapper {
+  height: 135vh;
+    width: 27vw;
+    border: 1px solid green;
     transform-style: preserve-3d;
-    transition: all 500ms ease-in-out;
-  }
-  .item:hover {
-    /* filter: grayscale(0%); */
-    transform: scale3d(1.2, 1.2, 1.2);
-    z-index: 1;
-  }
-  .img {
+    position: absolute;
+    top: -24vw;
+    left: 38vw;
+    right: 0;
+    transform: translateZ(672px) rotateY(347deg) rotateX(112deg);
+}
+
+.list {
+  perspective: 424px;
+    /* padding: 50px 0px; */
+    width: 100%;
+    height: 824px;
+    transform-style: preserve-3d;
+    overflow: auto;
+    transform: translate(-50%, 0%);
+    position: fixed;
+    /* bottom: 40%; */
+    left: 50%;
+    top: -5%;
+}
+.item {
+  position: relative;
+    margin: auto;
+    height: 100%;
+    width: 100%;
+    /* aspect-ratio: 1 / 4; */
+    transform: rotateX(313deg);
+    transform-origin: 0 0%;
+}
+
+.img {
     width: 100%;
     height: 100%;
     background-size: cover;
     background-position: center center;
-    box-shadow: 1px 1px 50px 0 #000;
-    -webkit-transform-origin: 100% 50%;
-    -ms-transform-origin: 100% 50%;
-    transform-origin: 100% 50%;
-    z-index: 10;
-    position: relative;
   }
 
 
