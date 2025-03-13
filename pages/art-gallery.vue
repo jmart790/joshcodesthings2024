@@ -31,18 +31,27 @@
     <section class="gallery-container">
       <svg
         class="svg-paint-drips"
-        width="100%"
-        height="15vh"
-        viewBox="0 0 100 20"
         xmlns="http://www.w3.org/2000/svg"
-        preserveAspectRatio="none"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        id="eheZjWS3nt21"
+        viewBox="0 0 100 22"
+        shape-rendering="geometricPrecision"
+        text-rendering="geometricPrecision"
+        project-id="a5f55102d4f24427be42e44012b383f3"
+        export-id="7c1c1342eaf7407189f68f7b7c9c5288"
+        cached="false"
+        style="background-color: transparent"
       >
-        <path d="M0 0 Q5 10 10 5 T20 5 T30 15 T40 5 T50 10 T60 5 T70 15 T80 5 T90 10 T100 0 V20 H0 Z" fill="deeppink" />
+        <path
+          style="mix-blend-mode: color-dodge"
+          d="M0,-0.713954Q5.67868,17.962675,10.24362,8.624361q3.63514-6.134067,7.912564,0c5.647102,8.016647,9.99008,9.251227,14.058958,5.965148C36.937795,10.775433,38.638648,4.12916,41.128317,3.03831c5.720395-2.506394,5.068388,8.994917,12.837632,11.551199Q57.129432,15.630376,60,3.955204q5-23.345788,10.637663,6.115913c5.2392,13.379679,11.206065.212702,11.788199-6.115913q3.916797-42.58109,6.9856,0Q91.958295,28.145421,100,-0.713954v18.67663h-100v-18.67663Z"
+          transform="matrix(1 0 0-.62-.152165 11.1943)"
+          fill="#ffc3ed"
+        />
       </svg>
 
-      <img src="/stage__artgirl.webp" alt="art gallery img" />
+      <img src="/stage__artgirl2.webp" alt="art gallery img" />
       <div class="img-galleries">
-        <!-- <ImageGallery class="img-gallery" /> -->
         <ImageGallery class="img-gallery" />
       </div>
     </section>
@@ -94,6 +103,7 @@
     text-shadow: -6px 6px black;
   }
   .hero-img img {
+    display: block;
     width: 100%;
   }
 
@@ -103,6 +113,7 @@
     right: 15vw;
     width: 35%;
     z-index: 10;
+    filter: drop-shadow(-2px 2px 6px rgba(0, 0, 0, 0.476));
   }
 
   .art-girl-hero img {
@@ -147,18 +158,12 @@
   }
 
   .gallery-container {
-    margin-top: -10px;
     width: 100%;
     max-height: 100vh;
-    /* object-fit: cover; */
-    /* position: sticky; */
-    /* background: linear-gradient(180deg, rgba(255,20,147,1) 0%, rgba(255,20,147,0.25) 60%); */
     display: grid;
-    overflow: scroll;
   }
   .svg-paint-drips {
     overflow: unset;
-    transform: rotateX(200deg);
     mix-blend-mode: color-dodge;
   }
   .gallery-container img,
