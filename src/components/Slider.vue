@@ -13,6 +13,9 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+import SlideItem from './SlideItem.vue';
+import YoshModel from './YoshModel.vue';
 
 const props = defineProps<{
   items: { image: string; name: string; id: number; isActive: boolean; isSelected: boolean }[];

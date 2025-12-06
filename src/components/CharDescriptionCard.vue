@@ -32,6 +32,7 @@
 </template>
 
 <script setup lang="ts">
+  import TypeWriter from './TypeWriter.vue';
   const props = defineProps<{ 
     isOpen: boolean;
     name: string;

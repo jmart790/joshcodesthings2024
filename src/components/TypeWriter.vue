@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from 'vue';
+import { ref, watchEffect, onMounted, watch } from 'vue';
 
 const props = defineProps({
   text: {

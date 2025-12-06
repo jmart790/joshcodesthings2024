@@ -32,7 +32,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { ref, watch } from 'vue';
+import CharDescriptionCard from '../components/CharDescriptionCard.vue';
   const yoshImages = [
     '/yoshx_standing.webp',
     '/yoshx_holdingswordhigh.webp',

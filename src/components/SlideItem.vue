@@ -31,6 +31,7 @@ const props = defineProps<{ image: string; position: number; isActive: boolean; 
     0% 0%, 90% 0%, 100% 10%, 100% 100%, 
     10% 100%, 0% 90%
   ); /* Clipping the top-left and bottom-left corners */
+  background: linear-gradient(135deg, #727272 0%, #ebebeb 50%, #727272 100%);
 }
 
 .item-wrapper::before,
@@ -84,13 +85,19 @@ const props = defineProps<{ image: string; position: number; isActive: boolean; 
   transform: rotateY(calc((var(--position) - 0.6) * (360 / var(--quantity)) * 1deg)) translateZ(200px) translate(-240%, -45%) !important;
   transition: transform 1s ease, top 1s ease, left 1s ease, width 1s ease, height 1s ease;
 }
-@media  screen and (min-width: 1600px) {
+@media  screen and (min-width: 1400px) and (min-height: 900px) {
   .item-wrapper.active.selected {
-    transform: rotateY(calc((var(--position) - 0.6) * (360 / var(--quantity)) * 1deg)) translateZ(200px) translate(-270%, -45%) !important;
+    transform: rotateY(calc((var(--position) - 0.6) * (360 / var(--quantity)) * 1deg)) translateZ(200px) translate(-255%, -45%) !important;
   }  
 }
 
-.item-wrapper.active.selected .item img {
+@media  screen and (min-width: 2000px) {
+  .item-wrapper.active.selected {
+    transform: rotateY(calc((var(--position) - 0.6) * (360 / var(--quantity)) * 1deg)) translateZ(200px) translate(-290%, -45%) !important;
+  }  
+}
+
+.item-wrapper.active.selected .item {
   animation: flip 1s forwards;
 }
 

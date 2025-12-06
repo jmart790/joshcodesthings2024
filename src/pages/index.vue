@@ -36,7 +36,10 @@
 </template>
 
 
+
 <script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 const menuItems = ref<string[]>(['GAME START', 'PASSWORD', 'OPTIONS']);
 const selectedIndex = ref<number>(0);

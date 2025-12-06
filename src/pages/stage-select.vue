@@ -25,6 +25,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import SphereGrid from '../components/SphereGrid.vue';
+import Slider from '../components/Slider.vue';
+import ScrambleText from '../components/ScrambleText.vue';
+import CharDescriptionCard from '../components/CharDescriptionCard.vue';
 
 const router = useRouter();
 const characters = ref([
