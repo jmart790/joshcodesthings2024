@@ -30,7 +30,14 @@
       >
         {{ item }}
       </button>
-      <img src="/YoshX.webp" alt="Character" class="character-image" :class="`position-${selectedIndex}`" />
+      <img 
+        v-if="showWave" 
+        src="/yoshsprites/sprite wave.webp" 
+        alt="Wave Projectile" 
+        class="wave-image" 
+        :class="`position-${selectedIndex}`" 
+      />
+      <img :src="`/yoshsprites/${currentSprite}`" alt="Character" class="character-image" :class="`position-${selectedIndex}`" />
     </div>
   </div>
 </template>
@@ -43,6 +50,8 @@ import { useRouter } from 'vue-router';
 
 const menuItems = ref<string[]>(['GAME START', 'PASSWORD', 'OPTIONS']);
 const selectedIndex = ref<number>(0);
+const currentSprite = ref<string>('sprite 1.webp');
+const showWave = ref<boolean>(false);
 
 const router = useRouter();
 
@@ -60,6 +69,28 @@ const navigate = (menuItem: string) => {
   return routes[menuItem] || '/';
 };
 
+const animateAndNavigate = async (index: number) => {
+  const selectedMenuItem = menuItems.value[index];
+  const route = navigate(selectedMenuItem);
+
+  // Animation sequence: 1 -> 7 -> 1
+  for (let i = 1; i <= 7; i++) {
+    currentSprite.value = `sprite ${i}.webp`;
+    if (i === 6) {
+      showWave.value = true;
+    }
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  // Reset to 1
+  currentSprite.value = 'sprite 1.webp';
+  
+  // Wait for wave animation to complete
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  showWave.value = false;
+  
+  router.push(route);
+};
+
 const handleKeyDown = (event: KeyboardEvent) => {
   switch (event.key) {
     case 'ArrowUp':
@@ -69,17 +100,13 @@ const handleKeyDown = (event: KeyboardEvent) => {
       selectedIndex.value = (selectedIndex.value + 1) % menuItems.value.length;
       break;
     case 'Enter':
-      const selectedMenuItem = menuItems.value[selectedIndex.value];
-      const route = navigate(selectedMenuItem);
-      router.push(route);
+      animateAndNavigate(selectedIndex.value);
       break;
   }
 };
 
 const clickToRoute = (index: number) => {
-  const selectedMenuItem = menuItems.value[index];
-  const route = navigate(selectedMenuItem);
-  router.push(route);
+  animateAndNavigate(index);
 }
 
 onMounted(() => {
@@ -99,6 +126,7 @@ onUnmounted(() => {
   align-items: center;
   height: 100%;
   background-color: #000119;
+  overflow: hidden;
 }
 
 header {
@@ -223,7 +251,7 @@ header {
 }
 
 .menu {
-  --character-height: 120px;
+  --character-height: 250px;
   --menu-item-height: 24px; /* Adjust based on your actual menu item height */
   position: relative;
   display: flex;
@@ -232,6 +260,7 @@ header {
 }
 .menu-item {
   position: relative;
+  z-index: 100;
   font-family: "Press Start 2P", cursive, Arial, sans-serif;
   font-size: 24px;
   margin: 10px 0;
@@ -252,9 +281,28 @@ header {
 
 .character-image {
   position: absolute;
-  left: -120%; /* Adjust as needed */
+  left: -140%; /* Adjust as needed */
   height: var(--character-height);
   transition: transform 0.3s; /* Smooth transition when changing active item */
+}
+
+@keyframes waveTravel {
+  0% {
+    left: -120%;
+    height: var(--character-height);
+  }
+  100% {
+    left: 700%;
+    height: calc(var(--character-height) * 2);
+  }
+}
+
+.wave-image {
+  position: absolute;
+  left: -120%;
+  height: var(--character-height);
+  animation: waveTravel 2s linear forwards; 
+  z-index: 5; /* Ensure it's behind menu items but visible */
 }
 
 .position-0 {
