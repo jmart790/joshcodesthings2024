@@ -9,7 +9,7 @@
 
 <style scoped>
 .yosh-model {
-  background-image: url('/YoshModel.webp');
+  background-image: url('/YoshModel2025.webp');
   width: 900px;
   height: 95vh;
   position: absolute;
