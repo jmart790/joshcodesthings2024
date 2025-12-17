@@ -1,7 +1,7 @@
 <template>
   <div class="juke-box-page">
     <div class="back-button">
-      <PixelButton @click="$router.push('./stage-select')">&lt; Back</PixelButton>
+      <RetroButton @click="$router.push('./stage-select')">&lt; Back</RetroButton>
     </div>
 
     <JukeboxFrame>
@@ -34,22 +34,22 @@
 </template>
 
 <script setup>
-  import { ref, onMounted } from 'vue';
-  import PixelButton from '../components/PixelButton.vue';
+  import { ref } from 'vue';
+  import RetroButton from '../components/RetroButton.vue';
   import MegaManMonitor from '../components/jukebox/MegaManMonitor.vue';
   import MegaManPlaylist from '../components/jukebox/MegaManPlaylist.vue';
   import WireAssembly from '../components/jukebox/WireAssembly.vue';
   import JukeboxFrame from '../components/jukebox/JukeboxFrame.vue';
 
   const videos = [
-    { title: 'Breath of LoFi III: Beats from Cedar Woods 🐉', id: 'UeGPZerwib4' },
-    { title: 'Super Lofi-Vania IV : Beats from the Clock Tower 🧛🏻', id: '2DVUhqmgqhI' },
-    { title: 'Lo-Fi Fantasy Tactics: Beats from the Zodiac Brave ⚔️', id: 'lnxKqQA6_qU' },
-    { title: 'Blue Bomber LoFi: Beats from 20XX 🤖', id: 'QXrXy3LpzVQ' },
-    { title: 'Lo-Fi Trigger: Beats from Between Timelines ⚙️', id: '6KDtnf_Ai_k' },
-    { title: 'Maverick Hunter LoFi: Beats from the Maverick Rebellion ⚡', id: 'jlhXMH1vQGQ' },
+    { title: 'Breath of LoFi III: Beats from Cedar Woods', id: 'UeGPZerwib4' },
+    { title: 'Super Lofi-Vania IV : Beats from the Clock Tower', id: '2DVUhqmgqhI' },
+    { title: 'Lo-Fi Fantasy Tactics: Beats from the Zodiac Brave', id: 'lnxKqQA6_qU' },
+    { title: 'Blue Bomber LoFi: Beats from 20XX', id: 'QXrXy3LpzVQ' },
+    { title: 'Lo-Fi Trigger: Beats from Between Timelines', id: '6KDtnf_Ai_k' },
+    { title: 'Maverick Hunter LoFi: Beats from the Maverick Rebellion', id: 'jlhXMH1vQGQ' },
     { title: 'Lo-Fi Fantasy VI: Beats from the Opera House (Vol.3)', id: 'Y6a2HPi7w4E' },
-    { title: 'Lo-Fi the Hedgehog: Beats from the Green Hills 💍', id: '1D2k-uipzBI' },
+    { title: 'Lo-Fi the Hedgehog: Beats from the Green Hills', id: '1D2k-uipzBI' },
     { title: 'Lo-Fi Trigger: Beats from 1000 A.D (Vol.1)', id: 'TXRoSN0pHkI' }
   ];
 

@@ -22,9 +22,10 @@
 </template>
 
 <style scoped>
-.svg-paint-drips {
-  margin-top: -1px;
-  overflow: unset;
-  mix-blend-mode: hard-light;
-}
+  .svg-paint-drips {
+    margin-top: -1px;
+    overflow: unset;
+    mix-blend-mode: hard-light;
+    z-index: 1;
+  }
 </style>

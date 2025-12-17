@@ -14,16 +14,16 @@
       </template>
     </section>
     <div class="buttons">
-      <PixelButton @click="$router.back()">&lt; Home</PixelButton>
-      <PixelButton :disabled="activeIndex === 0" @click="prev">Prev</PixelButton>
-      <PixelButton :disabled="activeIndex === yoshImages.length - 1" @click="next">Next</PixelButton>
+      <RetroButton @click="$router.back()">&lt; Back</RetroButton>
+      <RetroButton :disabled="activeIndex === 0" @click="prev">Prev</RetroButton>
+      <RetroButton :disabled="activeIndex === yoshImages.length - 1" @click="next">Next</RetroButton>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
   import { ref, watch } from 'vue';
-  import PixelButton from '../components/PixelButton.vue';
+  import RetroButton from '../components/RetroButton.vue';
   import WorkHistorySlide from '../components/work-history/WorkHistorySlide.vue';
   import { yoshImages, historyManImages, yoshDialogue, historyManDialogue } from '../data/workHistoryData';
 

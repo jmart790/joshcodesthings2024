@@ -1,10 +1,9 @@
 <template>
   <div class="art-gallery-page">
     <div class="back-button">
-      <PixelButton @click="$router.back()">< Home</PixelButton>
+      <RetroButton @click="$router.back()">< Home</RetroButton>
     </div>
     <section class="hero-img">
-      
       <img src="/art_gallery.webp" alt="heroimg" />
     </section>
     <section class="main">
@@ -12,6 +11,9 @@
         <img src="/artgirl_swinging.webp" alt="art girl swinging" />
       </div>
       <PaintStrokeSvg />
+      <div class="scroll-indicator">
+        <PixelArrowDown />
+      </div>
     </section>
 
     <section class="gallery-container">
@@ -27,8 +29,9 @@
   import ImageGallery from '../components/ImageGallery.vue';
   import PaintStrokeSvg from '../components/PaintStrokeSvg.vue';
   import PaintDripsSvg from '../components/PaintDripsSvg.vue';
-  import PixelButton from '../components/PixelButton.vue';
-  
+  import RetroButton from '../components/RetroButton.vue';
+  import PixelArrowDown from '../components/PixelArrowDown.vue';
+
   // inspired by: https://codepen.io/MalaikaIshtiaq/pen/MNbXyx
 </script>
 
@@ -55,6 +58,13 @@
     grid-area: 1/1;
   }
 
+  .scroll-indicator {
+    position: absolute;
+    top: 53%;
+    left: 18rem;
+    z-index: 20;
+  }
+
   .hero-img {
     position: sticky;
     bottom: 0;
@@ -66,7 +76,7 @@
 
   /* The painted version overlay */
   .hero-img::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -107,7 +117,7 @@
     margin-inline: auto;
     width: 45%;
     z-index: 10;
-    filter: drop-shadow(-2px 2px 6px rgba(0, 0, 0, 0.476));
+    filter: drop-shadow(-8px 8px 16px rgba(0, 0, 0, 0.276));
   }
 
   .art-girl-hero img {
@@ -116,7 +126,6 @@
     opacity: 0;
     animation: fadeIn 1s ease 300ms forwards; /* 0s delay */
   }
-
 
   @keyframes fadeIn {
     from {

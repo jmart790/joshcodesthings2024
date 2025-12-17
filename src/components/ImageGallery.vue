@@ -7,12 +7,14 @@
         <div class="container">
           <div class="wrapper">
             <ul class="list">
-              <li v-for="(image, index) in images" :key="image.name" class="item" :style="getItemStyle(index)">
+              <li v-for="(item, index) in flatItems" :key="index" class="item" :style="getItemStyle(index)">
+                <GalleryTitleCard v-if="item.type === 'title'" :theme-one="item.themeOne" :theme-two="item.themeTwo" />
                 <ImageArt
-                  :src="image.img"
-                  :alt="image.name"
-                  :name="image.name"
-                  :desc="image.desc"
+                  v-else
+                  :src="item.img"
+                  :alt="item.name"
+                  :name="item.name"
+                  :desc="item.desc"
                   :show-info="getIsInfoVisible(index)"
                 />
               </li>
@@ -25,100 +27,42 @@
 </template>
 
 <script setup>
-  import { onMounted, onUnmounted, ref } from 'vue';
+  import { onMounted, onUnmounted, ref, computed } from 'vue';
   import ImageArt from './ImageArt.vue';
+  import GalleryTitleCard from './GalleryTitleCard.vue';
+  import { galleryImages } from '../constants/galleryImages';
 
-  const images = [
-    {
-      img: '/tmnt__leo.webp',
-      name: 'Leonardo',
-      desc: 'Water Hashira'
-    },
-    {
-      img: '/tmnt__don.webp',
-      name: 'Donatello',
-      desc: 'Mist Hashira'
-    },
-    {
-      img: '/tmnt__mikey.webp',
-      name: 'Michelangelo',
-      desc: 'Thunder Hashira'
-    },
-    {
-      img: '/tmnt__raph.webp',
-      name: 'Raphael',
-      desc: 'Flame Hashira'
-    },
-    {
-      img: '/tmnt__april.webp',
-      name: "April O'Neil",
-      desc: 'Love Hashira'
-    },
-    {
-      img: '/tmnt__casey.webp',
-      name: 'Casey Jones',
-      desc: 'Beast Hashira'
-    },
-    {
-      img: '/tmnt__miyamoto.webp',
-      name: 'Miyamoto Usagi',
-      desc: 'Wind Hashira'
-    },
-    {
-      img: '/tmnt__splinter.webp',
-      name: 'Master Splinter',
-      desc: 'Stone Hashira'
-    },
-    {
-      img: '/tmnt__slash.webp',
-      name: 'Slash',
-      desc: 'Upper Demon 6'
-    },
-    {
-      img: '/tmnt__leatherhead.webp',
-      name: 'Leatherhead',
-      desc: 'Upper Demon 5'
-    },
-    {
-      img: './tmnt__baxter.webp',
-      name: 'Baxter Stockman',
-      desc: 'Upper Demon 4'
-    },
-    {
-      img: './tmnt__rocksteady.webp',
-      name: 'Rocksteady',
-      desc: 'Upper Demon 3'
-    },
-    {
-      img: './tmnt__krang.webp',
-      name: 'Krang',
-      desc: 'Upper Demon 2'
-    },
-    {
-      img: '/tmnt__karai.webp',
-      name: 'Karai',
-      desc: 'Upper Demon 1'
-    },
-    {
-      img: '/tmnt__shredder.webp',
-      name: 'Shredder',
-      desc: 'Demon King'
-    }
-  ];
+  const flatItems = computed(() => {
+    const items = [];
+    galleryImages.forEach((theme) => {
+      items.push({
+        type: 'title',
+        themeOne: theme.themeOne,
+        themeTwo: theme.themeTwo
+      });
+      theme.images.forEach((img) => {
+        items.push({
+          type: 'image',
+          ...img
+        });
+      });
+    });
+    return items;
+  });
 
   // Configuration
   const config = {
-    initialZPosition: 10000, // Start right in front (fully visible)
+    initialZPosition: -3000, // Reduced from 10000 to be visible immediately
     imageZSpacing: 8000, // Positive spacing puts subsequent images "behind" in queue
     maxVisibleZ: 6000,
     minVisibleZ: -20000,
     fullVisibilityThreshold: 3000,
     fadeInRange: 3000,
-    fadeOutRange: 25000,
+    fadeOutRange: 45000,
     baseYSpacing: 0,
     yOffsetMultiplier: 0,
     minScale: 0.4,
-    scaleReduction: 0.03
+    scaleReduction: 0 // Disable index-based shrinking
   };
 
   const galleryRoot = ref(null);
@@ -127,8 +71,12 @@
   function calculateTotalZ(index) {
     const startZ = config.initialZPosition;
 
-    // Adjusted total travel distance for the new queue length
-    const zScrollTotal = -130000;
+    // Calculate total distance needed to bring the last item to the front (Z=0)
+    // We add a buffer (e.g. 1 extra spacing) to ensure it clears nicely
+    const totalItems = flatItems.value.length;
+    const lastItemZ = startZ + (totalItems - 1) * config.imageZSpacing;
+    const zScrollTotal = -(lastItemZ + 2000); // 2000px buffer to scroll past the last item
+
     const zOffset = scrollProgress.value * zScrollTotal;
 
     const baseZ = startZ + index * config.imageZSpacing;
@@ -164,7 +112,7 @@
         1 - index * config.scaleReduction
       )})`,
       opacity: opacity,
-      'z-index': images.length - index
+      'z-index': flatItems.value.length - index
     };
   }
 
@@ -255,7 +203,8 @@
     position: absolute;
     top: -15%;
     left: 35%; /* Moved left from 54% */
-    transform: translateX(-50%) rotateX(358deg) rotateY(354deg) translateZ(220px);
+    /* transform: translateX(-50%) rotateX(358deg) rotateY(354deg) translateZ(220px); */
+    transform: translateX(-50%) rotateX(359deg) rotateY(354deg) translateZ(226px);
   }
 
   .list {

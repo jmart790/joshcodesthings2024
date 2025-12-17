@@ -4,9 +4,9 @@ export const yoshImages = [
   '/yoshx_readying.webp',
   '/yoshx_gripping.webp',
   '/yoshx_jumping.webp',
-  '/yoshx_slash.webp',
-  '/yoshx_clenchingkatapose.webp',
-  '/yoshx_shootinginair.webp'
+  // '/yoshx_slash.webp',
+  '/yoshx_blocking.webp',
+  '/yoshx_final.webp'
 ];
 
 export const historyManImages = [
@@ -15,8 +15,9 @@ export const historyManImages = [
   '/historyman_open.webp',
   '/historyman_charging.webp',
   '/historyman_scared.webp',
-  '/historyman_blocking.webp',
-  '/historyman_punching.webp'
+  // '/historyman_blocking.webp',
+  '/historyman_punching.webp',
+  '/historyman_final.webp'
 ];
 
 export const yoshDialogue = [

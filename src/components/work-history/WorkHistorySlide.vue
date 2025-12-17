@@ -49,6 +49,7 @@
     position: relative;
     height: 100%;
     width: 100%;
+    z-index: 11;
   }
 
   .slide-image.right {
@@ -88,6 +89,7 @@
     bottom: 9%;
     width: auto;
     height: 50%;
+    z-index: 1000;
   }
 
   .slide-image.left img {
@@ -123,14 +125,25 @@
     bottom: 25%;
     left: 30%;
   }
+  .slide-image.left-5 img {
+    left: 50%;
+  }
+  .slide-image.left-6 img {
+    left: 40%;
+    bottom: 25%;
+    transform: rotate(-15deg) scale(1.1);
+  }
   .slide-image.right-1 img {
     right: 45%;
   }
+
   .slide-image.right-5 img {
-    right: 5%;
+    right: 40%;
   }
   .slide-image.right-6 img {
-    right: 40%;
+    right: 15%;
+    bottom: 10%;
+    transform: scale(0.9);
   }
   .dialog-container {
     position: absolute;

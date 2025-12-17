@@ -1,5 +1,8 @@
 <template>
   <div class="stage-select">
+    <div class="home-button">
+      <RetroButton @click="$router.push('/')">< Menu</RetroButton>
+    </div>
     <SphereGrid class="sphere-grid" />
     <div class="slider-container">
       <Slider
@@ -15,7 +18,7 @@
     <div class="buttons">
       <RetroButton @click="prev">Prev</RetroButton>
       <RetroButton @click="next">Next</RetroButton>
-      <RetroButton @click="select">{{ isSelected ? 'Deselect' : 'Select' }}</RetroButton>
+      <RetroButton class="select-button" @click="select">{{ isSelected ? 'Deselect' : 'Select' }}</RetroButton>
     </div>
     <div class="char-desc">
       <CharDescriptionCard
@@ -87,6 +90,17 @@
     display: flex;
     gap: 1rem;
     z-index: 5;
+  }
+
+  .select-button {
+    margin-left: 3rem;
+  }
+
+  .home-button {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    z-index: 100;
   }
 
   .char-name {

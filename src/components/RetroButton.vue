@@ -1,5 +1,12 @@
+<script setup lang="ts">
+  defineProps<{
+    disabled?: boolean;
+    selected?: boolean;
+  }>();
+</script>
+
 <template>
-  <button class="retro-button">
+  <button :disabled="disabled" class="retro-button" :class="{ selected }">
     <slot />
   </button>
 </template>
@@ -19,9 +26,18 @@
     -webkit-text-fill-color: transparent;
   }
 
-  .retro-button:hover {
+  .retro-button:hover:not(:disabled),
+  .retro-button.selected:not(:disabled) {
     background: linear-gradient(to bottom, #fe9900 0%, #fe9900 25%, #f9e5bd 50%, #ff9900 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+
+  .retro-button:disabled {
+    background: linear-gradient(to bottom, #484645 0%, #7d7b78 25%, #b0aeaa 50%, #3b3a3a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    cursor: not-allowed;
+    filter: drop-shadow(-2px 2px 1px black);
   }
 </style>

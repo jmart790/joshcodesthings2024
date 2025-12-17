@@ -6,7 +6,7 @@
     <section>
       <TypeWriter class="type-writer" v-if="isOpen" :delay="1000" :speed="10" :text="desc" />
     </section>
-    <RetroButton @click="$emit('go-to-stage')" v-if="size !== 'sm'">
+    <RetroButton @click.stop="$emit('go-to-stage')" v-if="size !== 'sm'">
       <TypeWriter class="type-writer" v-if="isOpen" :delay="2500" :speed="10" text="Go!" />
     </RetroButton>
   </dialog>
