@@ -126,7 +126,21 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    animation: fade-in 0.8s ease-out 1.6s both;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   .menu-item {
     position: relative;

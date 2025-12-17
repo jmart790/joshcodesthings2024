@@ -35,6 +35,11 @@
     z-index: 10;
   }
 
+  /* Main Title Animation */
+  .title-wrapper:not(.gold) {
+    animation: flicker-in-angle 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) backwards;
+  }
+
   .gold-wrapper {
     width: 320px;
     height: 100px;
@@ -46,12 +51,84 @@
     position: absolute;
     transform: rotate(-45deg) skew(57deg, 0deg) scaleX(1.1);
     z-index: 5;
+    animation: bar-to-x-things 0.8s cubic-bezier(0.19, 1, 0.22, 1) 0.8s backwards;
   }
+
   .title-wrapper.gold.com {
     position: absolute;
     transform: rotate(45deg) skewX(331deg) translate(-1rem, 1rem);
     z-index: 4;
     white-space: nowrap;
+    animation: bar-to-x-com 0.8s cubic-bezier(0.19, 1, 0.22, 1) 0.8s backwards;
+  }
+
+  /* Keyframes */
+  @keyframes flicker-in-angle {
+    0% {
+      opacity: 0;
+      transform: translateX(-150px) skewX(30deg) scale(1.2);
+      filter: blur(10px);
+    }
+    10% {
+      opacity: 1;
+      transform: translateX(-120px) skewX(20deg);
+      filter: blur(0);
+    }
+    20% {
+      opacity: 0;
+      transform: translateX(-100px) skewX(10deg);
+    }
+    30% {
+      opacity: 1;
+      transform: translateX(-80px) skewX(0deg);
+    }
+    40% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+      transform: translateX(-40px);
+    }
+    70% {
+      opacity: 1;
+      transform: translateX(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes bar-to-x-things {
+    0% {
+      /* Overlapping vertical bar state */
+      transform: rotate(90deg) skew(0deg, 0deg) scaleX(1) translateX(50px);
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    100% {
+      /* Final state */
+      transform: rotate(-45deg) skew(57deg, 0deg) scaleX(1.1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes bar-to-x-com {
+    0% {
+      /* Overlapping vertical bar state */
+      transform: rotate(90deg) skew(0deg, 0deg) translateX(50px);
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    100% {
+      /* Final state */
+      transform: rotate(45deg) skewX(331deg) translate(-1rem, 1rem);
+      opacity: 1;
+    }
   }
 
   .title,
@@ -244,5 +321,18 @@
     border-left: 86px solid transparent;
     border-top: 97px solid #940001;
     transform: skewX(355deg);
+    /* Animation for the red spike background as well to match */
+    animation: spike-in 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.1s backwards;
+  }
+
+  @keyframes spike-in {
+    0% {
+      transform: skewX(355deg) scaleX(0);
+      opacity: 0;
+    }
+    100% {
+      transform: skewX(355deg) scaleX(1);
+      opacity: 1;
+    }
   }
 </style>
