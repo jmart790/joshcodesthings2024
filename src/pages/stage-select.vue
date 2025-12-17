@@ -112,7 +112,7 @@
 
   .char-desc {
     position: absolute;
-    right: 10%;
+    right: 7%;
     bottom: 20%;
     z-index: 100;
     height: 550px;
