@@ -30,7 +30,7 @@
   import { onMounted, onUnmounted, ref, computed } from 'vue';
   import ImageArt from './ImageArt.vue';
   import GalleryTitleCard from './GalleryTitleCard.vue';
-  import { galleryImages } from '../constants/galleryImages';
+  import { galleryImages } from '../../constants/galleryImages';
 
   const flatItems = computed(() => {
     const items = [];

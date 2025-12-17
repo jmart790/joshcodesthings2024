@@ -1,10 +1,10 @@
 <template>
   <article class="slide">
     <div class="dialog-container">
-      <CharDescriptionCard is-open name="Yosh" :desc="yoshText" size="sm" is-name-blue />
+      <DialogCard is-open name="Yosh" :desc="yoshText" size="sm" is-name-blue />
     </div>
     <div class="dialog-container">
-      <CharDescriptionCard :is-open="historyManOpen" name="History Man" :desc="historyManText" size="sm" />
+      <DialogCard :is-open="historyManOpen" name="History Man" :desc="historyManText" size="sm" />
     </div>
     <picture class="slide-image left" :class="`left-${index}`">
       <img :src="yoshImage" alt="Yosh Slide Image" />
@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-  import CharDescriptionCard from '../CharDescriptionCard.vue';
+  import DialogCard from '../shared/DialogCard.vue';
 
   defineProps<{
     index: number;

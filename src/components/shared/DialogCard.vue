@@ -1,7 +1,14 @@
 <template>
-  <dialog :open="isOpen" class="char-desc-card" :class="`size-${size}`">
+  <dialog :open="isOpen" class="dialog-card" :class="`size-${size}`">
     <header>
-      <TypeWriter class="type-writer" :class="{ blue: isNameBlue }" v-if="isOpen" :delay="0" :speed="10" :text="name" />
+      <TypeWriter
+        class="type-writer"
+        :class="{ blue: isNameBlue }"
+        v-if="isOpen"
+        :delay="10"
+        :speed="10"
+        :text="name"
+      />
     </header>
     <section>
       <TypeWriter class="type-writer" v-if="isOpen" :delay="1000" :speed="10" :text="desc" />
@@ -46,7 +53,7 @@
       height: 1000px;
     }
   }
-  .char-desc-card {
+  .dialog-card {
     position: relative;
     background: black;
     color: white;
@@ -64,7 +71,7 @@
     animation: expand 1s ease forwards;
   }
 
-  .char-desc-card.size-sm {
+  .dialog-card.size-sm {
     max-width: 650px;
     max-height: 350px;
     margin: 0;

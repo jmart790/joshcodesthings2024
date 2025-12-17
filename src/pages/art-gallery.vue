@@ -26,11 +26,11 @@
 </template>
 
 <script setup>
-  import ImageGallery from '../components/ImageGallery.vue';
-  import PaintStrokeSvg from '../components/PaintStrokeSvg.vue';
-  import PaintDripsSvg from '../components/PaintDripsSvg.vue';
-  import RetroButton from '../components/RetroButton.vue';
-  import PixelArrowDown from '../components/PixelArrowDown.vue';
+  import ImageGallery from '../components/art-gallery/ImageGallery.vue';
+  import PaintStrokeSvg from '../components/art-gallery/PaintStrokeSvg.vue';
+  import PaintDripsSvg from '../components/art-gallery/PaintDripsSvg.vue';
+  import RetroButton from '../components/shared/RetroButton.vue';
+  import PixelArrowDown from '../components/shared/PixelArrowDown.vue';
 
   // inspired by: https://codepen.io/MalaikaIshtiaq/pen/MNbXyx
 </script>

@@ -35,7 +35,7 @@
 
 <script setup>
   import { ref } from 'vue';
-  import RetroButton from '../components/RetroButton.vue';
+  import RetroButton from '../components/shared/RetroButton.vue';
   import MegaManMonitor from '../components/jukebox/MegaManMonitor.vue';
   import MegaManPlaylist from '../components/jukebox/MegaManPlaylist.vue';
   import WireAssembly from '../components/jukebox/WireAssembly.vue';

@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
   import { ref, watch } from 'vue';
-  import RetroButton from '../components/RetroButton.vue';
+  import RetroButton from '../components/shared/RetroButton.vue';
   import WorkHistorySlide from '../components/work-history/WorkHistorySlide.vue';
   import { yoshImages, historyManImages, yoshDialogue, historyManDialogue } from '../data/workHistoryData';
 

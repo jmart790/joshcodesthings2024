@@ -21,7 +21,7 @@
       <RetroButton class="select-button" @click="select">{{ isSelected ? 'Deselect' : 'Select' }}</RetroButton>
     </div>
     <div class="char-desc">
-      <CharDescriptionCard
+      <DialogCard
         :isOpen="isSelected"
         :name="characters[activeIndex].name"
         :desc="characters[activeIndex].desc"
@@ -36,11 +36,11 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
-  import SphereGrid from '../components/SphereGrid.vue';
-  import Slider from '../components/Slider.vue';
-  import ScrambleText from '../components/ScrambleText.vue';
-  import CharDescriptionCard from '../components/CharDescriptionCard.vue';
-  import RetroButton from '../components/RetroButton.vue';
+  import SphereGrid from '../components/stage-select/SphereGrid.vue';
+  import Slider from '../components/stage-select/Slider.vue';
+  import ScrambleText from '../components/shared/ScrambleText.vue';
+  import DialogCard from '../components/shared/DialogCard.vue';
+  import RetroButton from '../components/shared/RetroButton.vue';
   import { characters as allCharacters } from '../constants/characters';
 
   const router = useRouter();

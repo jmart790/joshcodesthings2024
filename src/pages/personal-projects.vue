@@ -49,7 +49,7 @@
 
 <script setup lang="ts">
   import { ref, computed } from 'vue';
-  import RetroButton from '../components/RetroButton.vue';
+  import RetroButton from '../components/shared/RetroButton.vue';
 
   // Placeholder Data
   const projects = [

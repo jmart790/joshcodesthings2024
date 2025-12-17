@@ -31,8 +31,8 @@
 <script setup lang="ts">
   import { ref, onMounted, onUnmounted } from 'vue';
   import { useRouter } from 'vue-router';
-  import GameTitle from '../components/GameTitle.vue';
-  import RetroButton from '../components/RetroButton.vue';
+  import GameTitle from '../components/home/GameTitle.vue';
+  import RetroButton from '../components/shared/RetroButton.vue';
 
   const menuItems = ref<string[]>(['GAME START', 'PASSWORD', 'OPTIONS']);
   const selectedIndex = ref<number>(0);
