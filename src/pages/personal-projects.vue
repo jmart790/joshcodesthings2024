@@ -6,52 +6,70 @@
 
     <div class="content-container">
       <!-- Left Column: Details -->
-      <ProjectDetails :project="activeProject" />
+      <section class="details-column">
+        <IndustrialDialog :isOpen="isDialogOpen" :project="activeProject" />
+      </section>
 
       <!-- Right Column: Navigation Wheel -->
-      <ProjectWheel :projects="projects" :active-index="activeIndex" @select="selectProject" />
+      <ProjectWheel :projects="doubledProjects" :active-index="activeIndex" @select="selectProject" />
     </div>
 
-    <!-- Background (can be ignored or simple gradient for now) -->
-    <div class="background-overlay"></div>
+    <!-- Vignette Overlay -->
+    <div class="vignette-overlay"></div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref, computed } from 'vue';
+  import { ref, computed, watch } from 'vue';
   import RetroButton from '../components/shared/RetroButton.vue';
-  import ProjectDetails from '../components/personal-projects/ProjectDetails.vue';
+  import IndustrialDialog from '../components/personal-projects/IndustrialDialog.vue';
   import ProjectWheel from '../components/personal-projects/ProjectWheel.vue';
-  import { projects } from '../data/projects';
+  import { projects as rawProjects } from '../data/projects';
+
+  const doubledProjects = [...rawProjects, ...rawProjects].map((p, i) => ({ ...p, uniqueId: i }));
 
   const activeIndex = ref(0);
+  const isDialogOpen = ref(true);
 
-  const activeProject = computed(() => projects[activeIndex.value]);
+  const activeProject = computed(() => doubledProjects[activeIndex.value]);
+
+  watch(
+    () => activeProject.value,
+    () => {
+      isDialogOpen.value = false;
+      setTimeout(() => {
+        isDialogOpen.value = true;
+      }, 100);
+    }
+  );
 
   function selectProject(index: number) {
     activeIndex.value = index;
   }
 
   // Wheel Interaction
+  let isThrottled = false;
   function handleWheel(event: WheelEvent) {
-    // Simple throttle or just direct mapping
+    if (isThrottled) return;
+
+    isThrottled = true;
+    setTimeout(() => {
+      isThrottled = false;
+    }, 100); // 100ms throttle for responsiveness but stability
+
     if (event.deltaY > 0) {
-      nextProject();
-    } else {
       prevProject();
+    } else {
+      nextProject();
     }
   }
 
   function nextProject() {
-    if (activeIndex.value < projects.length - 1) {
-      activeIndex.value++;
-    }
+    activeIndex.value = (activeIndex.value + 1) % doubledProjects.length;
   }
 
   function prevProject() {
-    if (activeIndex.value > 0) {
-      activeIndex.value--;
-    }
+    activeIndex.value = (activeIndex.value - 1 + doubledProjects.length) % doubledProjects.length;
   }
 </script>
 
@@ -64,6 +82,9 @@
     overflow: hidden;
     position: relative;
     font-family: 'Arial', sans-serif;
+    background-image: url('/constructionman_bg.png');
+    background-size: cover;
+    background-position: center;
   }
 
   .back-button {
@@ -73,10 +94,34 @@
     z-index: 20;
   }
 
+  .details-column {
+    padding: 2rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1.5rem;
+    height: 100%;
+  }
+
+  .vignette-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2; /* Content is 10, Bg is 1 */
+    pointer-events: none;
+    background: radial-gradient(circle at center, transparent 30%, #000000e0 100%);
+  }
+
   .content-container {
     display: grid;
-    grid-template-columns: 2fr 1fr; /* Left takes space, Right is fixed width wheel */
+    grid-template-columns: 1fr 1fr; /* Left takes space, Right is fixed width wheel */
+    gap: 2rem;
     height: 100%;
     padding-top: 80px; /* Clear header space */
+    position: relative; /* Context for absolute wheel */
+    z-index: 10; /* Ensure content is above background */
   }
 </style>

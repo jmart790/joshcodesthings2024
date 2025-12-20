@@ -1,5 +1,9 @@
 <template>
-  <dialog :open="isOpen" class="dialog-card" :class="`size-${size}`">
+  <dialog
+    :open="isOpen"
+    class="dialog-card"
+    :class="[`size-${size}`, { 'is-full-size': isFullSize, 'is-transparent': isTransparent }]"
+  >
     <header>
       <TypeWriter
         class="type-writer"
@@ -12,6 +16,7 @@
     </header>
     <section>
       <TypeWriter class="type-writer" v-if="isOpen" :delay="1000" :speed="10" :text="desc" />
+      <slot></slot>
     </section>
     <RetroButton @click.stop="$emit('go-to-stage')" v-if="size !== 'sm'">
       <TypeWriter class="type-writer" v-if="isOpen" :delay="2500" :speed="10" text="Go!" />
@@ -29,9 +34,13 @@
       desc: string;
       size: string;
       isNameBlue?: boolean;
+      isFullSize?: boolean;
+      isTransparent?: boolean;
     }>(),
     {
-      isNameBlue: false
+      isNameBlue: false,
+      isFullSize: false,
+      isTransparent: false
     }
   );
 </script>
@@ -67,11 +76,43 @@
     color: white;
     max-width: 500px;
     max-height: 550px;
-    overflow: auto;
+    overflow: auto; /* Default scrollable */
     animation: expand 1s ease forwards;
+    transition: background 0.3s ease;
   }
 
-  .dialog-card.size-sm {
+  /* Transparent override */
+  .dialog-card.is-transparent {
+    background: linear-gradient(to bottom, rgba(64, 64, 64, 0.4), rgba(0, 0, 0, 0.4));
+    backdrop-filter: blur(4px); /* Reduce blur slightly for transparency feel */
+  }
+
+  .dialog-card[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Full size override */
+  .dialog-card.is-full-size {
+    max-height: 800px;
+    overflow: hidden;
+  }
+
+  /* Content Section */
+  .dialog-card > section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dialog-card.size-sm.is-full-size {
+    max-width: 650px;
+    max-height: 800px;
+    height: 100%;
+    margin: 0;
+  }
+
+  .dialog-card.size-sm:not(.is-full-size) {
     max-width: 650px;
     max-height: 350px;
     margin: 0;
@@ -93,12 +134,14 @@
   header .type-writer {
     font-size: 125%;
     background: linear-gradient(to bottom, #fe9900 0%, #fe9900 25%, #f9e5bd 50%, #ff9900 100%);
+    background-clip: text; /* Standard property */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
   header .type-writer.blue {
     font-size: 125%;
     background: linear-gradient(to bottom, #02a7f9 0%, #47c2ff 25%, #ccf2fd 50%, #00aaff 100%);
+    background-clip: text; /* Standard property */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }

@@ -8,6 +8,8 @@ export interface Project {
   video?: string;
   github?: string;
   demoLink?: string;
+  icon?: string;
+  bg?: string;
 }
 
 export const projects: Project[] = [
@@ -21,38 +23,68 @@ export const projects: Project[] = [
     logoClass: 'logo-pokedex',
     video: '/pokedex_demo.webm',
     github: 'https://github.com/jmart790/real-pokedex',
-    demoLink: 'https://aprettydecentpokedex.netlify.app/'
+    demoLink: 'https://aprettydecentpokedex.netlify.app/',
+    icon: 'pokeball',
+    bg: '/pokemon-bg.png'
   },
   {
     id: 2,
-    name: 'Sega Genesis',
-    year: '1989',
-    tech: 'Motorola 68000',
-    description: 'A 16-bit home video game console developed and sold by Sega. It was a major competitor to the SNES.',
-    logoClass: 'logo-sega'
+    name: 'Josh Codes Things',
+    year: '2024',
+    tech: 'Vue 3, TypeScript',
+    description:
+      'My personal portfolio and playground for retro-inspired web experiments. Built with a focus on component architecture, pixel-perfect 90s aesthetics, and modern frontend tooling.',
+    logoClass: 'logo-jct',
+    github: 'https://github.com/jmart790/joshcodesthings2024',
+    icon: 'computer',
+    bg: '/joshcodesthings-bg.png'
   },
   {
     id: 3,
-    name: 'Neo Geo',
-    year: '1990',
-    tech: 'Arcade Board',
-    description: 'Known for its high-end arcade specs brought to the home console market. Very expensive but powerful.',
-    logoClass: 'logo-neogeo'
+    name: '16-bit UI Library',
+    year: '2025',
+    tech: 'React, Storybook, TypeScript',
+    description:
+      'A retro 90s video game pixel art design system for React. Features pixel-perfect components, CSS reset, and custom font support to easily build authentic SNES/Genesis era web interfaces.',
+    logoClass: 'logo-16bit',
+    github: 'https://github.com/jmart790/16bit-ui',
+    icon: 'pencil',
+    bg: '/uilibrary-bg.png'
   },
   {
     id: 4,
-    name: 'Nintendo 64',
-    year: '1996',
-    tech: 'MIPS R4300i',
-    description: 'Named for its 64-bit central processing unit. Released with Super Mario 64.',
-    logoClass: 'logo-n64'
+    name: 'My Smart Dash',
+    year: '2023',
+    tech: 'Vue 3, Geolocation API',
+    description:
+      "A location-aware personal dashboard that consolidates useful utility modues. It aggregates data from multiple public APIs to display local weather, news, and relevant alerts based on the user's real-time position.",
+    logoClass: 'logo-dashboard',
+    github: 'https://github.com/jmart790/My_Dashboard',
+    icon: 'globe',
+    bg: '/mydashboard-bg.png'
   },
   {
     id: 5,
-    name: 'Dreamcast',
-    year: '1998',
-    tech: 'Hitachi SH-4',
-    description: 'The final home console from Sega, featuring a built-in modem for internet play.',
-    logoClass: 'logo-dreamcast'
+    name: 'PS App Replica',
+    year: '2023',
+    tech: 'Vue 3, Vuex',
+    description:
+      'A pixel-perfect web replica of the PlayStation Mobile App. Recreates the iOS navigation, animations, and visual polish using modern web standards.',
+    logoClass: 'logo-psapp',
+    github: 'https://github.com/jmart790/playstation-app-replica',
+    icon: 'mobile',
+    bg: '/playstation-bg.png'
+  },
+  {
+    id: 6,
+    name: 'Retro Gamer Lofi',
+    year: '2024',
+    tech: 'Gen AI (Midjourney, Suno, Kling)',
+    description:
+      'A multimedia project exploring the intersection of AI generation and nostalgia. I use a toolchain of AI models to generate infinite lofi beats and retro-style visuals, curated and edited in DaVinci Resolve.',
+    logoClass: 'logo-lofi',
+    demoLink: 'https://www.youtube.com/@RetroGamerLofi',
+    icon: 'cassette',
+    bg: '/retrogamerlofi-bg.png'
   }
 ];
