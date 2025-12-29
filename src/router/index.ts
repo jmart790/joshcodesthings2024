@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
   { path: '/', component: () => import('../pages/index.vue') },
@@ -9,11 +9,12 @@ const routes = [
   { path: '/personal-projects', component: () => import('../pages/personal-projects.vue') },
   { path: '/stage-select', component: () => import('../pages/stage-select.vue') },
   { path: '/work-history', component: () => import('../pages/work-history.vue') },
-]
+  { path: '/password', component: () => import('../pages/password.vue') }
+];
 
 const router = createRouter({
   history: createWebHistory(),
-  routes,
-})
+  routes
+});
 
-export default router
+export default router;

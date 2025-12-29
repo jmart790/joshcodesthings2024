@@ -9,6 +9,7 @@
 <template>
   <button :disabled="disabled" class="retro-button" :class="{ selected, small }">
     <slot />
+    <div class="active-border"></div>
   </button>
 </template>
 
@@ -18,6 +19,8 @@
     font-size: 24px;
     margin: 10px 0;
     cursor: pointer;
+    position: relative;
+    outline: none;
     transition: all 0.3s;
     line-height: 1;
     border: none;
@@ -49,5 +52,35 @@
     -webkit-text-fill-color: transparent;
     cursor: not-allowed;
     filter: drop-shadow(-2px 2px 1px black);
+  }
+
+  .active-border {
+    position: absolute;
+    inset: -6px;
+    pointer-events: none;
+    display: none;
+    z-index: 10;
+  }
+
+  .retro-button:focus-visible .active-border,
+  .retro-button.selected .active-border {
+    display: block;
+    background: linear-gradient(#ffcc00, #ffcc00) top left, linear-gradient(#ffcc00, #ffcc00) top left,
+      linear-gradient(#ffcc00, #ffcc00) top right, linear-gradient(#ffcc00, #ffcc00) top right,
+      linear-gradient(#ffcc00, #ffcc00) bottom right, linear-gradient(#ffcc00, #ffcc00) bottom right,
+      linear-gradient(#ffcc00, #ffcc00) bottom left, linear-gradient(#ffcc00, #ffcc00) bottom left;
+    background-size: 10px 3px, 3px 10px, 10px 3px, 3px 10px, 10px 3px, 3px 10px, 10px 3px, 3px 10px;
+    background-repeat: no-repeat;
+    animation: flashBracket 0.2s step-end infinite alternate;
+  }
+
+  @keyframes flashBracket {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
   }
 </style>

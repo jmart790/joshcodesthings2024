@@ -111,13 +111,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #101115;
     overflow: hidden;
-    background-image: radial-gradient(circle at center, transparent 60%, #000000b1 100%),
-      linear-gradient(rgba(19, 202, 58, 0.1) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(19, 202, 58, 0.1) 1px, transparent 1px);
-    background-size: 100% 100%, 40px 40px, 40px 40px;
-    background-position: center;
   }
 
   .menu {

@@ -10,6 +10,10 @@
         :activeIndex="activeIndex"
         :positionOffset="positionOffset"
         :isSelected="isSelected"
+        :transitionDuration="transitionDuration"
+        :transitionTiming="transitionTiming"
+        :style="{ top: sliderTop }"
+        :showModel="isModelVisible"
       />
     </div>
     <div class="char-name">
@@ -17,7 +21,7 @@
     </div>
     <div class="buttons">
       <RetroButton @click="prev">Prev</RetroButton>
-      <RetroButton @click="next">Next</RetroButton>
+      <RetroButton @click="nextManually">Next</RetroButton>
       <RetroButton class="select-button" @click="select">{{ isSelected ? 'Deselect' : 'Select' }}</RetroButton>
     </div>
     <div class="char-desc">
@@ -34,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { useRouter } from 'vue-router';
   import SphereGrid from '../components/stage-select/SphereGrid.vue';
   import Slider from '../components/stage-select/Slider.vue';
@@ -49,8 +53,17 @@
   const activeIndex = ref(0);
   const isSelected = ref(false);
   const positionOffset = ref(1);
+  const isSpinning = ref(false);
+  const transitionDuration = ref(500);
+
+  const transitionTiming = ref('ease');
+  const sliderTop = ref('-100vh');
+  const isModelVisible = ref(false);
 
   const prev = () => {
+    if (isSpinning.value) return;
+    transitionDuration.value = 500;
+    transitionTiming.value = 'ease';
     positionOffset.value += 1;
     activeIndex.value = (activeIndex.value - 1 + characters.value.length) % characters.value.length;
   };
@@ -60,7 +73,15 @@
     activeIndex.value = (activeIndex.value + 1) % characters.value.length;
   };
 
+  const nextManually = () => {
+    if (isSpinning.value) return;
+    transitionDuration.value = 500;
+    transitionTiming.value = 'ease';
+    next();
+  };
+
   const select = () => {
+    if (isSpinning.value) return;
     isSelected.value = !isSelected.value;
   };
 
@@ -68,6 +89,66 @@
     const route = characters.value[activeIndex.value].page;
     router.push(route);
   };
+
+  const spinToRandomCharacter = async () => {
+    isSpinning.value = true;
+    const randomIndex = Math.floor(Math.random() * characters.value.length);
+    // Ensure at least 2 full rotations (2 * length) plus the distance to the target
+    const currentIdx = activeIndex.value;
+    const distance = (randomIndex - currentIdx + characters.value.length) % characters.value.length;
+    const totalSteps = characters.value.length * 3 + distance;
+
+    let step = 0;
+
+    const animateStep = () => {
+      if (step >= totalSteps) {
+        isSpinning.value = false;
+        // Reset to default for manual interaction
+        transitionDuration.value = 500;
+        transitionTiming.value = 'ease';
+        return;
+      }
+
+      // Interactive ease-out curve
+      // Start fast (small delay), end slow (large delay)
+      const progress = step / totalSteps;
+      const delay = 40 + 450 * Math.pow(progress, 5); // Faster start, steeper curve
+
+      // Update transition settings to match the speed of this step
+      // Add a small buffer (e.g. 1.2x) to ensure the transition doesn't finish before the next step triggers
+      // This prevents micro-stutters where the animation stops briefly
+      transitionDuration.value = delay * 1.2;
+      transitionTiming.value = 'linear';
+
+      // If this is the last step, use ease-out for a smooth final stop
+      if (step === totalSteps - 1) {
+        transitionTiming.value = 'ease-out';
+        transitionDuration.value = delay; // Let it take the full calculated time (slower)
+      }
+
+      next();
+      step++;
+
+      setTimeout(animateStep, delay);
+    };
+
+    animateStep();
+  };
+
+  onMounted(() => {
+    // Start spinning immediately
+    spinToRandomCharacter();
+
+    // Animate in from top
+    setTimeout(() => {
+      sliderTop.value = '20%';
+    }, 100);
+
+    // Fade in YoshModel after entry animation (1s duration + buffer)
+    setTimeout(() => {
+      isModelVisible.value = true;
+    }, 2000);
+  });
 </script>
 
 <style scoped>

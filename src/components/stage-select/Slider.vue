@@ -8,7 +8,7 @@
       :isActive="index === activeIndex"
       :isSelected="isSelected"
     />
-    <YoshModel />
+    <YoshModel :visible="showModel" />
   </section>
 </template>
 
@@ -22,6 +22,9 @@
     activeIndex: number;
     positionOffset: number;
     isSelected: boolean;
+    transitionDuration?: number;
+    transitionTiming?: string;
+    showModel?: boolean;
   }>();
 
   const sliderStyle = computed(() => {
@@ -38,7 +41,9 @@
       '--active-index': activeIndex,
       '--initial-rotate-y': `${initialRotateY}deg`,
       '--angle-per-item': `${anglePerItem}deg`,
-      '--active-rotate-y': `${activeRotateY}deg`
+      '--active-rotate-y': `${activeRotateY}deg`,
+      '--transition-duration': `${props.transitionDuration ?? 500}ms`,
+      '--transition-timing': props.transitionTiming ?? 'ease'
     };
   });
 </script>
@@ -52,6 +57,6 @@
     left: calc(50% - 100px);
     transform-style: preserve-3d;
     transform: perspective(1000px) rotateY(var(--active-rotate-y)) rotateX(-16deg);
-    transition: transform 0.5s ease;
+    transition: transform var(--transition-duration) var(--transition-timing), top 1s ease-out;
   }
 </style>
