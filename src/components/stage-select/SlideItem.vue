@@ -1,5 +1,9 @@
 <template>
-  <div class="item-wrapper" :class="{ active: isActive, selected: isSelected }" :style="{ '--position': position }">
+  <div
+    class="item-wrapper"
+    :class="{ active: isActive, selected: isSelected, disabled: disabled }"
+    :style="{ '--position': position }"
+  >
     <div class="item">
       <img :src="image" alt="" />
     </div>
@@ -7,7 +11,13 @@
 </template>
 
 <script setup lang="ts">
-  const props = defineProps<{ image: string; position: number; isActive: boolean; isSelected: boolean }>();
+  const props = defineProps<{
+    image: string;
+    position: number;
+    isActive: boolean;
+    isSelected: boolean;
+    disabled?: boolean;
+  }>();
 </script>
 
 <style scoped>
@@ -34,7 +44,7 @@
       10% 100%,
       0% 90%
     ); /* Clipping the top-left and bottom-left corners */
-    background: linear-gradient(135deg, #727272 0%, #ebebeb 50%, #727272 100%);
+    background: linear-gradient(135deg, #000 0%, #333 50%, #000 100%);
   }
 
   .item-wrapper::before,
@@ -114,5 +124,58 @@
     width: 98%;
     height: 98%;
     clip-path: inherit; /* Inherit clip-path from parent */
+  }
+
+  /* Disabled State - Static/No Signal Effect */
+  .item-wrapper.disabled {
+    pointer-events: none; /* Prevent interaction */
+  }
+
+  /* Apply scanlines to all items */
+  .item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    /* Static Noise Effect */
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.1) 2px,
+      rgba(255, 255, 255, 0.1) 4px
+    );
+    background-size: 100% 4px;
+    animation: static-lines 0.2s infinite linear;
+    pointer-events: none;
+  }
+
+  /* Disabled State - Static Distortion on Image Only */
+  .item-wrapper.disabled img {
+    filter: contrast(100%) brightness(0.3) sepia(100%) blur(10px);
+  }
+
+  /* Disabled State - Question Mark Overlay */
+  .item-wrapper.disabled .item::after {
+    content: '?';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 6rem;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.8);
+    font-family: 'Press Start 2P', cursive;
+    text-shadow: 4px 4px 0px #000;
+    z-index: 100;
+  }
+
+  @keyframes static-lines {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 0 4px;
+    }
   }
 </style>

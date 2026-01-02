@@ -51,6 +51,7 @@ export const characters = [
     isActive: false,
     isSelected: false,
     page: '/mystery',
-    desc: `He obscures the truth about his identity, hiding in the shadows of a lair filled with static screens and distorted reflections. His mission is shrouded in mystery, and his eerie resemblance to Yosh raises unsettling questions. Could they be the same, or is Mosh a dark reflection of the hero? As he moves through the shadows, his true intentions remain an enigma.`
+    desc: `A distorted shadow lurking in the code. His origins are corrupted, and his files are locked behind layers of encryption. Access denied.....`,
+    disabled: true
   }
 ];

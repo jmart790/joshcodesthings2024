@@ -18,7 +18,7 @@
       <TypeWriter class="type-writer" v-if="isOpen" :delay="1000" :speed="10" :text="desc" />
       <slot></slot>
     </section>
-    <RetroButton @click.stop="$emit('go-to-stage')" v-if="size !== 'sm'">
+    <RetroButton @click.stop="$emit('go-to-stage')" v-if="isDisabled ? false : size !== 'sm'">
       <TypeWriter class="type-writer" v-if="isOpen" :delay="2500" :speed="10" text="Go!" />
     </RetroButton>
   </dialog>
@@ -33,11 +33,13 @@
       name: string;
       desc: string;
       size: string;
+      isDisabled?: boolean;
       isNameBlue?: boolean;
       isFullSize?: boolean;
       isTransparent?: boolean;
     }>(),
     {
+      isDisabled: false,
       isNameBlue: false,
       isFullSize: false,
       isTransparent: false

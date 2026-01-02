@@ -7,6 +7,7 @@
       :position="index + positionOffset"
       :isActive="index === activeIndex"
       :isSelected="isSelected"
+      :disabled="item.disabled"
     />
     <YoshModel :visible="showModel" />
   </section>
@@ -18,7 +19,7 @@
   import YoshModel from './YoshModel.vue';
 
   const props = defineProps<{
-    items: { image: string; name: string; id: number; isActive: boolean; isSelected: boolean }[];
+    items: { image: string; name: string; id: number; isActive: boolean; isSelected: boolean; disabled?: boolean }[];
     activeIndex: number;
     positionOffset: number;
     isSelected: boolean;

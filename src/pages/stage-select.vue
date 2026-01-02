@@ -16,8 +16,8 @@
         :showModel="isModelVisible"
       />
     </div>
-    <div class="char-name">
-      <ScrambleText :text="characters[activeIndex].name" />
+    <div class="char-name" v-if="isTextVisible">
+      <ScrambleText :text="characters[activeIndex].disabled ? DISABLED_CHAR_NAME : characters[activeIndex].name" />
     </div>
     <div class="buttons">
       <RetroButton @click="prev">Prev</RetroButton>
@@ -26,12 +26,13 @@
     </div>
     <div class="char-desc">
       <DialogCard
-        :isOpen="isSelected"
-        :name="characters[activeIndex].name"
-        :desc="characters[activeIndex].desc"
         size="md"
-        @go-to-stage="navToCharPage"
+        :isOpen="isSelected"
+        :name="characters[activeIndex].disabled ? DISABLED_CHAR_NAME : characters[activeIndex].name"
+        :desc="characters[activeIndex].disabled ? DISABLED_CHAR_DESC : characters[activeIndex].desc"
         :is-name-blue="false"
+        :is-disabled="characters[activeIndex].disabled"
+        @go-to-stage="navToCharPage"
       />
     </div>
   </div>
@@ -54,15 +55,24 @@
   const isSelected = ref(false);
   const positionOffset = ref(1);
   const isSpinning = ref(false);
-  const transitionDuration = ref(500);
+
+  const DEFAULT_TRANSITION_DURATION = 500;
+  const SLIDER_IN_DELAY = 100;
+  const TEXT_SHOW_DELAY = 1500;
+  const MODEL_SHOW_DELAY = 2000;
+  const DISABLED_CHAR_DESC = '... ..... .... ... ....... ... .... ..... .... .... ......... . . .';
+  const DISABLED_CHAR_NAME = '????????';
+
+  const transitionDuration = ref(DEFAULT_TRANSITION_DURATION);
 
   const transitionTiming = ref('ease');
   const sliderTop = ref('-100vh');
   const isModelVisible = ref(false);
+  const isTextVisible = ref(false);
 
   const prev = () => {
     if (isSpinning.value) return;
-    transitionDuration.value = 500;
+    transitionDuration.value = DEFAULT_TRANSITION_DURATION;
     transitionTiming.value = 'ease';
     positionOffset.value += 1;
     activeIndex.value = (activeIndex.value - 1 + characters.value.length) % characters.value.length;
@@ -75,7 +85,7 @@
 
   const nextManually = () => {
     if (isSpinning.value) return;
-    transitionDuration.value = 500;
+    transitionDuration.value = DEFAULT_TRANSITION_DURATION;
     transitionTiming.value = 'ease';
     next();
   };
@@ -92,11 +102,12 @@
 
   const spinToRandomCharacter = async () => {
     isSpinning.value = true;
+    const rotationAmmount = 2;
     const randomIndex = Math.floor(Math.random() * characters.value.length);
     // Ensure at least 2 full rotations (2 * length) plus the distance to the target
     const currentIdx = activeIndex.value;
     const distance = (randomIndex - currentIdx + characters.value.length) % characters.value.length;
-    const totalSteps = characters.value.length * 3 + distance;
+    const totalSteps = characters.value.length * rotationAmmount + distance;
 
     let step = 0;
 
@@ -104,7 +115,7 @@
       if (step >= totalSteps) {
         isSpinning.value = false;
         // Reset to default for manual interaction
-        transitionDuration.value = 500;
+        transitionDuration.value = DEFAULT_TRANSITION_DURATION;
         transitionTiming.value = 'ease';
         return;
       }
@@ -142,12 +153,17 @@
     // Animate in from top
     setTimeout(() => {
       sliderTop.value = '20%';
-    }, 100);
+    }, SLIDER_IN_DELAY);
+
+    // Show text after slide animation (100ms delay + 1s transition)
+    setTimeout(() => {
+      isTextVisible.value = true;
+    }, TEXT_SHOW_DELAY);
 
     // Fade in YoshModel after entry animation (1s duration + buffer)
     setTimeout(() => {
       isModelVisible.value = true;
-    }, 2000);
+    }, MODEL_SHOW_DELAY);
   });
 </script>
 
