@@ -64,7 +64,6 @@
     background: #050510; /* Dark background to make glass pop */
     /* background-image: radial-gradient(circle at 20% 40%, rgba(0, 100, 255, 0.2) 0%, transparent 40%),
       radial-gradient(circle at 80% 60%, rgba(0, 255, 200, 0.1) 0%, transparent 40%); */
-    /* background-image: url('/public/mirrorman_bg.webp'); */
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
