@@ -106,23 +106,36 @@
 
 <style scoped>
   .container {
+    --container-padding-block: 1rem;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: var(--container-padding-block) 1rem;
     overflow: hidden;
   }
 
   .menu {
     --character-height: 250px;
-    --menu-item-height: 24px; /* Adjust based on your actual menu item height */
+    --menu-item-height: 24px;
+    --menu-row-gap: 20px;
+    --character-left: -140%;
+    --wave-start: -120%;
+    --wave-end: 700%;
+    --button-font-size: 24px;
+    --button-margin-block: 10px;
+    --character-glow: 0 0 60px #ffffff9d;
+    --menu-margin-top: 0;
+
     position: relative;
-    display: flex;
     flex-direction: column;
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: var(--menu-margin-top);
     animation: fade-in 0.8s ease-out 1.6s both;
   }
 
@@ -143,40 +156,99 @@
 
   .character-image {
     position: absolute;
-    left: -140%; /* Adjust as needed */
+    left: var(--character-left);
     height: var(--character-height);
     transition: transform 0.3s; /* Smooth transition when changing active item */
-    filter: drop-shadow(0px 0px 60px #ffffff9d);
+    filter: drop-shadow(var(--character-glow));
   }
 
   @keyframes waveTravel {
     0% {
-      left: -120%;
+      left: var(--wave-start);
       height: var(--character-height);
     }
     100% {
-      left: 700%;
+      left: var(--wave-end);
       height: calc(var(--character-height) * 2);
     }
   }
 
   .wave-image {
     position: absolute;
-    left: -120%;
+    left: var(--wave-start);
     height: var(--character-height);
     animation: waveTravel 2s linear forwards;
     z-index: 5; /* Ensure it's behind menu items but visible */
   }
 
   .position-0 {
-    transform: translateY(calc(-50% + 0 * (var(--menu-item-height) + 20px)));
+    transform: translateY(calc(-50% + 0 * (var(--menu-item-height) + var(--menu-row-gap))));
   }
 
   .position-1 {
-    transform: translateY(calc(-50% + 1 * (var(--menu-item-height) + 20px)));
+    transform: translateY(calc(-50% + 1 * (var(--menu-item-height) + var(--menu-row-gap))));
   }
 
   .position-2 {
-    transform: translateY(calc(-50% + 2 * (var(--menu-item-height) + 20px)));
+    transform: translateY(calc(-50% + 2 * (var(--menu-item-height) + var(--menu-row-gap))));
+  }
+
+  .menu :deep(.retro-button) {
+    font-size: var(--button-font-size);
+    margin-block: var(--button-margin-block);
+  }
+
+  /* desktop: mirrors --breakpoint-desktop */
+  @media (max-width: 1200px) {
+    .menu {
+      --character-height: 190px;
+      --menu-item-height: 20px;
+      --menu-row-gap: 18px;
+      --character-left: -118%;
+      --wave-start: -104%;
+      --wave-end: 520%;
+      --button-font-size: 20px;
+      --button-margin-block: 9px;
+    }
+  }
+
+  /* tablet: mirrors --breakpoint-tablet */
+  @media (max-width: 720px) {
+    .container {
+      --container-padding-block: 1.5rem;
+    }
+
+    .menu {
+      --character-height: 135px;
+      --menu-item-height: 16px;
+      --menu-row-gap: 16px;
+      --character-left: -88%;
+      --wave-start: -78%;
+      --wave-end: 390%;
+      --button-font-size: 16px;
+      --button-margin-block: 8px;
+      --character-glow: 0 0 36px #ffffff9d;
+      --menu-margin-top: 0.5rem;
+    }
+  }
+
+  /* mobile: mirrors --breakpoint-mobile */
+  @media (max-width: 480px) {
+    .menu {
+      --character-height: 112px;
+      --character-left: -76%;
+      --wave-start: -68%;
+      --wave-end: 330%;
+      --button-font-size: 14px;
+    }
+  }
+
+  /* short-screen: mirrors --breakpoint-short-screen */
+  @media (max-height: 620px) {
+    .menu {
+      --character-height: 120px;
+      --button-font-size: 14px;
+      --button-margin-block: 6px;
+    }
   }
 </style>

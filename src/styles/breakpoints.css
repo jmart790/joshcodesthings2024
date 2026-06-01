@@ -1,0 +1,17 @@
+:root {
+  /*
+    Shared app breakpoints.
+
+    CSS custom properties cannot be used directly inside @media queries, so
+    component styles should mirror these values when adding responsive rules.
+
+    desktop: 1200px and below
+    tablet: 720px and below
+    mobile: 480px and below
+    short-screen: 620px high and below
+  */
+  --breakpoint-desktop: 1200px;
+  --breakpoint-tablet: 720px;
+  --breakpoint-mobile: 480px;
+  --breakpoint-short-screen: 620px;
+}

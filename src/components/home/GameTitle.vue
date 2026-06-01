@@ -23,8 +23,23 @@
 
 <style scoped>
   header {
+    --title-font-size: 100px;
+    --title-margin-block: 8rem 16rem;
+    --gold-width: 320px;
+    --gold-height: 100px;
+    --gold-margin-left: -9rem;
+    --border-left: -27px;
+    --red-bg-top: 40px;
+    --red-bg-left: -32px;
+    --red-bg-border-right: 665px;
+    --red-bg-border-left: 86px;
+    --red-bg-border-top: 97px;
+    --com-translate-x: -1rem;
+    --com-translate-y: 1rem;
+    --pl-padding: 0.8em;
+
     position: relative;
-    margin-block: 8rem 16rem;
+    margin-block: var(--title-margin-block);
     text-transform: uppercase;
     display: flex;
   }
@@ -41,9 +56,9 @@
   }
 
   .gold-wrapper {
-    width: 320px;
-    height: 100px;
-    margin-left: -9rem;
+    width: var(--gold-width);
+    height: var(--gold-height);
+    margin-left: var(--gold-margin-left);
     z-index: 1;
   }
 
@@ -56,7 +71,7 @@
 
   .title-wrapper.gold.com {
     position: absolute;
-    transform: rotate(45deg) skewX(331deg) translate(-1rem, 1rem);
+    transform: rotate(45deg) skewX(331deg) translate(var(--com-translate-x), var(--com-translate-y));
     z-index: 4;
     white-space: nowrap;
     animation: bar-to-x-com 0.8s cubic-bezier(0.19, 1, 0.22, 1) 0.8s backwards;
@@ -126,7 +141,7 @@
     }
     100% {
       /* Final state */
-      transform: rotate(45deg) skewX(331deg) translate(-1rem, 1rem);
+      transform: rotate(45deg) skewX(331deg) translate(var(--com-translate-x), var(--com-translate-y));
       opacity: 1;
     }
   }
@@ -143,7 +158,7 @@
     font-family: 'Saira', sans-serif;
     font-weight: 900;
     font-style: italic;
-    font-size: 100px;
+    font-size: var(--title-font-size);
     display: inline-block;
     line-height: 0.9;
   }
@@ -231,7 +246,7 @@
     --letter-spacing: calc(1em / 8);
     position: absolute;
     z-index: 2;
-    left: -27px;
+    left: var(--border-left);
     top: 0;
     background-clip: text;
     width: 110%;
@@ -294,11 +309,17 @@
 
   .title-border:last-of-type {
     z-index: 1;
-    text-shadow: 0 0 0.1rem #8ba2d07a, 0 0 0.2rem black, 0 0 1.5rem #1660f37c;
+    text-shadow:
+      0 0 0.1rem #8ba2d07a,
+      0 0 0.2rem black,
+      0 0 1.5rem #1660f37c;
     -webkit-text-stroke: 0.06em rgba(black, 0.5);
   }
   .title-border.gold:last-of-type {
-    text-shadow: 0 0 0.1rem #d1a9526e, 0 0 0.2rem black, 0 0 1.5rem #f2d95d80;
+    text-shadow:
+      0 0 0.1rem #d1a9526e,
+      0 0 0.2rem black,
+      0 0 1.5rem #f2d95d80;
   }
 
   .first-letter {
@@ -306,20 +327,20 @@
   }
 
   .first-letter.pl {
-    padding-left: 0.8em;
+    padding-left: var(--pl-padding);
   }
 
   .red-bg {
     position: absolute;
-    top: 40px;
-    left: -32px;
+    top: var(--red-bg-top);
+    left: var(--red-bg-left);
     z-index: 3;
     content: '';
     width: 0;
     height: 0;
-    border-right: 665px solid transparent;
-    border-left: 86px solid transparent;
-    border-top: 97px solid #940001;
+    border-right: var(--red-bg-border-right) solid transparent;
+    border-left: var(--red-bg-border-left) solid transparent;
+    border-top: var(--red-bg-border-top) solid #940001;
     transform: skewX(355deg);
     /* Animation for the red spike background as well to match */
     animation: spike-in 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.1s backwards;
@@ -335,4 +356,49 @@
       opacity: 1;
     }
   }
+
+  /* desktop: mirrors --breakpoint-desktop */
+  @media (max-width: 1200px) {
+    header {
+      --title-font-size: 72px;
+      --title-margin-block: 4rem 8rem;
+      --gold-width: 230px;
+      --gold-height: 120px;
+      --gold-margin-left: -6.5rem;
+      --border-left: -20px;
+      --red-bg-top: 29px;
+      --red-bg-left: -24px;
+      --red-bg-border-right: 480px;
+      --red-bg-border-left: 62px;
+      --red-bg-border-top: 70px;
+    }
+  }
+
+  /* tablet: mirrors --breakpoint-tablet */
+  @media (max-width: 720px) {
+    header {
+      --title-font-size: 44px;
+      --title-margin-block: 2rem 5rem;
+      --gold-width: 145px;
+      --gold-height: 70px;
+      --gold-margin-left: -4rem;
+      --border-left: -12px;
+      --red-bg-top: 18px;
+      --red-bg-left: -16px;
+      --red-bg-border-right: 300px;
+      --red-bg-border-left: 38px;
+      --red-bg-border-top: 43px;
+      --com-translate-x: -0.5rem;
+      --com-translate-y: 0.5rem;
+      --pl-padding: 0.55em;
+    }
+  }
+
+  /* short-screen: mirrors --breakpoint-short-screen */
+  @media (max-height: 620px) {
+    header {
+      --title-margin-block: 1.5rem 4rem;
+    }
+  }
+
 </style>
