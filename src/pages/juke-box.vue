@@ -42,6 +42,8 @@
   import JukeboxFrame from '../components/jukebox/JukeboxFrame.vue';
 
   const videos = [
+    { title: 'Legend of LoFi: Beats from the Sacred Realm', id: 'WbIh_63IZu8' },
+    { title: 'Lo-Fi Fantasy VII: Beats from the Streets of Midgar', id: 'UM8dvsGTMzg' },
     { title: 'Breath of LoFi III: Beats from Cedar Woods', id: 'UeGPZerwib4' },
     { title: 'Super Lofi-Vania IV : Beats from the Clock Tower', id: '2DVUhqmgqhI' },
     { title: 'Lo-Fi Fantasy Tactics: Beats from the Zodiac Brave', id: 'lnxKqQA6_qU' },
@@ -97,10 +99,14 @@
     padding: 8rem;
     box-sizing: border-box;
     overflow: hidden;
-    background-image: radial-gradient(circle at center, transparent 80%, #000 100%),
+    background-image:
+      radial-gradient(circle at center, transparent 80%, #000 100%),
       linear-gradient(rgba(0, 200, 255, 0.07) 1px, transparent 1px),
       linear-gradient(90deg, rgba(2, 200, 255, 0.07) 1px, transparent 1px);
-    background-size: 100% 100%, 40px 40px, 40px 40px;
+    background-size:
+      100% 100%,
+      40px 40px,
+      40px 40px;
     background-position: center;
   }
 
@@ -123,7 +129,9 @@
     border: 4px solid hsla(188, 23%, 39%, 0.497);
     border-radius: 12px;
     padding: 15px;
-    box-shadow: inset 0 0 30px #000, 0 0 0 2px #333310;
+    box-shadow:
+      inset 0 0 30px #000,
+      0 0 0 2px #333310;
     box-sizing: border-box;
     overflow: hidden;
   }
