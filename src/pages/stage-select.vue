@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue';
+  import { computed, ref, onMounted } from 'vue';
   import { useRouter } from 'vue-router';
   import SphereGrid from '../components/stage-select/SphereGrid.vue';
   import Slider from '../components/stage-select/Slider.vue';
@@ -47,9 +47,20 @@
   import DialogCard from '../components/shared/DialogCard.vue';
   import RetroButton from '../components/shared/RetroButton.vue';
   import { characters as allCharacters } from '../constants/characters';
+  import { moshmanUnlocked } from '../state/progress';
 
   const router = useRouter();
-  const characters = ref(allCharacters);
+  const MOSHMAN_ID = 6;
+  const characters = computed(() =>
+    allCharacters.map((character) =>
+      character.id === MOSHMAN_ID
+        ? {
+            ...character,
+            disabled: !moshmanUnlocked.value
+          }
+        : character
+    )
+  );
 
   const activeIndex = ref(0);
   const isSelected = ref(false);

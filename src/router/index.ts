@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { isMoshmanUnlocked, recordVisitedPage } from '../state/progress';
 
 const routes = [
   { path: '/', component: () => import('../pages/index.vue') },
@@ -15,6 +16,16 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes
+});
+
+router.beforeEach((to) => {
+  if (to.path === '/mystery' && !isMoshmanUnlocked()) {
+    return '/stage-select';
+  }
+});
+
+router.afterEach((to) => {
+  recordVisitedPage(to.path);
 });
 
 export default router;

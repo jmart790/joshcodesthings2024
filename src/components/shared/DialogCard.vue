@@ -19,7 +19,7 @@
       <slot></slot>
     </section>
     <RetroButton @click.stop="$emit('go-to-stage')" v-if="isDisabled ? false : size !== 'sm'">
-      <TypeWriter class="type-writer" v-if="isOpen" :delay="2500" :speed="10" text="Go!" />
+      <TypeWriter class="type-writer" v-if="isOpen" :delay="0" :speed="10" text="Go!" />
     </RetroButton>
   </dialog>
 </template>

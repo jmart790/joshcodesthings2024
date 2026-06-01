@@ -47,7 +47,7 @@ export const characters = [
   {
     id: 6,
     image: '/moshman.webp',
-    name: 'Mosh',
+    name: 'Mosh Man',
     isActive: false,
     isSelected: false,
     page: '/mystery',

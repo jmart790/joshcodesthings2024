@@ -42,6 +42,7 @@
   import PasswordGridButton from '../components/password/PasswordGridButton.vue';
   import PasswordGridFrame from '../components/password/PasswordGridFrame.vue';
   import RetroButton from '../components/shared/RetroButton.vue';
+  import { unlockMoshman } from '../state/progress';
 
   // Options for the grid cells
   const options = ['?', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'A', 'B', 'X', 'Y', 'L', 'R'];
@@ -92,6 +93,7 @@
 
     if (isCorrect) {
       validationStatus.value = 'success';
+      unlockMoshman();
       console.log('PASSWORD ACCEPTED');
     } else {
       validationStatus.value = 'error';
