@@ -55,18 +55,14 @@
     'RIGHT',
     'A',
     'B',
-    'A',
-    '?',
-    '?',
-    '?',
-    '?',
-    '?',
-    '?',
-    '?'
+    'A'
   ];
 
-  // 4x4 Grid = 16 cells
-  const gridState = ref(new Array(16).fill(0));
+  const GRID_CELL_COUNT = 9;
+  const createEmptyGrid = () => new Array(GRID_CELL_COUNT).fill(0);
+
+  // 3x3 Grid = 9 cells
+  const gridState = ref(createEmptyGrid());
   const activeIndex = ref(0); // Start with first valid index
   const gridButtons = ref([]);
 
@@ -102,7 +98,7 @@
   };
 
   const resetGrid = () => {
-    gridState.value = new Array(16).fill(0); // Reset to '?' (index 0)
+    gridState.value = createEmptyGrid(); // Reset to '?' (index 0)
     validationStatus.value = null;
     isDirty.value = false;
     activeIndex.value = 0; // Optional: focus first

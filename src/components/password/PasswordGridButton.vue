@@ -116,8 +116,8 @@
   }
 
   .grid-cell {
-    width: 100px;
-    height: 100px;
+    width: var(--button-size, 132px);
+    height: var(--button-size, 132px);
     box-sizing: border-box;
     background-color: transparent;
     display: flex;
@@ -206,7 +206,7 @@
     justify-content: center;
     align-items: center;
     font-family: 'Press Start 2P', cursive, Arial, sans-serif;
-    font-size: 2rem;
+    font-size: 2.45rem;
     line-height: 1;
     background: linear-gradient(to bottom, #02a7f9 0%, #47c2ff 25%, #ccf2fd 50%, #00aaff 100%);
     background-clip: text;
@@ -230,8 +230,8 @@
   }
 
   .pixel-arrow {
-    width: 40px;
-    height: 40px;
+    width: 58px;
+    height: 58px;
   }
 
   .arrow-path {

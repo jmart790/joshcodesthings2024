@@ -8,12 +8,10 @@
     <div class="socket socket-l socket-pos-1"></div>
     <div class="socket socket-l socket-pos-2"></div>
     <div class="socket socket-l socket-pos-3"></div>
-    <div class="socket socket-l socket-pos-4"></div>
     <!-- Right Sockets (Horizontal Rows 1, 2, 3, 4) -->
     <div class="socket socket-r socket-pos-1"></div>
     <div class="socket socket-r socket-pos-2"></div>
     <div class="socket socket-r socket-pos-3"></div>
-    <div class="socket socket-r socket-pos-4"></div>
     <!-- Corner Sockets -->
     <div class="socket socket-c socket-tl"></div>
     <div class="socket socket-c socket-tr"></div>
@@ -31,11 +29,9 @@
     <!-- Row 3 -->
     <div class="joint joint-c1 joint-r3"></div>
     <div class="joint joint-c2 joint-r3"></div>
-    <div class="joint joint-c3 joint-r3"></div>
-    <!-- Row 4 (Footer Divider) -->
-    <div class="joint joint-c1 joint-r4"></div>
-    <div class="joint joint-c2 joint-r4"></div>
-    <div class="joint joint-c3 joint-r4"></div>
+    <!-- Footer Divider -->
+    <div class="joint joint-c1 joint-footer"></div>
+    <div class="joint joint-c2 joint-footer"></div>
 
     <div class="grid-matrix">
       <slot></slot>
@@ -67,10 +63,10 @@
   }
 
   .grid-container {
-    --button-size: 100px;
-    --gap: 72px;
-    --pipe-width: 16px;
-    --outer-pipe-width: 32px;
+    --button-size: 132px;
+    --gap: 80px;
+    --pipe-width: 18px;
+    --outer-pipe-width: 34px;
 
     --padding: calc((var(--gap) - var(--pipe-width)) / 2);
 
@@ -79,16 +75,15 @@
     transform-origin: center;
 
     /* Pipe Positions (Horizontal & Vertical) */
-    /* 1, 2, 3 are between buttons 1-2, 2-3, 3-4 */
+    /* 1 and 2 are between buttons. 3 is below the final grid row. */
     --pos-1: calc(var(--padding) + var(--button-size) + (var(--gap) - var(--pipe-width)) / 2);
     --pos-2: calc(var(--padding) + 2 * var(--button-size) + var(--gap) + (var(--gap) - var(--pipe-width)) / 2);
+
+    /* Pos 3 is AFTER the 3rd row, acting as the divider between Grid and Footer. */
     --pos-3: calc(var(--padding) + 3 * var(--button-size) + 2 * var(--gap) + (var(--gap) - var(--pipe-width)) / 2);
 
-    /* Pos 4 is AFTER the 4th row, acting as the divider between Grid and Footer */
-    --pos-4: calc(var(--padding) + 4 * var(--button-size) + 3 * var(--gap) + (var(--gap) - var(--pipe-width)) / 2);
-
-    /* V-Pipe Height: Length from Top (0) to Bottom of the 4th horizontal pipe (Divider) */
-    --v-pipe-height: calc(var(--pos-4) + var(--pipe-width));
+    /* V-Pipe Height: Length from Top (0) to Bottom of the divider pipe. */
+    --v-pipe-height: calc(var(--pos-3) + var(--pipe-width));
 
     /* Texture Variables */
     --texture-pattern: repeating-linear-gradient(45deg, #4a4a4a 0px, #4a4a4a 2px, #5a5a5a 2px, #5a5a5a 4px);
@@ -122,27 +117,26 @@
     background-clip: padding-box;
     /* Background Pipes */
     background-image: 
-      /* == LIGHTING LAYER (Top) == */ var(--lighting-v), var(--lighting-v), var(--lighting-v),
-      /* V1, V2, V3 */ var(--lighting-h), var(--lighting-h), var(--lighting-h), var(--lighting-h),
-      /* H1, H2, H3, H4 */ /* == TEXTURE LAYER (Bottom) == */ var(--texture-pattern), var(--texture-pattern),
-      var(--texture-pattern), /* V1, V2, V3 */ var(--texture-pattern), var(--texture-pattern), var(--texture-pattern),
-      var(--texture-pattern),
-      /* H1, H2, H3, H4 */ /* == SUBSTRATE (Grid Background) == */
+      /* == LIGHTING LAYER (Top) == */ var(--lighting-v), var(--lighting-v),
+      /* V1, V2 */ var(--lighting-h), var(--lighting-h), var(--lighting-h),
+      /* H1, H2, H3 */ /* == TEXTURE LAYER (Bottom) == */ var(--texture-pattern), var(--texture-pattern),
+      /* V1, V2 */ var(--texture-pattern), var(--texture-pattern), var(--texture-pattern),
+      /* H1, H2, H3 */ /* == SUBSTRATE (Grid Background) == */
         linear-gradient(rgba(51, 34, 85, 0.55), rgba(51, 34, 85, 0.55));
 
     background-repeat: no-repeat;
     background-position: 
-       /* LIGHTING V */ var(--pos-1) 0, var(--pos-2) 0, var(--pos-3) 0,
-      /* LIGHTING H */ 0 var(--pos-1), 0 var(--pos-2), 0 var(--pos-3), 0 var(--pos-4), /* TEXTURE V */ var(--pos-1) 0,
-      var(--pos-2) 0, var(--pos-3) 0, /* TEXTURE H */ 0 var(--pos-1), 0 var(--pos-2), 0 var(--pos-3), 0 var(--pos-4),
+       /* LIGHTING V */ var(--pos-1) 0, var(--pos-2) 0,
+      /* LIGHTING H */ 0 var(--pos-1), 0 var(--pos-2), 0 var(--pos-3), /* TEXTURE V */ var(--pos-1) 0,
+      var(--pos-2) 0, /* TEXTURE H */ 0 var(--pos-1), 0 var(--pos-2), 0 var(--pos-3),
       /* SUBSTRATE */ 0 0;
     background-size: 
        /* LIGHTING V */ var(--pipe-width) var(--v-pipe-height),
-      var(--pipe-width) var(--v-pipe-height), var(--pipe-width) var(--v-pipe-height),
-      /* LIGHTING H */ 100% var(--pipe-width), 100% var(--pipe-width), 100% var(--pipe-width), 100% var(--pipe-width),
+      var(--pipe-width) var(--v-pipe-height),
+      /* LIGHTING H */ 100% var(--pipe-width), 100% var(--pipe-width), 100% var(--pipe-width),
       /* TEXTURE V */ var(--pipe-width) var(--v-pipe-height), var(--pipe-width) var(--v-pipe-height),
-      var(--pipe-width) var(--v-pipe-height), /* TEXTURE H */ 100% var(--pipe-width), 100% var(--pipe-width),
-      100% var(--pipe-width), 100% var(--pipe-width), /* SUBSTRATE */ 100% 100%;
+      /* TEXTURE H */ 100% var(--pipe-width), 100% var(--pipe-width), 100% var(--pipe-width),
+      /* SUBSTRATE */ 100% 100%;
 
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(0, 0, 0, 0.6);
   }
@@ -222,7 +216,7 @@
   /* INNER GRID MATRIX */
   .grid-matrix {
     display: grid;
-    grid-template-columns: repeat(4, var(--button-size));
+    grid-template-columns: repeat(3, var(--button-size));
     grid-gap: var(--gap);
     /* Bottom padding provided by gap/footer separation */
     margin-bottom: var(--padding);
@@ -230,7 +224,7 @@
 
   /* FOOTER ROW */
   .grid-footer {
-    height: 110px; /* Specific footer height */
+    height: 120px; /* Specific footer height */
     display: flex;
     align-items: center;
     padding-left: 10px;
@@ -347,10 +341,6 @@
   .socket-pos-3.socket-r {
     top: calc(var(--pos-3) - 8px);
   }
-  .socket-pos-4.socket-l,
-  .socket-pos-4.socket-r {
-    top: calc(var(--pos-4) - 8px);
-  }
 
   /* Corners - Aligned to sit IN the corner (-32px matches outer frame thickness) */
   .socket-tl {
@@ -456,12 +446,12 @@
   .joint-r3 {
     top: calc(var(--pos-3) - 8px);
   }
-  .joint-r4 {
-    top: calc(var(--pos-4) - 8px);
+  .joint-footer {
+    top: calc(var(--pos-3) - 8px);
   }
 
   /* Upside Down T shape for last row (remove bottom vertical leg) */
-  .joint-r4::before {
+  .joint-footer::before {
     height: 18px;
     top: 2px;
   }
