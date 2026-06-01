@@ -1,9 +1,12 @@
 <template>
-  <div class="text" :data-text="displayedText">{{ displayedText }}</div>
+  <div class="scramble-wrap">
+    <div class="text text-fill">{{ displayedText }}</div>
+    <div class="text text-outline" aria-hidden="true">{{ displayedText }}</div>
+  </div>
 </template>
 
 <script setup>
-  import { ref, watch, onMounted } from 'vue';
+  import { ref, watch } from 'vue';
 
   const props = defineProps({
     text: {
@@ -76,6 +79,11 @@
 </script>
 
 <style scoped>
+  .scramble-wrap {
+    position: relative;
+    display: inline-block;
+  }
+
   .text {
     position: relative;
     font-size: 4rem;
@@ -90,6 +98,18 @@
     text-transform: uppercase;
     text-shadow: -6px 6px black;
   }
+
+  .text-outline {
+    position: absolute;
+    inset: 0;
+    z-index: 2000;
+    color: transparent;
+    -webkit-text-stroke: 2px #d3d3d3;
+    text-stroke: 2px #d3d3d3;
+    text-shadow: none;
+    pointer-events: none;
+  }
+
   .text::first-letter {
     font-size: 125%;
   }
