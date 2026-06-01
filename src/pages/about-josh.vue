@@ -10,7 +10,7 @@
       <img class="about-me-page__moon" src="/moon bg isolate.webp" alt="" />
     </div>
     <div class="back-button">
-      <RetroButton @click="$router.push('/')">&lt; Back</RetroButton>
+      <RetroButton @click="$router.push('/stage-select')">&lt; Back</RetroButton>
     </div>
     <AboutCube :slides="slides" class="about-me-page__carousel" />
   </div>
