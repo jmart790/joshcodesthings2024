@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
   import { computed, ref, onMounted } from 'vue';
-  import { useRouter } from 'vue-router';
+  import { useRoute, useRouter } from 'vue-router';
   import SphereGrid from '../components/stage-select/SphereGrid.vue';
   import Slider from '../components/stage-select/Slider.vue';
   import ScrambleText from '../components/shared/ScrambleText.vue';
@@ -49,6 +49,7 @@
   import { characters as allCharacters } from '../constants/characters';
   import { moshmanUnlocked } from '../state/progress';
 
+  const route = useRoute();
   const router = useRouter();
   const MOSHMAN_ID = 6;
   const characters = computed(() =>
@@ -80,6 +81,15 @@
   const sliderTop = ref('-100vh');
   const isModelVisible = ref(false);
   const isTextVisible = ref(false);
+
+  const focusCharacterById = (characterId: number) => {
+    const characterIndex = characters.value.findIndex((character) => character.id === characterId);
+    if (characterIndex === -1) return false;
+
+    activeIndex.value = characterIndex;
+    positionOffset.value = 1 - characterIndex;
+    return true;
+  };
 
   const prev = () => {
     if (isSpinning.value) return;
@@ -158,8 +168,14 @@
   };
 
   onMounted(() => {
-    // Start spinning immediately
-    spinToRandomCharacter();
+    const shouldFocusMoshman = route.query.active === 'moshman';
+
+    if (shouldFocusMoshman) {
+      focusCharacterById(MOSHMAN_ID);
+    } else {
+      // Start spinning immediately
+      spinToRandomCharacter();
+    }
 
     // Animate in from top
     setTimeout(() => {

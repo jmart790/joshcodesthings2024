@@ -39,10 +39,13 @@
 
 <script setup>
   import { ref, onMounted, nextTick } from 'vue';
+  import { useRouter } from 'vue-router';
   import PasswordGridButton from '../components/password/PasswordGridButton.vue';
   import PasswordGridFrame from '../components/password/PasswordGridFrame.vue';
   import RetroButton from '../components/shared/RetroButton.vue';
   import { unlockMoshman } from '../state/progress';
+
+  const router = useRouter();
 
   // Options for the grid cells
   const options = ['?', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'A', 'B', 'X', 'Y', 'L', 'R'];
@@ -90,6 +93,9 @@
     if (isCorrect) {
       validationStatus.value = 'success';
       unlockMoshman();
+      setTimeout(() => {
+        router.push({ path: '/stage-select', query: { active: 'moshman' } });
+      }, 1000);
       console.log('PASSWORD ACCEPTED');
     } else {
       validationStatus.value = 'error';
