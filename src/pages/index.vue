@@ -107,6 +107,7 @@
 <style scoped>
   .container {
     --container-padding-block: 1rem;
+    --cta-button-font-size: 24px;
 
     display: flex;
     flex-direction: column;
@@ -120,12 +121,12 @@
 
   .menu {
     --character-height: 250px;
-    --menu-item-height: 24px;
+    --button-font-size: var(--cta-button-font-size);
+    --menu-item-height: var(--button-font-size);
     --menu-row-gap: 20px;
     --character-left: -140%;
     --wave-start: -120%;
     --wave-end: 700%;
-    --button-font-size: 24px;
     --button-margin-block: 10px;
     --character-glow: 0 0 60px #ffffff9d;
     --menu-margin-top: 0;
@@ -202,12 +203,10 @@
   @media (max-width: 1200px) {
     .menu {
       --character-height: 190px;
-      --menu-item-height: 20px;
       --menu-row-gap: 18px;
       --character-left: -118%;
       --wave-start: -104%;
       --wave-end: 520%;
-      --button-font-size: 20px;
       --button-margin-block: 9px;
     }
   }
@@ -216,16 +215,15 @@
   @media (max-width: 720px) {
     .container {
       --container-padding-block: 1.5rem;
+      --cta-button-font-size: clamp(14px, 4vw, 20px);
     }
 
     .menu {
       --character-height: 135px;
-      --menu-item-height: 16px;
       --menu-row-gap: 16px;
       --character-left: -88%;
       --wave-start: -78%;
       --wave-end: 390%;
-      --button-font-size: 16px;
       --button-margin-block: 8px;
       --character-glow: 0 0 36px #ffffff9d;
       --menu-margin-top: 0.5rem;
@@ -239,7 +237,6 @@
       --character-left: -76%;
       --wave-start: -68%;
       --wave-end: 330%;
-      --button-font-size: 14px;
     }
   }
 
@@ -247,7 +244,6 @@
   @media (max-height: 620px) {
     .menu {
       --character-height: 120px;
-      --button-font-size: 14px;
       --button-margin-block: 6px;
     }
   }

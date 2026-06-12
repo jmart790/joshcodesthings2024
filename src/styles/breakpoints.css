@@ -10,6 +10,7 @@
     mobile: 480px and below
     short-screen: 620px high and below
   */
+  --breakpoint-desktop-lg: 1600px;
   --breakpoint-desktop: 1200px;
   --breakpoint-tablet: 720px;
   --breakpoint-mobile: 480px;

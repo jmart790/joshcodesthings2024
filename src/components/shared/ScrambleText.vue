@@ -82,21 +82,22 @@
   .scramble-wrap {
     position: relative;
     display: inline-block;
+    max-width: 100%;
   }
 
   .text {
     position: relative;
-    font-size: 4rem;
     font-family: 'Saira', sans-serif;
     font-weight: 900;
     font-style: italic;
-    font-size: 100px;
+    font-size: var(--scramble-font-size, 100px);
     display: inline-block;
     line-height: 0.9;
-    letter-spacing: 0.25rem;
+    letter-spacing: var(--scramble-letter-spacing, 0.25rem);
     color: #d3d3d3;
     text-transform: uppercase;
-    text-shadow: -6px 6px black;
+    text-shadow: var(--scramble-text-shadow, -6px 6px black);
+    white-space: nowrap;
   }
 
   .text-outline {
@@ -104,8 +105,8 @@
     inset: 0;
     z-index: 2000;
     color: transparent;
-    -webkit-text-stroke: 2px #d3d3d3;
-    text-stroke: 2px #d3d3d3;
+    -webkit-text-stroke: var(--scramble-stroke-width, 2px) #d3d3d3;
+    text-stroke: var(--scramble-stroke-width, 2px) #d3d3d3;
     text-shadow: none;
     pointer-events: none;
   }

@@ -67,6 +67,24 @@
     --gap: 80px;
     --pipe-width: 18px;
     --outer-pipe-width: 34px;
+    --footer-height: 120px;
+    --footer-padding-left: 10px;
+    --footer-padding-top: 20px;
+    --socket-gem-width: 14px;
+    --socket-gem-height: 6px;
+    --corner-gem-size: 10px;
+    --socket-top-width: 32px;
+    --socket-top-height: 24px;
+    --socket-side-width: 24px;
+    --socket-side-height: 32px;
+    --socket-corner-size: 34px;
+    --socket-offset: 8px;
+    --joint-size: 32px;
+    --joint-offset: 8px;
+    --joint-v-width: 14px;
+    --joint-v-height: 28px;
+    --joint-h-width: 28px;
+    --joint-h-height: 14px;
 
     --padding: calc((var(--gap) - var(--pipe-width)) / 2);
 
@@ -108,6 +126,7 @@
 
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
     padding: var(--padding);
     padding-bottom: 0;
     border-radius: 12px;
@@ -224,11 +243,11 @@
 
   /* FOOTER ROW */
   .grid-footer {
-    height: 120px; /* Specific footer height */
+    height: var(--footer-height);
     display: flex;
     align-items: center;
-    padding-left: 10px;
-    padding-top: 20px;
+    padding-left: var(--footer-padding-left);
+    padding-top: var(--footer-padding-top);
     background: transparent;
     z-index: 5; /* Above background pipes */
   }
@@ -260,8 +279,8 @@
   /* Purple Center Gem via Pseudo-element - RECTANGULAR */
   .socket::after {
     content: '';
-    width: 14px; /* Wider rectangle */
-    height: 6px; /* Narrower height */
+    width: var(--socket-gem-width);
+    height: var(--socket-gem-height);
     border-radius: 2px; /* Slight rounding */
     background: radial-gradient(circle at center, #ea00ff 0%, #8800aa 60%, #440055 100%);
     box-shadow: 0 0 4px #ea00ff, inset 1px 1px 2px rgba(0, 0, 0, 0.5);
@@ -272,14 +291,14 @@
   /* Gem Rotation for Vertical Sockets */
   .socket-l::after,
   .socket-r::after {
-    width: 6px;
-    height: 14px;
+    width: var(--socket-gem-height);
+    height: var(--socket-gem-width);
   }
 
   /* Corner Gem - Square for emphasis - ORANGE */
   .socket-c::after {
-    width: 10px;
-    height: 10px;
+    width: var(--corner-gem-size);
+    height: var(--corner-gem-size);
     background: radial-gradient(circle at center, #ffaa00 0%, #cc8800 60%, #664400 100%);
     box-shadow: 0 0 4px #ffaa00, inset 1px 1px 2px rgba(0, 0, 0, 0.5);
     border: 1px solid #442200;
@@ -288,17 +307,17 @@
   /* Dimensions - Chunkier (~32px wide perpendicular to pipe) */
   .socket-t,
   .socket-b {
-    width: 32px;
-    height: 24px;
+    width: var(--socket-top-width);
+    height: var(--socket-top-height);
   }
   .socket-l,
   .socket-r {
-    width: 24px;
-    height: 32px;
+    width: var(--socket-side-width);
+    height: var(--socket-side-height);
   }
   .socket-c {
-    width: 34px;
-    height: 34px;
+    width: var(--socket-corner-size);
+    height: var(--socket-corner-size);
   }
 
   /* Positions - Recessed deeper due to larger size */
@@ -318,46 +337,46 @@
   /* Positional Classes - Recalculated for centering 32px element on 16px pipe (Offset -8px) */
   .socket-pos-1.socket-t,
   .socket-pos-1.socket-b {
-    left: calc(var(--pos-1) - 8px);
+    left: calc(var(--pos-1) - var(--socket-offset));
   }
   .socket-pos-2.socket-t,
   .socket-pos-2.socket-b {
-    left: calc(var(--pos-2) - 8px);
+    left: calc(var(--pos-2) - var(--socket-offset));
   }
   .socket-pos-3.socket-t,
   .socket-pos-3.socket-b {
-    left: calc(var(--pos-3) - 8px);
+    left: calc(var(--pos-3) - var(--socket-offset));
   }
 
   .socket-pos-1.socket-l,
   .socket-pos-1.socket-r {
-    top: calc(var(--pos-1) - 8px);
+    top: calc(var(--pos-1) - var(--socket-offset));
   }
   .socket-pos-2.socket-l,
   .socket-pos-2.socket-r {
-    top: calc(var(--pos-2) - 8px);
+    top: calc(var(--pos-2) - var(--socket-offset));
   }
   .socket-pos-3.socket-l,
   .socket-pos-3.socket-r {
-    top: calc(var(--pos-3) - 8px);
+    top: calc(var(--pos-3) - var(--socket-offset));
   }
 
   /* Corners - Aligned to sit IN the corner (-32px matches outer frame thickness) */
   .socket-tl {
-    top: -32px;
-    left: -32px;
+    top: calc(-1 * var(--outer-pipe-width));
+    left: calc(-1 * var(--outer-pipe-width));
   }
   .socket-tr {
-    top: -32px;
-    right: -32px;
+    top: calc(-1 * var(--outer-pipe-width));
+    right: calc(-1 * var(--outer-pipe-width));
   }
   .socket-bl {
-    bottom: -32px;
-    left: -32px;
+    bottom: calc(-1 * var(--outer-pipe-width));
+    left: calc(-1 * var(--outer-pipe-width));
   }
   .socket-br {
-    bottom: -32px;
-    right: -32px;
+    bottom: calc(-1 * var(--outer-pipe-width));
+    right: calc(-1 * var(--outer-pipe-width));
   }
 
   /* 
@@ -370,8 +389,8 @@
   */
   .joint {
     position: absolute;
-    width: 32px;
-    height: 32px;
+    width: var(--joint-size);
+    height: var(--joint-size);
     z-index: 15; /* Top most decoration */
     pointer-events: none;
     display: flex;
@@ -398,13 +417,13 @@
 
   /* Vertical Bar */
   .joint::before {
-    width: 14px;
-    height: 28px;
+    width: var(--joint-v-width);
+    height: var(--joint-v-height);
   }
   /* Horizontal Bar */
   .joint::after {
-    width: 28px;
-    height: 14px;
+    width: var(--joint-h-width);
+    height: var(--joint-h-height);
     background: 
       /* Gem Center */ radial-gradient(
         circle at center,
@@ -428,31 +447,59 @@
      Joint Left = --pos + 8 - 16 = --pos - 8.
   */
   .joint-c1 {
-    left: calc(var(--pos-1) - 8px);
+    left: calc(var(--pos-1) - var(--joint-offset));
   }
   .joint-c2 {
-    left: calc(var(--pos-2) - 8px);
+    left: calc(var(--pos-2) - var(--joint-offset));
   }
   .joint-c3 {
-    left: calc(var(--pos-3) - 8px);
+    left: calc(var(--pos-3) - var(--joint-offset));
   }
 
   .joint-r1 {
-    top: calc(var(--pos-1) - 8px);
+    top: calc(var(--pos-1) - var(--joint-offset));
   }
   .joint-r2 {
-    top: calc(var(--pos-2) - 8px);
+    top: calc(var(--pos-2) - var(--joint-offset));
   }
   .joint-r3 {
-    top: calc(var(--pos-3) - 8px);
+    top: calc(var(--pos-3) - var(--joint-offset));
   }
   .joint-footer {
-    top: calc(var(--pos-3) - 8px);
+    top: calc(var(--pos-3) - var(--joint-offset));
   }
 
   /* Upside Down T shape for last row (remove bottom vertical leg) */
   .joint-footer::before {
     height: 18px;
     top: 2px;
+  }
+
+  @media (max-width: 720px) {
+    .grid-container {
+      --button-size: clamp(64px, 18vw, 116px);
+      --gap: clamp(36px, 10vw, 68px);
+      --pipe-width: clamp(10px, 2.3vw, 16px);
+      --outer-pipe-width: clamp(18px, 4.5vw, 32px);
+      --footer-height: clamp(76px, 15vw, 96px);
+      --footer-padding-left: clamp(4px, 1.4vw, 10px);
+      --footer-padding-top: clamp(10px, 2.8vw, 18px);
+      --socket-gem-width: clamp(8px, 1.8vw, 12px);
+      --socket-gem-height: clamp(4px, 0.9vw, 5px);
+      --corner-gem-size: clamp(7px, 1.5vw, 9px);
+      --socket-top-width: clamp(22px, 4.6vw, 30px);
+      --socket-top-height: clamp(16px, 3.4vw, 22px);
+      --socket-side-width: clamp(16px, 3.4vw, 22px);
+      --socket-side-height: clamp(22px, 4.6vw, 30px);
+      --socket-corner-size: var(--outer-pipe-width);
+      --socket-offset: clamp(5px, 1.2vw, 8px);
+      --joint-size: clamp(22px, 4.6vw, 30px);
+      --joint-offset: clamp(5px, 1.2vw, 8px);
+      --joint-v-width: clamp(9px, 1.9vw, 13px);
+      --joint-v-height: clamp(19px, 4vw, 26px);
+      --joint-h-width: clamp(19px, 4vw, 26px);
+      --joint-h-height: clamp(9px, 1.9vw, 13px);
+      max-width: 600px;
+    }
   }
 </style>

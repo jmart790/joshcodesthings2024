@@ -123,6 +123,8 @@
 
 <style scoped>
   .password-page {
+    --cta-button-font-size: 24px;
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -144,6 +146,10 @@
     flex-direction: column;
     align-items: center;
     position: relative;
+  }
+
+  .password-page :deep(.retro-button) {
+    font-size: var(--cta-button-font-size);
   }
 
   .header {
@@ -180,7 +186,6 @@
 
   /* Button Styling */
   .footer-btn {
-    font-size: 24px;
     margin: 0;
   }
 
@@ -193,5 +198,28 @@
     opacity: 0;
     animation: fade-in 0.5s ease forwards;
     animation-delay: 1.7s; /* 0.6s (frame) + 0.8s (buttons approx) + buffer */
+  }
+
+  @media (max-width: 720px) {
+    .password-page {
+      --cta-button-font-size: clamp(14px, 4vw, 20px);
+
+      padding: 16px;
+    }
+
+    .footer-content {
+      padding-right: clamp(4px, 1.4vw, 10px);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .password-page {
+      padding: 12px;
+    }
+
+    .back-button {
+      bottom: 1rem;
+      left: 1rem;
+    }
   }
 </style>

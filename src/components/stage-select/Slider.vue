@@ -51,13 +51,28 @@
 
 <style scoped>
   .slider {
+    --slider-scale: 1;
+    --active-rotate-x: -16deg;
+
     position: absolute;
     width: 200px;
     height: 250px;
     top: 20%;
     left: calc(50% - 100px);
     transform-style: preserve-3d;
-    transform: perspective(1000px) rotateY(var(--active-rotate-y)) rotateX(-16deg);
-    transition: transform var(--transition-duration) var(--transition-timing), top 1s ease-out;
+    transform: perspective(1000px) rotateY(var(--active-rotate-y)) rotateX(var(--active-rotate-x))
+      scale(var(--slider-scale));
+    transform-origin: center center;
+    transition:
+      transform var(--transition-duration) var(--transition-timing),
+      top 1s ease-out;
+  }
+
+  /* desktop: mirrors --breakpoint-desktop */
+  @media (max-width: 1200px) {
+    .slider {
+      --slider-scale: 0.75;
+      --active-rotate-x: -10deg;
+    }
   }
 </style>

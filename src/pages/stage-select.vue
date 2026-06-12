@@ -196,11 +196,18 @@
 
 <style scoped>
   .stage-select {
+    --cta-button-font-size: 24px;
+
     position: relative;
     background-color: #d2d2d2;
     background: radial-gradient(circle, #d2d2d2, #020c29);
     overflow: hidden;
   }
+
+  .stage-select :deep(.retro-button) {
+    font-size: var(--cta-button-font-size);
+  }
+
   .sphere-grid {
     position: absolute;
     inset: -30% 0 0 0;
@@ -212,6 +219,7 @@
     bottom: 2rem;
     right: 2rem;
     display: flex;
+    align-items: center;
     gap: 1rem;
     z-index: 5;
   }
@@ -228,10 +236,16 @@
   }
 
   .char-name {
+    --scramble-font-size: 100px;
+    --scramble-letter-spacing: 0.25rem;
+    --scramble-text-shadow: -6px 6px black;
+    --scramble-stroke-width: 2px;
+
     position: absolute;
     left: 0;
     bottom: 0;
     margin: 1rem;
+    max-width: calc(100vw - 2rem);
   }
 
   .char-desc {
@@ -255,5 +269,69 @@
     overflow: hidden;
     position: relative;
     z-index: 2;
+  }
+
+  /* desktop-lg: mirrors --breakpoint-desktop-lg */
+  @media (max-width: 1600px) {
+    .char-name {
+      bottom: 5rem;
+    }
+  }
+
+  /* desktop: mirrors --breakpoint-desktop */
+  @media (max-width: 1200px) {
+    .char-name {
+      --scramble-font-size: clamp(54px, 7vw, 88px);
+      --scramble-letter-spacing: clamp(0.08rem, 0.3vw, 0.2rem);
+      --scramble-text-shadow: -4px 4px black;
+      --scramble-stroke-width: 1.5px;
+    }
+  }
+
+  /* tablet: mirrors --breakpoint-tablet */
+  @media (max-width: 720px) {
+    .stage-select {
+      --cta-button-font-size: clamp(14px, 4vw, 20px);
+    }
+
+    .buttons {
+      bottom: 1rem;
+      right: 1rem;
+      gap: 0.5rem;
+    }
+
+    .select-button {
+      margin-left: 1rem;
+    }
+
+    .char-name {
+      --scramble-font-size: clamp(40px, 9vw, 58px);
+      --scramble-letter-spacing: 0.06rem;
+      --scramble-text-shadow: -3px 3px black;
+      --scramble-stroke-width: 1px;
+
+      bottom: 4.5rem;
+    }
+  }
+
+  /* mobile: mirrors --breakpoint-mobile */
+  @media (max-width: 480px) {
+    .home-button {
+      top: 1rem;
+      left: 1rem;
+    }
+
+    .buttons {
+      bottom: 1rem;
+      right: 1rem;
+    }
+
+    .char-name {
+      --scramble-font-size: clamp(32px, 10vw, 44px);
+      --scramble-letter-spacing: 0.03rem;
+      --scramble-text-shadow: -2px 2px black;
+
+      bottom: 4rem;
+    }
   }
 </style>

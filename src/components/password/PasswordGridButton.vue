@@ -206,7 +206,7 @@
     justify-content: center;
     align-items: center;
     font-family: 'Press Start 2P', cursive, Arial, sans-serif;
-    font-size: 2.45rem;
+    font-size: calc(var(--button-size, 132px) * 0.295);
     line-height: 1;
     background: linear-gradient(to bottom, #02a7f9 0%, #47c2ff 25%, #ccf2fd 50%, #00aaff 100%);
     background-clip: text;
@@ -230,8 +230,8 @@
   }
 
   .pixel-arrow {
-    width: 58px;
-    height: 58px;
+    width: calc(var(--button-size, 132px) * 0.44);
+    height: calc(var(--button-size, 132px) * 0.44);
   }
 
   .arrow-path {
