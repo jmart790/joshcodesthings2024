@@ -79,16 +79,26 @@
   @media (max-width: 1200px) {
     .slider {
       --slider-scale: 0.75;
-      --active-rotate-y-adjust: -8deg; /* ponytail: card-angle knob — ring rotateY = 15 + this (≈7deg); 0deg = desktop's full angle, -15deg = flat */
-      --yosh-model-rotate-y: -8deg; /* ponytail: counter ≈ -(ring rotateY) to hold Yosh straight; retune if you change the knob above */
     }
   }
-
   @media (max-width: 900px) {
     .slider {
-      --slider-scale: 0.7;
-      --active-rotate-x: -12deg; /* ponytail: stand the ring up (less tilt) so the active card rises to the waist; toward 0 = higher, toward -16 = lower */
-      --yosh-model-rotate-x: 12deg; /* ponytail: match to keep Yosh straight; keep ≈ -(rotate-x above) */
+      --slider-scale: 0.55;
+      --active-rotate-x: -10deg; /* ponytail: stand the ring up (less tilt) so the active card rises to the waist; toward 0 = higher, toward -16 = lower */
+      --yosh-model-rotate-x: 10deg; /* ponytail: match to keep Yosh straight; keep ≈ -(rotate-x above) */
+      --yosh-model-rotate-y: -10deg; /* ponytail: counter the added Y rotation on the ring so Yosh stays straight */
+    }
+  }
+  @media (max-width: 580px) {
+    .slider {
+      left: 10%;
+      top: 15%;
+      --active-rotate-y-adjust: -9deg;
+    }
+  }
+  @media (max-width: 425px) {
+    .slider {
+      --active-rotate-y-adjust: -10deg;
     }
   }
 </style>

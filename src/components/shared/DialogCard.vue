@@ -78,7 +78,9 @@
     color: white;
     max-width: 500px;
     max-height: 550px;
-    overflow: auto; /* Default scrollable */
+    /* Card itself doesn't scroll: header and Go button sit fixed in the flex
+       column and only the content <section> scrolls (see rules below). */
+    overflow: hidden;
     animation: expand 1s ease forwards;
     transition: background 0.3s ease;
   }
@@ -100,9 +102,17 @@
     overflow: hidden;
   }
 
-  /* Content Section */
+  /* Fixed title row: never shrinks or scrolls. */
+  .dialog-card > header {
+    flex: 0 0 auto;
+  }
+
+  /* Content Section: the only scrollable region. min-height: 0 lets this flex
+     item shrink below its content so overflow-y actually scrolls. */
   .dialog-card > section {
-    flex: 1;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
   }
@@ -148,11 +158,15 @@
     -webkit-text-fill-color: transparent;
   }
 
+  /* Fixed CTA row below the scrollable content (a flex item, not absolute), so
+     it sits under the description and never overlaps it. */
   .retro-button {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    display: block;
-    margin-left: auto;
+    flex: 0 0 auto;
+    align-self: flex-end;
+  }
+  @media (max-width: 768px) {
+    section .type-writer {
+      overflow: auto;
+    }
   }
 </style>

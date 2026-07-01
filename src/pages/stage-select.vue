@@ -4,7 +4,7 @@
       <RetroButton @click="$router.push('/')">< Menu</RetroButton>
     </div>
     <SphereGrid class="sphere-grid" />
-    <div class="slider-container">
+    <div class="slider-container" :class="{ 'is-in': isSliderIn }">
       <Slider
         :items="characters"
         :activeIndex="activeIndex"
@@ -12,7 +12,6 @@
         :isSelected="isSelected"
         :transitionDuration="transitionDuration"
         :transitionTiming="transitionTiming"
-        :style="{ top: sliderTop }"
         :showModel="isModelVisible"
       />
     </div>
@@ -78,7 +77,7 @@
   const transitionDuration = ref(DEFAULT_TRANSITION_DURATION);
 
   const transitionTiming = ref('ease');
-  const sliderTop = ref('-100vh');
+  const isSliderIn = ref(false);
   const isModelVisible = ref(false);
   const isTextVisible = ref(false);
 
@@ -177,9 +176,9 @@
       spinToRandomCharacter();
     }
 
-    // Animate in from top
+    // Animate in from top (drop-in via transform on .slider-container)
     setTimeout(() => {
-      sliderTop.value = '20%';
+      isSliderIn.value = true;
     }, SLIDER_IN_DELAY);
 
     // Show text after slide animation (100ms delay + 1s transition)
@@ -265,6 +264,12 @@
     justify-content: center;
   }
 
+  /* Shorten the card so the description scrolls in its own region (title stays
+     on top, Go sits below) instead of running the full card height. */
+  .char-desc :deep(.dialog-card) {
+    max-height: 360px;
+  }
+
   .slider-container {
     width: 100%;
     height: 100vh;
@@ -272,6 +277,14 @@
     overflow: hidden;
     position: relative;
     z-index: 2;
+    /* drop-in: start above the viewport, slide to rest. Using transform (not
+       top) keeps .slider's top free for per-viewport tuning in Slider.vue. */
+    transform: translateY(-100vh);
+    transition: transform 1s ease-out;
+  }
+
+  .slider-container.is-in {
+    transform: translateY(0);
   }
 
   /* desktop-lg: mirrors --breakpoint-desktop-lg */
@@ -340,6 +353,14 @@
     }
   }
 
+  /* mobile→tablet band: shrink the description card text slightly. font-size on
+     the card scales the header (125%) and Go button along with the body. */
+  @media (min-width: 481px) and (max-width: 720px) {
+    .char-desc :deep(.dialog-card) {
+      font-size: 0.9rem;
+    }
+  }
+
   /* mobile: mirrors --breakpoint-mobile */
   @media (max-width: 480px) {
     .home-button {
@@ -353,7 +374,7 @@
     }
 
     .char-name {
-      --scramble-font-size: clamp(32px, 10vw, 44px);
+      --scramble-font-size: clamp(24px, 9vw, 40px);
       --scramble-letter-spacing: 0.03rem;
       --scramble-text-shadow: -2px 2px black;
 
