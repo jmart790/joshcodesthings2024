@@ -72,20 +72,24 @@
       top 1s ease-out;
   }
 
-  /* desktop: mirrors --breakpoint-desktop */
+  /* tablet → mobile: keep the reduced sizing, but give the ring a slight Y
+     rotation so the selected card sits at an angle. Yosh lives inside .slider,
+     so he inherits the desktop rotateX (-16/16) — that's what keeps him
+     straight; we only counter the added Y rotation on the model. Applies to
+     mobile too via the cascade. */
   @media (max-width: 1200px) {
     .slider {
       --slider-scale: 0.75;
-      --active-rotate-x: -10deg;
-      --active-rotate-y-adjust: -15deg;
-      --yosh-model-rotate-x: 10deg;
-      --yosh-model-rotate-y: 0deg;
+      --active-rotate-y-adjust: -8deg; /* ponytail: card-angle knob — ring rotateY = 15 + this (≈7deg); 0deg = desktop's full angle, -15deg = flat */
+      --yosh-model-rotate-y: -8deg; /* ponytail: counter ≈ -(ring rotateY) to hold Yosh straight; retune if you change the knob above */
     }
   }
 
   @media (max-width: 900px) {
     .slider {
       --slider-scale: 0.5;
+      --active-rotate-x: -8deg; /* ponytail: stand the ring up (less tilt) so the active card rises to the waist; toward 0 = higher, toward -16 = lower */
+      --yosh-model-rotate-x: 8deg; /* ponytail: match to keep Yosh straight; keep ≈ -(rotate-x above) */
     }
   }
 </style>

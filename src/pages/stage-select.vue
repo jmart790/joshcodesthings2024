@@ -201,7 +201,10 @@
     position: relative;
     background-color: #d2d2d2;
     background: radial-gradient(circle, #d2d2d2, #020c29);
-    overflow: hidden;
+    /* clip, not hidden: the sphere-grid overflows (height: 200%), and `hidden`
+       leaves a scroll container that the dialog's focus quietly scrolls and
+       leaves stuck. `clip` clips identically without a scrollable box. */
+    overflow: clip;
   }
 
   .stage-select :deep(.retro-button) {
@@ -311,6 +314,29 @@
       --scramble-stroke-width: 1px;
 
       bottom: 4.5rem;
+    }
+  }
+
+  /* small screens: description shows as a straight, centered modal (same expand
+     animation as desktop/tablet, just without the angled rotateY). The selected
+     character card stays in place behind it (see SlideItem.vue); Deselect
+     closes it. ponytail: 768px = "mobile" per the design. */
+  @media (max-width: 768px) {
+    .char-desc {
+      right: auto;
+      bottom: auto;
+      left: 50%;
+      top: 50%;
+      width: min(90vw, 500px);
+      height: auto;
+      max-height: 70vh;
+      transform: translate(-50%, -50%);
+      z-index: 200;
+    }
+
+    .char-desc :deep(.dialog-card) {
+      max-width: 100%;
+      max-height: 70vh;
     }
   }
 
