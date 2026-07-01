@@ -34,7 +34,7 @@
     position: absolute;
     top: -35%;
     left: 50%;
-    transform: translateX(-50%) rotateX(16deg) rotateY(-16deg);
+    transform: translateX(-50%) rotateX(var(--yosh-model-rotate-x, 16deg)) rotateY(var(--yosh-model-rotate-y, -16deg));
     background-size: contain;
     background-repeat: no-repeat;
     background-position: top center;

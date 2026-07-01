@@ -53,6 +53,9 @@
   .slider {
     --slider-scale: 1;
     --active-rotate-x: -16deg;
+    --active-rotate-y-adjust: 0deg;
+    --yosh-model-rotate-x: 16deg;
+    --yosh-model-rotate-y: -16deg;
 
     position: absolute;
     width: 200px;
@@ -60,7 +63,8 @@
     top: 20%;
     left: calc(50% - 100px);
     transform-style: preserve-3d;
-    transform: perspective(1000px) rotateY(var(--active-rotate-y)) rotateX(var(--active-rotate-x))
+    transform: perspective(1000px) rotateY(calc(var(--active-rotate-y) + var(--active-rotate-y-adjust)))
+      rotateX(var(--active-rotate-x))
       scale(var(--slider-scale));
     transform-origin: center center;
     transition:
@@ -73,6 +77,15 @@
     .slider {
       --slider-scale: 0.75;
       --active-rotate-x: -10deg;
+      --active-rotate-y-adjust: -15deg;
+      --yosh-model-rotate-x: 10deg;
+      --yosh-model-rotate-y: 0deg;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .slider {
+      --slider-scale: 0.5;
     }
   }
 </style>
