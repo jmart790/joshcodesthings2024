@@ -64,8 +64,7 @@
     left: calc(50% - 100px);
     transform-style: preserve-3d;
     transform: perspective(1000px) rotateY(calc(var(--active-rotate-y) + var(--active-rotate-y-adjust)))
-      rotateX(var(--active-rotate-x))
-      scale(var(--slider-scale));
+      rotateX(var(--active-rotate-x)) scale(var(--slider-scale));
     transform-origin: center center;
     transition:
       transform var(--transition-duration) var(--transition-timing),
@@ -87,9 +86,9 @@
 
   @media (max-width: 900px) {
     .slider {
-      --slider-scale: 0.5;
-      --active-rotate-x: -8deg; /* ponytail: stand the ring up (less tilt) so the active card rises to the waist; toward 0 = higher, toward -16 = lower */
-      --yosh-model-rotate-x: 8deg; /* ponytail: match to keep Yosh straight; keep ≈ -(rotate-x above) */
+      --slider-scale: 0.7;
+      --active-rotate-x: -12deg; /* ponytail: stand the ring up (less tilt) so the active card rises to the waist; toward 0 = higher, toward -16 = lower */
+      --yosh-model-rotate-x: 12deg; /* ponytail: match to keep Yosh straight; keep ≈ -(rotate-x above) */
     }
   }
 </style>
