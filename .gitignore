@@ -22,3 +22,7 @@ logs
 .env
 .env.*
 !.env.example
+
+# Editor / local tool settings
+.vscode/
+.claude/

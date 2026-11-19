@@ -41,6 +41,9 @@
     position: relative;
     min-height: 100vh;
     isolation: isolate; /* Create new stacking context cleanly */
+    /* The paint-stroke SVG is wider than the viewport. clip (not hidden) so the
+       sticky hero/gallery children keep sticking to the window. */
+    overflow-x: clip;
   }
 
   .back-button {
@@ -66,6 +69,10 @@
   }
 
   .hero-img {
+    /* Span the main + gallery rows. Auto-placed, it landed in its own third row
+       after the gallery, leaving a screen-and-a-half of background-only scroll. */
+    grid-area: 1 / 1 / 3 / 2;
+    align-self: end;
     position: sticky;
     bottom: 0;
     width: 100%;
