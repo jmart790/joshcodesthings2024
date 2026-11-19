@@ -4,6 +4,7 @@
       <div class="about-me-page__stars"></div>
       <img class="about-me-page__planet about-me-page__planet--sun" src="/sun isolate.webp" alt="" />
       <img class="about-me-page__planet about-me-page__planet--earth" src="/earth isolate.webp" alt="" />
+      <AboutMarquee :slides="slides" />
       <div class="about-me-page__mirror-man-wrap">
         <img class="about-me-page__mirror-man" src="/mirror man isolate.webp" alt="" />
       </div>
@@ -12,12 +13,11 @@
     <div class="back-button">
       <RetroButton @click="$router.push('/stage-select')">&lt; Back</RetroButton>
     </div>
-    <AboutCube :slides="slides" class="about-me-page__carousel" />
   </div>
 </template>
 
 <script setup lang="ts">
-  import AboutCube, { type Slide } from '@/components/about-josh/AboutCube.vue';
+  import AboutMarquee, { type Slide } from '@/components/about-josh/AboutMarquee.vue';
   import RetroButton from '../components/shared/RetroButton.vue';
 
   const slides: Slide[] = [
@@ -57,7 +57,7 @@
 <style scoped>
   .about-me-page {
     position: relative;
-    height: 100%;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -190,6 +190,9 @@
     bottom: 1vh;
     z-index: 2;
     width: min(50vw, 800px);
+    /* Scales the figure, staff glow, and ground shadow together (the shadow's rem sizes ignore width). */
+    transform: scale(0.9);
+    transform-origin: bottom left;
     filter: drop-shadow(-0.25rem -0.25rem 0.85rem rgba(255, 255, 255, 0.311));
   }
 
@@ -239,12 +242,6 @@
     height: auto;
     filter: drop-shadow(-0.4rem 0.6rem 0.35rem rgba(0, 0, 0, 0.35));
     user-select: none;
-  }
-
-  .about-me-page__carousel {
-    margin-left: 40%;
-    position: relative;
-    z-index: 1;
   }
   .back-button {
     position: absolute;
