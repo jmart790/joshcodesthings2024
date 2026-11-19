@@ -38,14 +38,14 @@ export const projects: Project[] = [
   },
   {
     id: 3,
-    name: '16-bit UI Library',
-    year: '2025',
-    tech: 'React, Storybook, TypeScript',
+    name: 'Roam Planner',
+    year: '2026',
+    tech: 'Vue 3, Pinia, Supabase, Netlify Functions, Leaflet',
     description:
-      'A retro 90s video game pixel art design system for React. Features pixel-perfect components, CSS reset, and custom font support to easily build authentic SNES/Genesis era web interfaces.',
-    logoClass: 'logo-16bit',
-    github: 'https://github.com/jmart790/16bit-ui',
-    icon: 'pencil'
+      'An RV Trip Planning web app. Search 18,000+ verified RV parks, plot routes with drive times and weather, and share trips with friends. A Netlify Functions backend serves the Supabase campground data and every external API, keeping the app bundle footprint small.',
+    logoClass: 'logo-roamplanner',
+    demoLink: 'https://roamplanner.netlify.app',
+    icon: 'map'
   },
   {
     id: 4,
@@ -72,12 +72,12 @@ export const projects: Project[] = [
   {
     id: 6,
     name: 'Retro Gamer Lofi',
-    year: '2024',
-    tech: 'Gen AI (Midjourney, Suno, Kling)',
+    year: '2026',
+    tech: 'Nuxt 3, Vue 3, TypeScript, Netlify',
     description:
-      'A multimedia project exploring the intersection of AI generation and nostalgia. I use a toolchain of AI models to generate infinite lofi beats and retro-style visuals, curated and edited in DaVinci Resolve.',
+      'An Emulation Station themed site with a 24/7 live radio, the latest mixes, albums, a live merch shop, and a fan voting board for the next soundtrack. Nuxt server routes pull YouTube, Spotify, and merch data with no API keys, and it is tuned for accessibility and performance.',
     logoClass: 'logo-lofi',
-    demoLink: 'https://www.youtube.com/@RetroGamerLofi',
+    demoLink: 'https://retrogamerlofi.com',
     icon: 'cassette'
   }
 ];

@@ -69,7 +69,7 @@
             <div class="btn-rivet top-right"></div>
             <div class="btn-rivet bottom-left"></div>
             <div class="btn-rivet bottom-right"></div>
-            Demo
+            Live Site
           </button>
         </footer>
       </div>
