@@ -60,13 +60,12 @@ export const projects: Project[] = [
   },
   {
     id: 5,
-    name: 'PS App Replica',
-    year: '2023',
-    tech: 'Vue 3, Vuex',
+    name: 'LYF//OS',
+    year: '2026',
+    tech: 'Vue 3, TypeScript, Vite, Netlify Functions, PWA',
     description:
-      'A pixel-perfect web replica of the PlayStation Mobile App. Recreates the iOS navigation, animations, and visual polish using modern web standards.',
-    logoClass: 'logo-psapp',
-    github: 'https://github.com/jmart790/playstation-app-replica',
+      'A private life-management dashboard. It balances goals and tasks across five life areas with a burnout guard that caps weekly effort, tracks my workout program, and pulls my Retro Gamer Lofi stats from YouTube, TikTok, Instagram, and DistroKid into one view. Installable as a PWA with a 95% test coverage gate.',
+    logoClass: 'logo-lyfos',
     icon: 'mobile'
   },
   {
