@@ -2,19 +2,23 @@
   <section class="wheel-column" @mousedown="startDrag" @touchstart="startDrag">
     <div class="wheel-container" :style="{ transform: `translateY(-50%) rotate(${currentRotation}deg)` }">
       <div class="gear-bg" :style="{ transform: `rotate(${gearRotation}deg)` }">
-        <img src="/prop_gear.png" alt="Gear Background" class="gear-img" />
+        <GearSvg />
       </div>
-      <div
-        v-for="item in visibleItems"
-        :key="`${item.project.name}-${item.offset}`"
-        class="wheel-item"
-        :class="{ active: item.offset === 0 }"
-        :style="getItemStyle(item.offset)"
-        @click.stop="selectItem(item.index)"
-      >
-        <span class="wheel-logo" :class="item.project.logoClass">
-          {{ item.project.name }}
-        </span>
+      <!-- Labels ride on their own rotor with the same rotation and transition as the gear,
+           so they stay glued to their segment while it turns. -->
+      <div class="wheel-rotor" :style="{ transform: `rotate(${rotorRotation}deg)` }">
+        <div
+          v-for="item in slots"
+          :key="item.slot"
+          class="wheel-item"
+          :class="{ active: item.offset === 0 }"
+          :style="getItemStyle(item)"
+          @click.stop="selectItem(item.index)"
+        >
+          <span class="wheel-logo" :class="item.project.logoClass">
+            {{ item.project.name }}
+          </span>
+        </div>
       </div>
     </div>
   </section>
@@ -23,6 +27,7 @@
 <script setup lang="ts">
   import { computed, ref, watch } from 'vue';
   import type { Project } from '../../data/projects';
+  import GearSvg from './GearSvg.vue';
 
   const props = defineProps<{
     projects: Project[];
@@ -33,10 +38,15 @@
     (e: 'select', index: number): void;
   }>();
 
-  const VISIBLE_RADIUS = 8;
-  const WHEEL_RADIUS = 250;
+  // Distance from the gear center to each label's center.
+  const WHEEL_RADIUS = 278;
   const ANGLE_STEP = 30;
+  const SLOT_COUNT = 360 / ANGLE_STEP; // one label per gear segment
 
+  // ponytail: slot s permanently holds project (startIndex + s) % n. That only
+  // wraps seamlessly when the project count divides 12 (1, 2, 3, 4, 6 or 12);
+  // any other count shows a repeat seam on the far side as the wheel spins.
+  const startIndex = props.activeIndex;
   const rotationIndex = ref(0);
 
   watch(
@@ -48,28 +58,28 @@
 
       let diff = newVal - oldVal;
 
-      if (diff > 1) diff -= total;
-      if (diff < -1) diff += total;
+      // Turn the short way round.
+      if (diff > total / 2) diff -= total;
+      if (diff < -total / 2) diff += total;
 
       rotationIndex.value -= diff;
     },
     { immediate: true }
   );
 
-  const visibleItems = computed(() => {
+  const mod = (a: number, n: number) => ((a % n) + n) % n;
+
+  const slots = computed(() => {
     const total = props.projects.length;
     if (total === 0) return [];
 
-    const items = [];
-    for (let i = -VISIBLE_RADIUS; i <= VISIBLE_RADIUS; i++) {
-      const index = (((props.activeIndex + i) % total) + total) % total;
-      items.push({
-        project: props.projects[index],
-        index,
-        offset: i
-      });
-    }
-    return items;
+    return Array.from({ length: SLOT_COUNT }, (_, slot) => {
+      const index = mod(startIndex + slot, total);
+      // Steps away from the selected position (left side of the wheel), -6..5.
+      let offset = mod(slot + rotationIndex.value, SLOT_COUNT);
+      if (offset >= SLOT_COUNT / 2) offset -= SLOT_COUNT;
+      return { slot, index, offset, project: props.projects[index] };
+    });
   });
 
   const isDragging = ref(false);
@@ -82,9 +92,9 @@
     return deltaY * -0.2;
   });
 
-  const gearRotation = computed(() => {
-    return rotationIndex.value * ANGLE_STEP + dragAngleOffset.value + 30;
-  });
+  const rotorRotation = computed(() => rotationIndex.value * ANGLE_STEP + dragAngleOffset.value);
+  // +30 keeps the art's spokes between labels (any multiple of 30 works with the SVG).
+  const gearRotation = computed(() => rotorRotation.value + 30);
 
   const currentRotation = ref(0);
 
@@ -129,24 +139,14 @@
     window.removeEventListener('touchend', stopDrag);
   }
 
-  function getItemStyle(offset: number) {
-    const angleDeg = 180 + offset * ANGLE_STEP + dragAngleOffset.value;
-    const angleRad = angleDeg * (Math.PI / 180);
-
-    const x = Math.cos(angleRad) * WHEEL_RADIUS;
-    const y = Math.sin(angleRad) * WHEEL_RADIUS;
-
-    const scale = offset === 0 ? 1.1 : 0.9;
-    const opacity = Math.max(0.2, 1 - Math.abs(offset) * 0.15);
-    const zIndex = 50 - Math.abs(offset);
-    const grayscale = offset === 0 ? 0 : 1;
-
+  function getItemStyle({ slot, offset }: { slot: number; offset: number }) {
+    // Fixed spot on the rotor: rotate about the gear center, then push straight out,
+    // so the label sits exactly midway between two spokes and never moves relative to them.
     return {
-      transform: `translate(${x}px, ${y}px) rotate(${angleDeg - 180}deg) scale(${scale})`,
-      opacity: opacity,
-      zIndex: zIndex,
-      filter: `grayscale(${grayscale})`,
-      transition: isDragging.value ? 'none' : 'transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s'
+      transform: `rotate(${slot * ANGLE_STEP}deg) translateX(-${WHEEL_RADIUS}px)`,
+      opacity: Math.max(0.2, 1 - Math.abs(offset) * 0.15),
+      zIndex: 50 - Math.abs(offset),
+      filter: `grayscale(${offset === 0 ? 0 : 1})`
     };
   }
 
@@ -182,6 +182,16 @@
     height: 0;
   }
 
+  .wheel-rotor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    /* Must match .gear-bg so labels and gear turn as one. */
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
   .gear-bg {
     position: absolute;
     top: -550px;
@@ -191,13 +201,8 @@
     z-index: -1;
     pointer-events: none;
     transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-
-  .gear-img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.8));
+    /* Keep the filtered SVG on its own layer so rotating it doesn't re-run the filters. */
+    will-change: transform;
   }
 
   .wheel-item {
@@ -206,15 +211,15 @@
     left: 0;
     width: 125px;
     height: 70px;
-    margin-top: -30px;
-    margin-left: -90px;
+    /* Centered on the gear's middle; the inline transform pushes it out. */
+    margin-top: -35px;
+    margin-left: -62.5px;
     line-height: 1.3;
     display: flex;
     align-items: center;
     justify-content: center;
-    transform-origin: center right;
     cursor: pointer;
-    will-change: transform;
+    transition: opacity 0.4s ease, filter 0.4s ease;
   }
 
   .wheel-item:hover {
