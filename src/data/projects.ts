@@ -49,13 +49,14 @@ export const projects: Project[] = [
   },
   {
     id: 4,
-    name: 'My Smart Dash',
-    year: '2023',
-    tech: 'Vue 3, Geolocation API',
+    name: 'The iHerald',
+    year: '2026',
+    tech: 'Vue 3, Vite, Vuex, Leaflet, Netlify Functions',
     description:
-      "A location-aware personal dashboard that consolidates useful utility modues. It aggregates data from multiple public APIs to display local weather, news, and relevant alerts based on the user's real-time position.",
-    logoClass: 'logo-dashboard',
+      'A local dashboard dressed as a vintage newspaper. Weather, alerts, news, nearby restaurants on a map, and daily puzzles for wherever you are, with morning and evening editions that change through the day. Built on free APIs with a small serverless backend.',
+    logoClass: 'logo-iherald',
     github: 'https://github.com/jmart790/My_Dashboard',
+    demoLink: 'https://iherald.netlify.app',
     icon: 'globe'
   },
   {
