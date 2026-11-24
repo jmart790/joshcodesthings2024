@@ -54,8 +54,6 @@
     --slider-scale: 1;
     --active-rotate-x: -16deg;
     --active-rotate-y-adjust: 0deg;
-    --yosh-model-rotate-x: 16deg;
-    --yosh-model-rotate-y: -16deg;
 
     position: absolute;
     width: 200px;
@@ -71,11 +69,9 @@
       top 1s ease-out;
   }
 
-  /* tablet → mobile: keep the reduced sizing, but give the ring a slight Y
-     rotation so the selected card sits at an angle. Yosh lives inside .slider,
-     so he inherits the desktop rotateX (-16/16) — that's what keeps him
-     straight; we only counter the added Y rotation on the model. Applies to
-     mobile too via the cascade. */
+  /* tablet → mobile: shrink and re-angle the ring. Yosh lives inside .slider and
+     counter-rotates from these same vars (YoshModel.vue), so he stays flat at
+     any tilt. Applies to mobile too via the cascade. */
   @media (max-width: 1200px) {
     .slider {
       --slider-scale: 0.75;
@@ -85,8 +81,7 @@
     .slider {
       --slider-scale: 0.55;
       --active-rotate-x: -10deg; /* ponytail: stand the ring up (less tilt) so the active card rises to the waist; toward 0 = higher, toward -16 = lower */
-      --yosh-model-rotate-x: 10deg; /* ponytail: match to keep Yosh straight; keep ≈ -(rotate-x above) */
-      --yosh-model-rotate-y: -10deg; /* ponytail: counter the added Y rotation on the ring so Yosh stays straight */
+      --active-rotate-y-adjust: -5deg; /* pull the active card in from the right edge on tablet */
     }
   }
   @media (max-width: 580px) {

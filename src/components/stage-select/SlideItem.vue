@@ -117,7 +117,7 @@
   /* small screens: don't fly the selected card out — leave it where the active
      card already sits (over the waist). The description slides up as a bottom
      sheet instead (see stage-select.vue). */
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 767px) {
     .item-wrapper.active.selected {
       transform: rotateY(calc((var(--position) - 1) * (360 / var(--quantity)) * 1deg)) translateZ(550px) !important;
     }

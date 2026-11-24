@@ -34,7 +34,11 @@
     position: absolute;
     top: -35%;
     left: 50%;
-    transform: translateX(-50%) rotateX(var(--yosh-model-rotate-x, 16deg)) rotateY(var(--yosh-model-rotate-y, -16deg));
+    /* Exact inverse of the ring's tilt (vars inherited from .slider in Slider.vue), so Yosh
+       always faces the screen flat. The ring's scale() is 2D only (z untouched), so it doesn't
+       commute with the rotations: undo it, counter-rotate in reverse order, then re-apply it. */
+    transform: translateX(-50%) scale(calc(1 / var(--slider-scale))) rotateX(calc(-1 * var(--active-rotate-x)))
+      rotateY(calc(-1 * (var(--active-rotate-y) + var(--active-rotate-y-adjust)))) scale(var(--slider-scale));
     background-size: contain;
     background-repeat: no-repeat;
     background-position: top center;

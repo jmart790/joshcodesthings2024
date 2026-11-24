@@ -246,8 +246,9 @@
     position: absolute;
     left: 0;
     bottom: 0;
-    margin: 1rem;
-    max-width: calc(100vw - 2rem);
+    /* left matches .home-button's 2rem gutter so the page edges line up */
+    margin: 1rem 1rem 1rem 2rem;
+    max-width: calc(100vw - 3rem);
   }
 
   .char-desc {
@@ -333,8 +334,8 @@
   /* small screens: description shows as a straight, centered modal (same expand
      animation as desktop/tablet, just without the angled rotateY). The selected
      character card stays in place behind it (see SlideItem.vue); Deselect
-     closes it. ponytail: 768px = "mobile" per the design. */
-  @media (max-width: 768px) {
+     closes it. 768px and up (tablet) keeps the desktop fly-out + angled card. */
+  @media (max-width: 767px) {
     .char-desc {
       right: auto;
       bottom: auto;
@@ -379,6 +380,8 @@
       --scramble-text-shadow: -2px 2px black;
 
       bottom: 4rem;
+      margin-left: 1rem; /* matches .home-button at this size */
+      max-width: calc(100vw - 2rem);
     }
   }
 </style>
