@@ -18,13 +18,15 @@
       <TypeWriter class="type-writer" v-if="isOpen" :delay="1000" :speed="10" :text="desc" />
       <slot></slot>
     </section>
-    <RetroButton @click.stop="$emit('go-to-stage')" v-if="isDisabled ? false : size !== 'sm'">
+    <!-- The card's only CTA: show it highlighted and focused on open, so Enter goes. -->
+    <RetroButton ref="cta" selected @click.stop="$emit('go-to-stage')" v-if="isDisabled ? false : size !== 'sm'">
       <TypeWriter class="type-writer" v-if="isOpen" :delay="0" :speed="10" text="Go!" />
     </RetroButton>
   </dialog>
 </template>
 
 <script setup lang="ts">
+  import { nextTick, ref, watch } from 'vue';
   import TypeWriter from './TypeWriter.vue';
   import RetroButton from './RetroButton.vue';
   const props = withDefaults(
@@ -44,6 +46,17 @@
       isFullSize: false,
       isTransparent: false
     }
+  );
+
+  const cta = ref<{ $el: HTMLElement } | null>(null);
+  watch(
+    () => props.isOpen,
+    async (open) => {
+      if (!open) return;
+      await nextTick();
+      cta.value?.$el.focus({ preventScroll: true });
+    },
+    { immediate: true }
   );
 </script>
 
@@ -113,8 +126,39 @@
     flex: 1 1 auto;
     min-height: 0;
     overflow-y: auto;
+    /* breathing room between the text and the scrollbar */
+    padding-right: 0.5rem;
     display: flex;
     flex-direction: column;
+  }
+
+  /* Pixel scrollbar: hard-edged bevel blocks in the Go button's blue. Styling
+     ::-webkit-scrollbar also opts out of macOS overlay scrollbars, so it stays
+     visible whenever the content overflows. Don't add scrollbar-color/width
+     here: in Chromium they override these pseudo-elements. */
+  .dialog-card ::-webkit-scrollbar {
+    width: 12px;
+  }
+  .dialog-card ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: inset 2px 0 0 #404040;
+  }
+  .dialog-card ::-webkit-scrollbar-thumb {
+    background: #00aaff;
+    border: 2px solid black;
+    border-radius: 0;
+    box-shadow:
+      inset 2px 2px 0 #ccf2fd,
+      inset -2px -2px 0 #0067a3;
+  }
+  .dialog-card ::-webkit-scrollbar-thumb:hover {
+    background: #47c2ff;
+  }
+  /* Firefox has no scrollbar pseudo-elements; closest match. */
+  @supports not selector(::-webkit-scrollbar) {
+    .dialog-card > section {
+      scrollbar-color: #00aaff rgba(0, 0, 0, 0.6);
+    }
   }
 
   .dialog-card.size-sm.is-full-size {
@@ -163,6 +207,8 @@
   .retro-button {
     flex: 0 0 auto;
     align-self: flex-end;
+    /* room for the selected bracket (inset -6px) inside the card's overflow clip */
+    margin-right: 1rem;
   }
   @media (max-width: 768px) {
     section .type-writer {
