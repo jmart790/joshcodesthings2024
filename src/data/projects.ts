@@ -5,6 +5,7 @@ export interface Project {
   tech: string;
   description: string;
   logoClass: string;
+  /** Base path of the demo, no extension: `${video}.webm`, `.mp4` and `.jpg` (poster) must exist in public/. */
   video?: string;
   github?: string;
   demoLink?: string;
@@ -20,7 +21,7 @@ export const projects: Project[] = [
     description:
       'Built with Vue 3 and PokeAPI to recreate an authentic game feel. A key challenge was performance with hundreds of unoptimized sprite GIFs. I solved this by implementing lazy loading for items near the viewport and ensuring only the active Pokemon renders its animated sprite.',
     logoClass: 'logo-pokedex',
-    video: '/pokedex_demo.webm',
+    video: '/demos/pokedex',
     github: 'https://github.com/jmart790/real-pokedex',
     demoLink: 'https://aprettydecentpokedex.netlify.app/',
     icon: 'pokeball'
@@ -33,6 +34,7 @@ export const projects: Project[] = [
     description:
       'My personal portfolio and playground for retro-inspired web experiments. Built with a focus on component architecture, pixel-perfect 90s aesthetics, and modern frontend tooling.',
     logoClass: 'logo-jct',
+    video: '/demos/jct',
     github: 'https://github.com/jmart790/joshcodesthings2024',
     icon: 'computer'
   },
@@ -44,6 +46,7 @@ export const projects: Project[] = [
     description:
       'An RV Trip Planning web app. Search 18,000+ verified RV parks, plot routes with drive times and weather, and share trips with friends. A Netlify Functions backend serves the Supabase campground data and every external API, keeping the app bundle footprint small.',
     logoClass: 'logo-roamplanner',
+    video: '/demos/roamplanner',
     demoLink: 'https://roamplanner.netlify.app',
     icon: 'map'
   },
@@ -55,6 +58,7 @@ export const projects: Project[] = [
     description:
       'A local dashboard dressed as a vintage newspaper. Weather, alerts, news, nearby restaurants on a map, and daily puzzles for wherever you are, with morning and evening editions that change through the day. Built on free APIs with a small serverless backend.',
     logoClass: 'logo-iherald',
+    video: '/demos/iherald',
     github: 'https://github.com/jmart790/My_Dashboard',
     demoLink: 'https://iherald.netlify.app',
     icon: 'globe'
@@ -67,6 +71,7 @@ export const projects: Project[] = [
     description:
       'A private life-management dashboard. It balances goals and tasks across five life areas with a burnout guard that caps weekly effort, tracks my workout program, and pulls my Retro Gamer Lofi stats from YouTube, TikTok, Instagram, and DistroKid into one view. Installable as a PWA with a 95% test coverage gate.',
     logoClass: 'logo-lyfos',
+    video: '/demos/lyfos',
     icon: 'mobile'
   },
   {
@@ -77,6 +82,7 @@ export const projects: Project[] = [
     description:
       'An Emulation Station themed site with a 24/7 live radio, the latest mixes, albums, a live merch shop, and a fan voting board for the next soundtrack. Nuxt server routes pull YouTube, Spotify, and merch data with no API keys, and it is tuned for accessibility and performance.',
     logoClass: 'logo-lofi',
+    video: '/demos/rgl',
     demoLink: 'https://retrogamerlofi.com',
     icon: 'cassette'
   }

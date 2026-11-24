@@ -39,16 +39,31 @@
           <TypeWriter class="description-text" :text="project.description" :delay="800" :speed="10" />
 
           <div class="project-screenshot-container">
-            <!-- Video Support -->
-            <video
+            <!-- Demo: WebM (VP9) first, MP4 fallback for Safari; poster shows while it loads.
+                 Click opens the larger view. -->
+            <button
               v-if="project.video"
-              :src="project.video"
-              autoplay
-              loop
-              muted
-              playsinline
-              class="project-video"
-            ></video>
+              type="button"
+              class="video-trigger"
+              aria-label="Open demo in larger view"
+              @click.stop="openModal"
+            >
+              <video
+                ref="inlineVideo"
+                :key="project.video"
+                :poster="`${project.video}.jpg`"
+                :autoplay="!reducedMotion"
+                preload="none"
+                loop
+                muted
+                playsinline
+                class="project-video"
+              >
+                <source :src="`${project.video}.webm`" type="video/webm" />
+                <source :src="`${project.video}.mp4`" type="video/mp4" />
+              </video>
+              <span class="video-expand-hint">Expand</span>
+            </button>
             <!-- Placeholder for screenshot -->
             <div v-else class="screenshot-placeholder">
               <span>{{ project.name }} Screenshot</span>
@@ -74,10 +89,61 @@
         </footer>
       </div>
     </div>
+
+    <!-- Native <dialog>: top layer, Esc to close, focus handled by the browser.
+         @wheel.stop keeps the page's wheel handler from switching projects underneath. -->
+    <dialog
+      v-if="project.video"
+      ref="modal"
+      class="demo-modal"
+      :aria-label="`${project.name} demo`"
+      @click="onModalClick"
+      @close="onModalClose"
+      @wheel.stop
+    >
+      <div class="demo-modal__frame">
+        <div class="rivet outer top-left"></div>
+        <div class="rivet outer top-right"></div>
+        <div class="rivet outer bottom-left"></div>
+        <div class="rivet outer bottom-right"></div>
+        <div class="caution-tape top-center"></div>
+
+        <header class="demo-modal__header">
+          <h2 class="dialog-title">{{ project.name }}</h2>
+          <button type="button" class="industrial-btn metal demo-modal__close" @click="closeModal">
+            <div class="btn-rivet top-left"></div>
+            <div class="btn-rivet top-right"></div>
+            <div class="btn-rivet bottom-left"></div>
+            <div class="btn-rivet bottom-right"></div>
+            Close
+          </button>
+        </header>
+
+        <div class="demo-modal__screen">
+          <video
+            v-if="isModalOpen"
+            ref="modalVideo"
+            :poster="`${project.video}.jpg`"
+            autoplay
+            loop
+            muted
+            playsinline
+            controls
+            class="demo-modal__video"
+          >
+            <source :src="`${project.video}.webm`" type="video/webm" />
+            <source :src="`${project.video}.mp4`" type="video/mp4" />
+          </video>
+        </div>
+
+        <div class="caution-tape bottom-center"></div>
+      </div>
+    </dialog>
   </div>
 </template>
 
 <script setup lang="ts">
+  import { nextTick, ref } from 'vue';
   import type { Project } from '../../data/projects';
   import TypeWriter from '../shared/TypeWriter.vue';
 
@@ -88,8 +154,42 @@
 
   defineEmits(['click']);
 
+  // Reduced motion: no autoplay, the poster stands in until the visitor opens the demo.
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const inlineVideo = ref<HTMLVideoElement>();
+  const modalVideo = ref<HTMLVideoElement>();
+  const modal = ref<HTMLDialogElement>();
+  const isModalOpen = ref(false);
+
   function openLink(url: string) {
     window.open(url, '_blank');
+  }
+
+  async function openModal() {
+    const inline = inlineVideo.value;
+    inline?.pause();
+    isModalOpen.value = true;
+    modal.value?.showModal();
+    await nextTick();
+    // Pick up where the small player was so the expand feels continuous.
+    if (modalVideo.value && inline) modalVideo.value.currentTime = inline.currentTime;
+  }
+
+  function closeModal() {
+    modal.value?.close();
+  }
+
+  // Clicks on the backdrop land on the <dialog> itself; clicks on the frame don't.
+  function onModalClick(event: MouseEvent) {
+    if (event.target === modal.value) closeModal();
+  }
+
+  function onModalClose() {
+    const inline = inlineVideo.value;
+    if (inline && modalVideo.value) inline.currentTime = modalVideo.value.currentTime;
+    isModalOpen.value = false; // unmounts the big video so it stops downloading/decoding
+    if (inline && !reducedMotion) inline.play().catch(() => {});
   }
 </script>
 
@@ -246,10 +346,137 @@
     z-index: 1;
   }
 
+  .video-trigger {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: zoom-in;
+  }
+
   .project-video {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  .video-expand-hint {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    padding: 6px 8px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.55rem;
+    color: #ffcc00;
+    background: rgba(0, 0, 0, 0.75);
+    border: 2px solid #ffcc00;
+    text-shadow: 1px 1px 0 #000;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+  }
+
+  .video-trigger:hover .video-expand-hint,
+  .video-trigger:focus-visible .video-expand-hint {
+    opacity: 1;
+  }
+
+  .video-trigger:focus-visible {
+    outline: 3px solid #ffcc00;
+    outline-offset: -3px;
+  }
+
+  /* Demo modal: same outer frame, rivets and caution tape as the card. */
+  .demo-modal {
+    width: min(1200px, 92vw);
+    max-width: none;
+    max-height: 92vh;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    overflow: visible;
+  }
+
+  .demo-modal::backdrop {
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  .demo-modal[open] {
+    animation: demo-modal-in 0.25s ease-out;
+  }
+
+  @keyframes demo-modal-in {
+    from {
+      opacity: 0;
+      transform: scale(0.92);
+    }
+  }
+
+  .demo-modal__frame {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 32px 24px 36px;
+    background: #7a7a7a;
+    border: 4px solid #555;
+    border-top-color: #999;
+    border-left-color: #999;
+    border-bottom-color: #333;
+    border-right-color: #333;
+    border-radius: 10px;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .demo-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .industrial-btn.demo-modal__close {
+    flex: 0 0 auto;
+    padding: 10px 18px;
+    font-size: 0.75rem;
+  }
+
+  .demo-modal__screen {
+    background: #000;
+    border: 4px solid #222;
+    border-bottom-color: #888;
+    border-right-color: #888;
+    border-radius: 6px;
+    box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+  }
+
+  .demo-modal__video {
+    display: block;
+    width: 100%;
+    max-height: calc(92vh - 140px);
+    object-fit: contain;
+    background: #000;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .demo-modal[open] {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .demo-modal__frame {
+      padding: 26px 12px 30px;
+    }
+
+    .demo-modal .dialog-title {
+      font-size: 0.8rem;
+    }
   }
 
   .screenshot-placeholder {
