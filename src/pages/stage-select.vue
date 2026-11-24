@@ -218,8 +218,8 @@
 
   .buttons {
     position: absolute;
-    bottom: 2rem;
-    right: 2rem;
+    bottom: var(--page-gutter);
+    right: var(--page-gutter);
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -232,8 +232,8 @@
 
   .home-button {
     position: absolute;
-    top: 2rem;
-    left: 2rem;
+    top: var(--page-gutter);
+    left: var(--page-gutter);
     z-index: 100;
   }
 
@@ -246,9 +246,9 @@
     position: absolute;
     left: 0;
     bottom: 0;
-    /* left matches .home-button's 2rem gutter so the page edges line up */
-    margin: 1rem 1rem 1rem 2rem;
-    max-width: calc(100vw - 3rem);
+    /* left matches .home-button's gutter so the page edges line up */
+    margin: 1rem 1rem 1rem var(--page-gutter);
+    max-width: calc(100vw - var(--page-gutter) - 1rem);
   }
 
   .char-desc {
@@ -291,7 +291,7 @@
   /* desktop-lg: mirrors --breakpoint-desktop-lg */
   @media (max-width: 1600px) {
     .char-name {
-      bottom: 5rem;
+      bottom: calc(3rem + var(--page-gutter)); /* tracks .buttons' bottom */
     }
   }
 
@@ -312,8 +312,6 @@
     }
 
     .buttons {
-      bottom: 1rem;
-      right: 1rem;
       gap: 0.5rem;
     }
 
@@ -364,24 +362,12 @@
 
   /* mobile: mirrors --breakpoint-mobile */
   @media (max-width: 480px) {
-    .home-button {
-      top: 1rem;
-      left: 1rem;
-    }
-
-    .buttons {
-      bottom: 1rem;
-      right: 1rem;
-    }
-
     .char-name {
       --scramble-font-size: clamp(24px, 9vw, 40px);
       --scramble-letter-spacing: 0.03rem;
       --scramble-text-shadow: -2px 2px black;
 
       bottom: 4rem;
-      margin-left: 1rem; /* matches .home-button at this size */
-      max-width: calc(100vw - 2rem);
     }
   }
 </style>

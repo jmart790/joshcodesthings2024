@@ -136,8 +136,8 @@
 
   .back-button {
     position: absolute;
-    bottom: 2rem;
-    left: 2rem;
+    bottom: var(--page-gutter);
+    left: var(--page-gutter);
     z-index: 100;
   }
 
@@ -215,11 +215,6 @@
   @media (max-width: 480px) {
     .password-page {
       padding: 12px;
-    }
-
-    .back-button {
-      bottom: 1rem;
-      left: 1rem;
     }
   }
 </style>

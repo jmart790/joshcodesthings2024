@@ -231,7 +231,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: var(--page-gutter);
     box-sizing: border-box;
     color: #f7fbff;
     font-family: 'Press Start 2P', monospace;
@@ -243,8 +243,8 @@
 
   .back-button {
     position: absolute;
-    bottom: 2rem;
-    left: 2rem;
+    bottom: var(--page-gutter);
+    left: var(--page-gutter);
     z-index: 100;
   }
 

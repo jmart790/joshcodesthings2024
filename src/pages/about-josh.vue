@@ -245,8 +245,8 @@
   }
   .back-button {
     position: absolute;
-    top: 2rem;
-    left: 2rem;
+    top: var(--page-gutter);
+    left: var(--page-gutter);
     z-index: 100;
   }
 

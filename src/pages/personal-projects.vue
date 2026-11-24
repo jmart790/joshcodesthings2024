@@ -89,8 +89,8 @@
 
   .back-button {
     position: absolute;
-    top: 2rem;
-    left: 2rem;
+    top: var(--page-gutter);
+    left: var(--page-gutter);
     z-index: 20;
   }
 
@@ -120,8 +120,36 @@
     grid-template-columns: 1fr 1fr; /* Left takes space, Right is fixed width wheel */
     gap: 2rem;
     height: 100%;
-    padding-top: 80px; /* Clear header space */
+    padding-top: calc(48px + var(--page-gutter)); /* clear the back button (80px on desktop) */
     position: relative; /* Context for absolute wheel */
     z-index: 10; /* Ensure content is above background */
+  }
+
+  /* Portrait (tablet + phone): card on top at full width, cog turned 90deg and
+     peeking up from the bottom edge (cog geometry lives in ProjectWheel.vue).
+     The query must match PORTRAIT in ProjectWheel.vue, which flips the drag axis. */
+  @media (orientation: portrait) {
+    .personal-projects-page {
+      /* visible cog strip height; mirror of ProjectWheel's scale/drop math */
+      --cog-peek: calc(550px * var(--cog-scale) - var(--cog-drop));
+      --cog-scale: 0.8;
+      /* center this far below the screen: hub (r 186 * scale = 149) stays hidden,
+         selected label (r 318 * scale = 254) sits 30px above the bottom edge */
+      --cog-drop: 224px;
+    }
+
+    .content-container {
+      display: block;
+    }
+
+    .details-column {
+      /* full width between 2rem gutters, matching .back-button's left: 2rem */
+      --industrial-card-w: 100%;
+      --industrial-card-h: min(780px, 100%);
+
+      height: calc(100% - var(--cog-peek));
+      padding: 1.5rem var(--page-gutter) 1rem; /* top: breathing room under the back button */
+      align-items: center;
+    }
   }
 </style>

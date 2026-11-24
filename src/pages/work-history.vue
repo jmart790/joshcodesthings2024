@@ -79,7 +79,7 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    padding: 2rem;
+    padding: var(--page-gutter);
     width: 100%;
     display: flex;
     gap: 1rem;

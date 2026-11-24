@@ -38,8 +38,6 @@
     (e: 'select', index: number): void;
   }>();
 
-  // Distance from the gear center to each label's center.
-  const WHEEL_RADIUS = 278;
   const ANGLE_STEP = 30;
   const SLOT_COUNT = 360 / ANGLE_STEP; // one label per gear segment
 
@@ -82,14 +80,22 @@
     });
   });
 
+  // Must match the media query in personal-projects.vue: in portrait the cog is
+  // turned 90deg to the bottom edge, so dragging left plays the role of dragging down.
+  const PORTRAIT = '(orientation: portrait)';
+  let horizontal = false;
+  const dragPos = (event: MouseEvent | TouchEvent) => {
+    const p = 'touches' in event ? event.touches[0] : event;
+    return horizontal ? -p.clientX : p.clientY;
+  };
+
   const isDragging = ref(false);
-  const startY = ref(0);
-  const currentDragY = ref(0);
+  const startPos = ref(0);
+  const currentPos = ref(0);
 
   const dragAngleOffset = computed(() => {
     if (!isDragging.value) return 0;
-    const deltaY = currentDragY.value - startY.value;
-    return deltaY * -0.2;
+    return (currentPos.value - startPos.value) * -0.2;
   });
 
   const rotorRotation = computed(() => rotationIndex.value * ANGLE_STEP + dragAngleOffset.value);
@@ -100,9 +106,8 @@
 
   function startDrag(event: MouseEvent | TouchEvent) {
     isDragging.value = true;
-    const clientY = 'touches' in event ? event.touches[0].clientY : event.clientY;
-    startY.value = clientY;
-    currentDragY.value = clientY;
+    horizontal = window.matchMedia(PORTRAIT).matches;
+    startPos.value = currentPos.value = dragPos(event);
 
     window.addEventListener('mousemove', onDrag);
     window.addEventListener('touchmove', onDrag);
@@ -112,21 +117,20 @@
 
   function onDrag(event: MouseEvent | TouchEvent) {
     if (!isDragging.value) return;
-    const clientY = 'touches' in event ? event.touches[0].clientY : event.clientY;
-    currentDragY.value = clientY;
+    currentPos.value = dragPos(event);
 
-    const diff = currentDragY.value - startY.value;
+    const diff = currentPos.value - startPos.value;
     const THRESHOLD_PX = 60;
 
     if (Math.abs(diff) >= THRESHOLD_PX) {
       if (diff > 0) {
         // Dragging DOWN -> Go to NEXT
         emit('select', (props.activeIndex + 1) % props.projects.length);
-        startY.value += THRESHOLD_PX;
+        startPos.value += THRESHOLD_PX;
       } else {
         // Dragging UP -> Go to PREV
         emit('select', (props.activeIndex - 1 + props.projects.length) % props.projects.length);
-        startY.value -= THRESHOLD_PX;
+        startPos.value -= THRESHOLD_PX;
       }
     }
   }
@@ -143,7 +147,7 @@
     // Fixed spot on the rotor: rotate about the gear center, then push straight out,
     // so the label sits exactly midway between two spokes and never moves relative to them.
     return {
-      transform: `rotate(${slot * ANGLE_STEP}deg) translateX(-${WHEEL_RADIUS}px)`,
+      transform: `rotate(${slot * ANGLE_STEP}deg) translateX(calc(-1 * var(--wheel-radius)))`,
       opacity: Math.max(0.2, 1 - Math.abs(offset) * 0.15),
       zIndex: 50 - Math.abs(offset),
       filter: `grayscale(${offset === 0 ? 0 : 1})`
@@ -158,6 +162,9 @@
 
 <style scoped>
   .wheel-column {
+    /* gear center to label center; portrait pushes labels out toward the rim */
+    --wheel-radius: 278px;
+
     position: absolute;
     right: 0;
     top: 0;
@@ -167,6 +174,7 @@
     pointer-events: auto;
     cursor: grab;
     user-select: none;
+    touch-action: none; /* the drag turns the cog; don't let touch scroll/zoom the page */
     z-index: 50;
   }
 
@@ -256,5 +264,34 @@
     -webkit-text-fill-color: transparent;
     filter: drop-shadow(0 0 2px rgba(49, 43, 5, 0.5));
     -webkit-text-stroke: 0.5px #3e1e05;
+  }
+
+  /* Portrait: cog lies along the bottom edge, center below the screen, so its top
+     arc shows with the selected label at 12 o'clock. Scale/drop vars come from
+     personal-projects.vue. rotate/scale (not transform) so they stack on the
+     inline transform. 90deg is a multiple of the 30deg step, so spokes stay
+     between labels. */
+  @media (orientation: portrait) {
+    .wheel-column {
+      --wheel-radius: 318px; /* max before text hits the steel rim (r 354) */
+      top: auto;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: var(--cog-peek);
+    }
+
+    .wheel-container {
+      top: calc(100% + var(--cog-drop));
+      right: auto;
+      left: 50%;
+      rotate: 90deg;
+      scale: var(--cog-scale);
+    }
+
+    /* undo the 90deg so labels read upright, following the rim */
+    .wheel-logo {
+      rotate: -90deg;
+    }
   }
 </style>

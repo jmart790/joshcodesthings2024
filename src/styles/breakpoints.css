@@ -15,4 +15,14 @@
   --breakpoint-tablet: 720px;
   --breakpoint-mobile: 420px;
   --breakpoint-short-screen: 620px;
+
+  /* Space between page edges and edge-anchored UI (back buttons, nav buttons,
+     card gutters). One knob for every page; tightens on tablet and below. */
+  --page-gutter: 2rem;
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --page-gutter: 1rem;
+  }
 }

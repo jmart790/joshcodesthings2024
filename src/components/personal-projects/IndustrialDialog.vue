@@ -202,20 +202,25 @@
     }
     40% {
       opacity: 1;
-      width: 620px;
+      width: var(--card-w);
       height: 10px;
     }
     100% {
-      width: 620px;
-      height: 780px;
+      width: var(--card-w);
+      height: var(--card-h);
     }
   }
 
   /* Main Card Frame (Outer Border) */
   .industrial-dialog-card {
+    /* Size comes from the page (personal-projects.vue overrides on tablet/phone);
+       the expand animation reads the same vars. */
+    --card-w: var(--industrial-card-w, 620px);
+    --card-h: var(--industrial-card-h, 780px);
+
     position: relative;
-    width: 620px; /* Fixed width matching max-width from user edit */
-    height: 780px; /* Fixed height for consistency */
+    width: var(--card-w);
+    height: var(--card-h);
     background: #7a7a7a; /* Industrial Grey Base */
     border: 4px solid #555;
     border-top-color: #999;
@@ -317,22 +322,61 @@
   }
 
   /* Content Styles */
+  /* Shrink chain (min-height: 0 on each flex level) so a short card squeezes
+     only the description, which scrolls; the demo and buttons keep full size. */
+  .inner-frame-border,
+  .screen-container {
+    min-height: 0;
+  }
+
   .dialog-content {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    height: 100%;
-    justify-content: space-between;
+    flex: 1;
+    min-height: 0;
   }
 
   .description-text {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
     line-height: 1.6;
     color: #fff;
     text-shadow: 1px 1px 3px #000;
     font-family: 'Press Start 2P', cursive, Arial, sans-serif;
   }
 
+  /* Pixel scrollbar, riveted-metal colors (same build as DialogCard.vue's).
+     Styling ::-webkit-scrollbar keeps it visible on macOS while it overflows.
+     Its first 8px are a transparent gap off the text: spacing that exists only
+     when the scrollbar does, so text that fits never re-wraps. */
+  .description-text::-webkit-scrollbar {
+    width: 20px;
+  }
+  .description-text::-webkit-scrollbar-track {
+    background: linear-gradient(90deg, transparent 8px, #222 8px 10px, rgba(0, 0, 0, 0.35) 10px);
+  }
+  .description-text::-webkit-scrollbar-thumb {
+    background: #7a7a7a padding-box;
+    border: 2px solid #222;
+    border-left: 10px solid transparent; /* gap + the track's dark edge show through */
+    border-radius: 0;
+    box-shadow:
+      inset 2px 2px 0 #bbb,
+      inset -2px -2px 0 #444;
+  }
+  .description-text::-webkit-scrollbar-thumb:hover {
+    background: #999 padding-box;
+  }
+  @supports not selector(::-webkit-scrollbar) {
+    .description-text {
+      scrollbar-color: #7a7a7a rgba(0, 0, 0, 0.35);
+    }
+  }
+
   .project-screenshot-container {
+    flex: none;
     width: 100%;
     aspect-ratio: 16/9;
     background: #000;
