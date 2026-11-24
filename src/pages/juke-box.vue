@@ -160,10 +160,34 @@
     filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
   }
 
+  /* Stacked (tablet and below): the player fits the viewport. The frame fills
+     the page, the screen keeps 16:9 on top, and the Data Logs panel takes the
+     remaining height and scrolls inside (MegaManPlaylist.vue). The extra 40px on
+     each side is the frame's outer ring (box-shadow in JukeboxFrame.vue), and
+     the bottom also leaves room for the Back button under the frame. */
   @media (max-width: 1000px) {
+    .juke-box-page {
+      --frame-ring: 40px;
+
+      height: 100dvh;
+      min-height: 0;
+      align-items: stretch;
+      padding: calc(var(--page-gutter) + var(--frame-ring));
+      padding-bottom: calc(var(--page-gutter) + var(--frame-ring) + 54px);
+    }
+
+    .jukebox-assembly {
+      width: 100%;
+    }
+
     .frame-content {
       display: flex;
       flex-direction: column;
+    }
+
+    .mediaman-video,
+    .yoshx-video {
+      height: 150px;
     }
   }
 </style>

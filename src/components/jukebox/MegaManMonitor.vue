@@ -262,6 +262,13 @@
   @media (max-width: 1000px) {
     .screen-section {
       height: auto;
+      flex: none;
+    }
+
+    /* the video keeps its real shape; the playlist below takes what's left */
+    .screen-inner {
+      height: auto;
+      aspect-ratio: 16 / 9;
     }
   }
 </style>

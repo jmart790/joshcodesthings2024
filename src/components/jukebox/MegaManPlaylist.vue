@@ -58,6 +58,16 @@
     margin-bottom: 20px;
   }
 
+  /* Stacked under the monitor: fill the remaining height (list scrolls inside). */
+  @media (max-width: 1000px) {
+    .data-logs-section {
+      flex: 1;
+      min-height: 0;
+      height: auto;
+      margin-bottom: 0;
+    }
+  }
+
   /* Rivets / Mechanical Details via Pseudo-elements */
   .data-logs-section::before,
   .data-logs-section::after {

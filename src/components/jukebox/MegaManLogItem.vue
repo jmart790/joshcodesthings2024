@@ -127,4 +127,21 @@
     color: #fff;
     text-shadow: 0 0 4px #005bb5;
   }
+
+  /* Stacked layout: tighter rows so more of the list fits under the monitor. */
+  @media (max-width: 1000px) {
+    .log-item {
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .thumb-frame {
+      width: 56px;
+      height: 40px;
+    }
+
+    .log-info {
+      min-height: 40px;
+    }
+  }
 </style>

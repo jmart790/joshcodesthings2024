@@ -161,14 +161,17 @@
     z-index: 2;
   }
 
+  /* Stacked: fill the page (juke-box.vue sizes it to the viewport). */
   @media (max-width: 1000px) {
     .megaman-frame {
-      height: auto;
-      max-height: none;
-      aspect-ratio: auto;
+      height: 100%;
+      width: 100%;
       flex-direction: column;
-      padding: 30px;
-      width: 95vw;
+      padding: 65px 30px 30px;
+    }
+
+    .frame-label {
+      font-size: clamp(12px, 3.2vw, 30px);
     }
   }
 </style>
