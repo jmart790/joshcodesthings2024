@@ -37,9 +37,15 @@
     --com-translate-x: -1rem;
     --com-translate-y: 1rem;
     --pl-padding: 0.8em;
+    /* The gold X hangs off the right of the layout box, so the flex-centered header
+       looks right-heavy. Shift the whole lockup back to visual center. Measured per
+       tier with animations finished; translate doesn't move the menu. */
+    --title-shift-x: -83px;
+    --title-shift-y: 0px;
 
     position: relative;
     margin-block: var(--title-margin-block);
+    translate: var(--title-shift-x) var(--title-shift-y);
     text-transform: uppercase;
     display: flex;
   }
@@ -371,6 +377,8 @@
       --red-bg-border-right: 480px;
       --red-bg-border-left: 62px;
       --red-bg-border-top: 70px;
+      --title-shift-x: -55px;
+      --title-shift-y: -24px; /* breathing room above the menu */
     }
   }
 
@@ -391,6 +399,7 @@
       --com-translate-x: -0.5rem;
       --com-translate-y: 0.5rem;
       --pl-padding: 0.55em;
+      --title-shift-x: -27px;
     }
   }
 
