@@ -176,4 +176,56 @@
     object-fit: cover;
     z-index: -1;
   }
+
+  /* Portrait: the background is one tall image (plaza over hallway) sized for a
+     wide screen. Scaled by width it's barely a screen tall here, so both scenes
+     show at once. Instead size it by height so each scene fills the viewport,
+     close to desktop (1440x900 shows 900 / 2063 = 44% of it; this shows 48%),
+     cropping the sides around the center. ImageGallery.vue aims its 3D
+     perspective at the hallway's vanishing point in this crop. */
+  @media (orientation: portrait) {
+    .hero-img img {
+      height: 210vh;
+      object-fit: cover;
+    }
+
+    .hero-img::after {
+      background-size: cover;
+    }
+
+    /* Plaza row ends just after the hallway pins (110vh), so the gallery
+       starts in the hallway. */
+    .main {
+      min-height: 120vh;
+    }
+
+    .art-girl-hero {
+      width: 75%;
+    }
+
+    /* Paint stroke: its draw starts from the path's end, a round-capped dot at
+       (277.5, 118) in the SVG's 1025x437 viewBox. At 60vh tall that dot sits
+       38.1vh from the SVG's left, 16.2vh from its top, radius 8.2vh. Place the
+       SVG so the dot lands in the first screen's bottom-left corner (center at
+       --dot-x / --dot-y); the arrow centers on it. The SVG's bottom then sets
+       where this row ends and the drips take over. */
+    .main {
+      --dot-x: calc(var(--page-gutter) + 10vh);
+      --dot-y: calc(90vh - var(--page-gutter));
+    }
+
+    .paint-svg {
+      align-self: start;
+      justify-self: start;
+      height: 60vh;
+      margin-top: calc(var(--dot-y) - 16.2vh);
+      margin-left: calc(var(--dot-x) - 38.1vh);
+    }
+
+    .scroll-indicator {
+      top: var(--dot-y);
+      left: var(--dot-x);
+      translate: -50% -50%;
+    }
+  }
 </style>

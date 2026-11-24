@@ -222,6 +222,45 @@
     width: 100%;
     transform-style: preserve-3d;
     transform-origin: center bottom;
-    transition: transform 0.1s linear, opacity 0.1s linear; /* Fast transition for scroll sync */
+    transition:
+      transform 0.1s linear,
+      opacity 0.1s linear; /* Fast transition for scroll sync */
+  }
+
+  /* Portrait: the background is cropped around its center (art-gallery.vue),
+     which puts the hallway's vanishing point right of center. Aim the
+     perspective there so receding art travels down the hallway; the standing
+     girl shrinks into the bottom-left corner so she doesn't cover the art. */
+  @media (orientation: portrait) {
+    .container {
+      /* vanishing point in the 210vh-tall crop: 15vh right of center, 57% down */
+      perspective-origin: calc(50% + 15vh) 57%;
+    }
+
+    .image-gallery {
+      --girl-width: 225px;
+      --girl-height: 300px;
+    }
+
+    .girl {
+      top: 50%;
+      margin-left: var(--page-gutter);
+    }
+
+    /* no rotateY: the perspective-origin above does the aiming */
+    /* nudged toward the vanishing point so receding art lines up with the
+       hallway's end wall, while close-up art still fits the screen */
+    .wrapper {
+      width: 85%;
+      top: 0;
+      left: calc(50% + 8vh);
+      transform: translateX(-50%) rotateX(359deg) translateZ(226px);
+    }
+
+    /* Bottom-anchor each piece near the screen's bottom edge so, as it recedes
+       toward the vanishing point, it rides the floor instead of floating. */
+    .item {
+      bottom: 4vh;
+    }
   }
 </style>
