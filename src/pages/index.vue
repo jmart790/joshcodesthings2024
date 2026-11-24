@@ -34,7 +34,7 @@
   import GameTitle from '../components/home/GameTitle.vue';
   import RetroButton from '../components/shared/RetroButton.vue';
 
-  const menuItems = ref<string[]>(['GAME START', 'PASSWORD', 'OPTIONS']);
+  const menuItems = ref<string[]>(['START', 'PASSWORD', 'OPTIONS']);
   const selectedIndex = ref<number>(0);
   const currentSprite = ref<string>('sprite 1.webp');
   const showWave = ref<boolean>(false);
@@ -47,7 +47,7 @@
 
   const navigate = (menuItem: string) => {
     const routes: { [key: string]: string } = {
-      'GAME START': '/stage-select',
+      START: '/stage-select',
       PASSWORD: '/password',
       OPTIONS: '/options'
     };
