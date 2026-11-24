@@ -1,9 +1,8 @@
 <template>
   <form class="grid-container" @submit.prevent>
-    <!-- Top Sockets (Vertical Columns 1, 2, 3) -->
+    <!-- Top Sockets (the two vertical pipes) -->
     <div class="socket socket-t socket-pos-1"></div>
     <div class="socket socket-t socket-pos-2"></div>
-    <div class="socket socket-t socket-pos-3"></div>
     <!-- Left Sockets (Horizontal Rows 1, 2, 3, 4) -->
     <div class="socket socket-l socket-pos-1"></div>
     <div class="socket socket-l socket-pos-2"></div>
@@ -21,11 +20,9 @@
     <!-- Row 1 -->
     <div class="joint joint-c1 joint-r1"></div>
     <div class="joint joint-c2 joint-r1"></div>
-    <div class="joint joint-c3 joint-r1"></div>
     <!-- Row 2 -->
     <div class="joint joint-c1 joint-r2"></div>
     <div class="joint joint-c2 joint-r2"></div>
-    <div class="joint joint-c3 joint-r2"></div>
     <!-- Row 3 -->
     <div class="joint joint-c1 joint-r3"></div>
     <div class="joint joint-c2 joint-r3"></div>
@@ -343,10 +340,6 @@
   .socket-pos-2.socket-b {
     left: calc(var(--pos-2) - var(--socket-offset));
   }
-  .socket-pos-3.socket-t,
-  .socket-pos-3.socket-b {
-    left: calc(var(--pos-3) - var(--socket-offset));
-  }
 
   .socket-pos-1.socket-l,
   .socket-pos-1.socket-r {
@@ -451,9 +444,6 @@
   }
   .joint-c2 {
     left: calc(var(--pos-2) - var(--joint-offset));
-  }
-  .joint-c3 {
-    left: calc(var(--pos-3) - var(--joint-offset));
   }
 
   .joint-r1 {
