@@ -250,6 +250,20 @@
     z-index: 100;
   }
 
+  /* Portrait tablet and below: bigger earth, centered between the sun and the
+     moon's horizon. `translate` (not transform) so the
+     hover animation still applies. */
+  @media (max-width: 1024px) and (orientation: portrait) {
+    .about-me-page__planet--earth {
+      top: auto;
+      right: auto;
+      bottom: 21vh;
+      left: 50%;
+      translate: -50% 0;
+      width: 75vw;
+    }
+  }
+
   @keyframes hover-sun {
     0%,
     100% {

@@ -236,6 +236,14 @@
     background: linear-gradient(to top, #050510, transparent);
   }
 
+  /* Tablet and below: same pixel distance on a smaller, more zoomed-in screen
+     reads as faster, so stretch every column's loop. Raise to slow further. */
+  @media (max-width: 1024px) {
+    .about-marquee__track {
+      animation-duration: calc(var(--duration) * 1.75);
+    }
+  }
+
   @media (max-width: 768px) {
     .about-marquee__stage {
       transform: rotateX(16deg) rotateY(-10deg) rotateZ(6deg) scale(1.3);
