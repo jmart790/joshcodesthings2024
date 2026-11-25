@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import App from './App.vue'
 import router from './router'
 import './styles/breakpoints.css'
+import './styles/cute-frame.css'
 
 const app = createApp(App)
 app.use(router)

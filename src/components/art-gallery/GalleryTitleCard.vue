@@ -6,7 +6,7 @@
 </script>
 
 <template>
-  <div class="gallery-title-card frame">
+  <div class="gallery-title-card cute-frame">
     <div class="title-content">
       <!-- Default: the theme title. The gallery's exit card passes its own content. -->
       <slot>
@@ -26,10 +26,8 @@
     justify-content: center;
     align-items: center;
     transform-style: preserve-3d;
-    background-color: #121212;
-    border: 12px solid #000;
-    outline: 1px solid #333;
-    box-sizing: border-box;
+    /* frame from the global .cute-frame; polka-dot mat instead of plain white */
+    background: radial-gradient(#ffd6ea 18%, transparent 20%) 0 0 / 28px 28px, #fff8fc;
     image-rendering: pixelated;
     padding: 2rem;
     container-type: inline-size; /* text below sizes off the card's width */

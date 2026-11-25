@@ -1,0 +1,58 @@
+/*
+  Playful frame for the art gallery (hallway art, theme/exit cards, viewer):
+  pastel pink molding around a white mat, a strip of washi tape on top and a
+  heart sticker on the bottom-right corner. Global because three components
+  share it; add `cute-frame` to the element that wraps the picture.
+*/
+.cute-frame {
+  --frame-pink: #ffb6d9;
+  --frame-hot: #ff5fa2;
+
+  position: relative;
+  box-sizing: border-box;
+  padding: 10px; /* white mat */
+  background: #fff;
+  border: 12px solid var(--frame-pink);
+  border-radius: 20px;
+  box-shadow:
+    0 0 0 4px #fff,
+    0 0 0 8px var(--frame-hot),
+    0 14px 24px rgba(90, 20, 60, 0.35);
+}
+
+/* washi tape */
+.cute-frame::before {
+  content: '';
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  z-index: 2;
+  width: 32%;
+  height: 44px;
+  translate: -50% 0;
+  rotate: -4deg;
+  background: repeating-linear-gradient(45deg, #fff6a8 0 10px, #ffe36e 10px 20px);
+  opacity: 0.92;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+}
+
+/* heart sticker */
+.cute-frame::after {
+  content: '\2665';
+  position: absolute;
+  right: -26px;
+  bottom: -26px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  rotate: 12deg;
+  border-radius: 50%;
+  background: var(--frame-hot);
+  box-shadow: 0 0 0 4px #fff, 0 4px 8px rgba(0, 0, 0, 0.25);
+  color: #fff;
+  font: 30px/1 Arial, sans-serif;
+  pointer-events: none;
+}

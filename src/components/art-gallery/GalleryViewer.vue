@@ -2,7 +2,7 @@
   <!-- Native modal dialog: top layer, Esc closes, focus is trapped by the browser. -->
   <dialog ref="dialog" class="gallery-viewer" @click="onBackdropClick" @close="onClose" @keydown="onKey">
     <div v-if="piece" class="gallery-viewer__body">
-      <div class="gallery-viewer__frame">
+      <div class="gallery-viewer__frame cute-frame">
         <img :src="piece.img" :alt="piece.name" class="gallery-viewer__img" />
       </div>
       <div class="gallery-viewer__info">
@@ -81,7 +81,7 @@
   }
 
   .gallery-viewer::backdrop {
-    background: rgba(5, 5, 16, 0.88);
+    background: rgba(60, 18, 50, 0.85); /* plum, softer than black */
   }
 
   .gallery-viewer[open] {
@@ -95,16 +95,14 @@
     gap: 1rem;
   }
 
-  /* same black matte frame as the hallway art (ImageArt.vue) */
+  /* same cute frame as the hallway art (global .cute-frame) */
   .gallery-viewer__frame {
-    border: 12px solid #000;
-    outline: 1px solid #333;
-    background: #121212;
-    box-shadow: 0 0 40px rgba(255, 0, 85, 0.25);
+    margin-top: 1.5rem; /* room for the washi tape */
   }
 
   .gallery-viewer__img {
     display: block;
+    border-radius: 8px;
     max-width: 100%;
     max-height: calc(100dvh - 15rem);
     object-fit: contain;
@@ -116,16 +114,17 @@
     justify-content: space-between;
     gap: 1rem;
     width: 100%;
-    font-family: 'Courier New', Courier, monospace;
-    color: #ccc;
+    font-family: 'Saira', sans-serif;
+    color: #ffe3f1;
   }
 
   .gallery-viewer__name {
     margin: 0 0 0.25rem;
     font-size: clamp(1.25rem, 3vw, 2rem);
-    color: #ff0055;
+    font-weight: 800;
+    color: #ff8cc6;
     text-transform: uppercase;
-    letter-spacing: 4px;
+    letter-spacing: 2px;
   }
 
   .gallery-viewer__desc {

@@ -401,7 +401,8 @@
     filter: drop-shadow(3px 3px 0 black);
   }
 
-  /* Dims the hallway around the piece on view and casts a warm light on it.
+  /* Softly dims the hallway (plum, not black) around the piece on view and
+     casts a pink-warm light on it.
      Sits under the art (.container paints later) and over the hallway/girl. */
   .spotlight {
     position: absolute;
@@ -410,10 +411,10 @@
     transition: opacity 0.25s ease;
     background: radial-gradient(
       circle at var(--spot-x) var(--spot-y),
-      rgba(255, 236, 210, 0.16) 0,
-      rgba(255, 236, 210, 0.05) calc(var(--spot-r) * 0.9),
-      rgba(0, 0, 0, 0.45) calc(var(--spot-r) * 1.6),
-      rgba(0, 0, 0, 0.6)
+      rgba(255, 228, 240, 0.2) 0,
+      rgba(255, 228, 240, 0.06) calc(var(--spot-r) * 0.9),
+      rgba(50, 10, 40, 0.25) calc(var(--spot-r) * 1.6),
+      rgba(50, 10, 40, 0.35)
     );
   }
 
