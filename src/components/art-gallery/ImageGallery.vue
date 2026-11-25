@@ -22,8 +22,10 @@
                 <GalleryTitleCard v-if="item.type === 'title'" :theme-one="item.themeOne" :theme-two="item.themeTwo" />
                 <GalleryTitleCard v-else-if="item.type === 'exit'">
                   <span class="exit-title">Thanks for visiting</span>
-                  <RetroButton @click.stop="backToTop">Back to top</RetroButton>
-                  <RetroButton @click.stop="$router.push('/stage-select')">Stage select</RetroButton>
+                  <button type="button" class="exit-btn" @click.stop="backToTop">Back to top</button>
+                  <button type="button" class="exit-btn exit-btn--alt" @click.stop="$router.push('/stage-select')">
+                    Stage select
+                  </button>
                 </GalleryTitleCard>
                 <ImageArt
                   v-else
@@ -399,6 +401,45 @@
     font-size: min(3rem, 8cqi);
     color: #ff0055;
     filter: drop-shadow(3px 3px 0 black);
+  }
+
+  /* Chunky sticker buttons in the art girl palette: solid fill, black outline
+     and hard pixel shadow, so they read on the white polka-dot card. Sized off
+     the card (it's the size container). */
+  .exit-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: min(1.4rem, 4.5cqi);
+    line-height: 1;
+    color: #fff;
+    background: #ff5fa2;
+    border: 3px solid #000;
+    border-radius: 10px;
+    padding: 0.8em 1.2em;
+    box-shadow: 4px 4px 0 #000;
+    cursor: pointer;
+    transition:
+      transform 0.1s ease,
+      box-shadow 0.1s ease;
+  }
+
+  .exit-btn--alt {
+    color: #000;
+    background: #ffd23f;
+  }
+
+  .exit-btn:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 5px 5px 0 #000;
+  }
+
+  .exit-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #000;
+  }
+
+  .exit-btn:focus-visible {
+    outline: 3px solid #2fa8ff;
+    outline-offset: 3px;
   }
 
   /* Softly dims the hallway (plum, not black) around the piece on view and
