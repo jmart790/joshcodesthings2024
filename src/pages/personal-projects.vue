@@ -1,7 +1,7 @@
 <template>
   <div class="personal-projects-page" @wheel="handleWheel">
     <div class="back-button">
-      <RetroButton @click="$router.back()">< Home</RetroButton>
+      <RetroButton @click="$router.push('/stage-select')">&lt; Back</RetroButton>
     </div>
 
     <div class="content-container">

@@ -1,7 +1,7 @@
 <template>
   <div class="art-gallery-page">
     <div class="back-button">
-      <RetroButton @click="$router.back()">< Home</RetroButton>
+      <RetroButton @click="$router.push('/stage-select')">&lt; Back</RetroButton>
     </div>
     <section class="hero-img">
       <img src="/art_gallery.webp" alt="heroimg" />

@@ -14,7 +14,7 @@
       </template>
     </section>
     <div class="buttons">
-      <RetroButton @click="$router.back()">&lt; Back</RetroButton>
+      <RetroButton @click="$router.push('/stage-select')">&lt; Back</RetroButton>
       <RetroButton :disabled="activeIndex === 0" @click="prev">Prev</RetroButton>
       <RetroButton :disabled="activeIndex === yoshImages.length - 1" @click="next">Next</RetroButton>
     </div>
