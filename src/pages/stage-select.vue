@@ -1,5 +1,5 @@
 <template>
-  <div class="stage-select">
+  <div class="stage-select" :class="{ 'is-selected': isSelected }">
     <div class="home-button">
       <RetroButton @click="$router.push('/')">< Menu</RetroButton>
     </div>
@@ -22,6 +22,11 @@
       <RetroButton @click="prev">Prev</RetroButton>
       <RetroButton @click="nextManually">Next</RetroButton>
       <RetroButton class="select-button" @click="select">{{ isSelected ? 'Deselect' : 'Select' }}</RetroButton>
+    </div>
+    <!-- Phones only (CSS): the selected card flies out of the ring to the top
+         half while the description slides up as a bottom sheet. -->
+    <div v-if="isSelected" class="hero-card" aria-hidden="true">
+      <img :src="characters[activeIndex].image" alt="" />
     </div>
     <div class="char-desc">
       <DialogCard
@@ -329,26 +334,108 @@
     }
   }
 
-  /* small screens: description shows as a straight, centered modal (same expand
-     animation as desktop/tablet, just without the angled rotateY). The selected
-     character card stays in place behind it (see SlideItem.vue); Deselect
-     closes it. 768px and up (tablet) keeps the desktop fly-out + angled card. */
+  /* Phones (below 768px): picking a character flies its card out of the ring to
+     the top half (.hero-card; the ring copy hides, see SlideItem.vue) and the
+     description slides up as a bottom sheet above the buttons. The ring dims
+     behind them. 768px and up (tablet) keeps the desktop fly-out + angled card. */
+  .hero-card {
+    display: none;
+  }
+
   @media (max-width: 767px) {
-    .char-desc {
-      right: auto;
-      bottom: auto;
+    .stage-select {
+      /* fixed sheet height; the hero card fills the space above it */
+      --sheet-height: 38vh;
+      --sheet-bottom: calc(var(--page-gutter) + 3rem);
+    }
+
+    .slider-container {
+      transition:
+        transform 1s ease-out,
+        filter 0.4s ease;
+    }
+
+    .is-selected .slider-container {
+      filter: brightness(0.35) blur(1px);
+    }
+
+    /* the name lives in the sheet's header while it's open */
+    .is-selected .char-name {
+      opacity: 0;
+    }
+
+    .hero-card {
+      --card-top: calc(var(--page-gutter) + 3.5rem);
+
+      display: block;
+      position: absolute;
+      z-index: 150;
+      top: var(--card-top);
       left: 50%;
-      top: 50%;
-      width: min(90vw, 500px);
+      /* 4:5 like the ring cards, as tall as the gap above the sheet allows */
+      height: calc(100vh - var(--card-top) - var(--sheet-bottom) - var(--sheet-height) - 1rem);
+      aspect-ratio: 4 / 5;
+      translate: -50% 0;
+      rotate: -4deg; /* the desktop fly-out's tilt */
+      padding: 3px;
+      background: linear-gradient(135deg, #000 0%, #333 50%, #000 100%);
+      clip-path: polygon(0% 0%, 90% 0%, 100% 10%, 100% 100%, 10% 100%, 0% 90%);
+      filter: drop-shadow(0 0 18px rgba(9, 255, 0, 0.35));
+      animation: hero-fly-out 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+    }
+
+    .hero-card img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      clip-path: inherit;
+    }
+
+    @keyframes hero-fly-out {
+      from {
+        opacity: 0;
+        scale: 0.55;
+        translate: -50% 35%;
+        rotate: 8deg;
+      }
+    }
+
+    .char-desc {
+      left: var(--page-gutter);
+      right: var(--page-gutter);
+      bottom: var(--sheet-bottom);
+      width: auto;
       height: auto;
-      max-height: 70vh;
-      transform: translate(-50%, -50%);
+      transform: none;
       z-index: 200;
     }
 
+    /* the sheet: full width, fixed height (text scrolls), slides up instead
+       of the dialog's grow-in */
     .char-desc :deep(.dialog-card) {
       max-width: 100%;
-      max-height: 70vh;
+      width: 100%;
+      height: var(--sheet-height);
+      max-height: none;
+      animation: sheet-up 0.35s ease-out both;
+    }
+
+    /* scrollbar track always shown (not only once the typewriter overflows),
+       with room under the last line so it scrolls fully clear of the Go row */
+    .char-desc :deep(.scrollbar.is-idle) {
+      visibility: visible;
+    }
+
+    .char-desc :deep(.body) {
+      padding-bottom: 1rem;
+    }
+
+    @keyframes sheet-up {
+      from {
+        opacity: 0;
+        transform: translateY(40%);
+      }
     }
   }
 
@@ -362,6 +449,12 @@
 
   /* mobile: mirrors --breakpoint-mobile */
   @media (max-width: 480px) {
+    /* smaller sheet text so more of the description shows (the name and Go
+       scale with it) */
+    .char-desc :deep(.dialog-card) {
+      font-size: 0.85rem;
+    }
+
     .char-name {
       --scramble-font-size: clamp(24px, 9vw, 40px);
       --scramble-letter-spacing: 0.03rem;

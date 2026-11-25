@@ -14,9 +14,22 @@
         :text="name"
       />
     </header>
+    <!-- The description scrolls in .body; the bar beside it is our own (not the
+         browser's) so it shows and can be dragged on touch screens too. -->
     <section>
-      <TypeWriter class="type-writer" v-if="isOpen" :delay="1000" :speed="10" :text="desc" />
-      <slot></slot>
+      <div ref="body" class="body" @scroll="syncBar">
+        <div ref="content">
+          <TypeWriter class="type-writer" v-if="isOpen" :delay="1000" :speed="10" :text="desc" />
+          <slot></slot>
+        </div>
+      </div>
+      <div class="scrollbar" :class="{ 'is-idle': !bar.overflowing }" @pointerdown="jumpTo">
+        <div
+          class="thumb"
+          :style="{ height: `${bar.thumbHeight}px`, transform: `translateY(${bar.thumbTop}px)` }"
+          @pointerdown.stop="startDrag"
+        ></div>
+      </div>
     </section>
     <!-- The card's only CTA: show it highlighted and focused on open, so Enter goes. -->
     <RetroButton ref="cta" selected @click.stop="$emit('go-to-stage')" v-if="isDisabled ? false : size !== 'sm'">
@@ -26,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-  import { nextTick, ref, watch } from 'vue';
+  import { nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue';
   import TypeWriter from './TypeWriter.vue';
   import RetroButton from './RetroButton.vue';
   const props = withDefaults(
@@ -58,6 +71,70 @@
     },
     { immediate: true }
   );
+
+  // --- Custom scrollbar for .body ---
+  const body = ref<HTMLElement | null>(null);
+  const content = ref<HTMLElement | null>(null);
+  const bar = reactive({ overflowing: false, thumbHeight: 0, thumbTop: 0 });
+  const MIN_THUMB = 24;
+
+  // the track runs the full height of the scroll area
+  const trackHeight = () => body.value?.clientHeight ?? 0;
+
+  function syncBar() {
+    const el = body.value;
+    if (!el) return;
+    const scrollable = el.scrollHeight - el.clientHeight;
+    bar.overflowing = scrollable > 1;
+    const track = trackHeight();
+    bar.thumbHeight = Math.max(MIN_THUMB, (track * el.clientHeight) / Math.max(el.scrollHeight, 1));
+    bar.thumbTop = scrollable > 0 ? ((track - bar.thumbHeight) * el.scrollTop) / scrollable : 0;
+  }
+
+  // drag the thumb: map pointer travel along the track to scroll distance
+  function startDrag(event: PointerEvent) {
+    const el = body.value;
+    if (!el) return;
+    const thumb = event.currentTarget as HTMLElement;
+    // keep receiving moves when the finger slides off the thin thumb
+    try {
+      thumb.setPointerCapture(event.pointerId);
+    } catch {
+      /* pointer already gone; the move/up listeners still work */
+    }
+    const startY = event.clientY;
+    const startScroll = el.scrollTop;
+    const ratio = (el.scrollHeight - el.clientHeight) / Math.max(trackHeight() - bar.thumbHeight, 1);
+    const move = (e: PointerEvent) => {
+      el.scrollTop = startScroll + (e.clientY - startY) * ratio;
+    };
+    const end = () => {
+      thumb.removeEventListener('pointermove', move);
+      thumb.removeEventListener('pointerup', end);
+      thumb.removeEventListener('pointercancel', end);
+    };
+    thumb.addEventListener('pointermove', move);
+    thumb.addEventListener('pointerup', end);
+    thumb.addEventListener('pointercancel', end);
+  }
+
+  // tap the track: center the thumb there
+  function jumpTo(event: PointerEvent) {
+    const el = body.value;
+    if (!el) return;
+    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    const t = (event.clientY - rect.top - bar.thumbHeight / 2) / Math.max(rect.height - bar.thumbHeight, 1);
+    el.scrollTop = Math.min(1, Math.max(0, t)) * (el.scrollHeight - el.clientHeight);
+  }
+
+  // the typewriter grows the text, and the card resizes as it opens
+  let observer: ResizeObserver | undefined;
+  onMounted(() => {
+    observer = new ResizeObserver(syncBar);
+    if (content.value) observer.observe(content.value);
+    if (body.value) observer.observe(body.value);
+  });
+  onBeforeUnmount(() => observer?.disconnect());
 </script>
 
 <style scoped>
@@ -120,45 +197,70 @@
     flex: 0 0 auto;
   }
 
-  /* Content Section: the only scrollable region. min-height: 0 lets this flex
-     item shrink below its content so overflow-y actually scrolls. */
+  /* Content section: the only scrollable region (header and Go stay fixed).
+     min-height: 0 lets these flex items shrink so .body actually scrolls. */
   .dialog-card > section {
     flex: 1 1 auto;
     min-height: 0;
-    overflow-y: auto;
-    /* breathing room between the text and the scrollbar */
-    padding-right: 0.5rem;
     display: flex;
-    flex-direction: column;
   }
 
-  /* Pixel scrollbar: hard-edged bevel blocks in the Go button's blue. Styling
-     ::-webkit-scrollbar also opts out of macOS overlay scrollbars, so it stays
-     visible whenever the content overflows. Don't add scrollbar-color/width
-     here: in Chromium they override these pseudo-elements. */
-  .dialog-card ::-webkit-scrollbar {
-    width: 12px;
+  .body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain; /* a flick at the end doesn't scroll the page */
+    scrollbar-width: none; /* the .scrollbar below replaces the native one */
   }
-  .dialog-card ::-webkit-scrollbar-track {
+  .body::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Pixel scrollbar: hard-edged bevel blocks in the Go button's blue. Shown only
+     while the text overflows (.is-idle hides it; stage-select's phone sheet
+     keeps the track showing). */
+  .scrollbar {
+    position: relative;
+    flex: none;
+    width: 12px;
+    margin: 0 8px 0 8px; /* gap from the text, and off the card's edge */
     background: rgba(0, 0, 0, 0.6);
     box-shadow: inset 2px 0 0 #404040;
+    touch-action: none; /* dragging it shouldn't scroll the page */
+    cursor: pointer;
   }
-  .dialog-card ::-webkit-scrollbar-thumb {
+
+  /* wider invisible hit area for fingers */
+  .scrollbar::before {
+    content: '';
+    position: absolute;
+    inset: 0 -10px;
+  }
+
+  .scrollbar.is-idle {
+    visibility: hidden;
+  }
+
+  .thumb {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    box-sizing: border-box;
     background: #00aaff;
     border: 2px solid black;
-    border-radius: 0;
     box-shadow:
       inset 2px 2px 0 #ccf2fd,
       inset -2px -2px 0 #0067a3;
+    cursor: grab;
   }
-  .dialog-card ::-webkit-scrollbar-thumb:hover {
+
+  .thumb:hover {
     background: #47c2ff;
   }
-  /* Firefox has no scrollbar pseudo-elements; closest match. */
-  @supports not selector(::-webkit-scrollbar) {
-    .dialog-card > section {
-      scrollbar-color: #00aaff rgba(0, 0, 0, 0.6);
-    }
+
+  .scrollbar.is-idle .thumb {
+    display: none;
   }
 
   .dialog-card.size-sm.is-full-size {
@@ -210,9 +312,15 @@
     /* room for the selected bracket (inset -6px) inside the card's overflow clip */
     margin-right: 1rem;
   }
-  @media (max-width: 768px) {
-    section .type-writer {
-      overflow: auto;
+  /* phones: tighter Go button so the sheet's text keeps more room */
+  @media (max-width: 767px) {
+    .retro-button .type-writer {
+      margin: 4px;
     }
+  }
+
+  /* long words (accomplishments.) wrap instead of scrolling sideways in narrow cards */
+  section .type-writer {
+    overflow-wrap: anywhere;
   }
 </style>
