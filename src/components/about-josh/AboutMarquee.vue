@@ -261,4 +261,21 @@
       font-size: 0.78rem;
     }
   }
+
+  /* Phones: two wide columns that fill the screen (the rest hide) instead of
+     five narrow ones, so cards read as two clear rotating columns and wider
+     cards wrap into fewer, shorter lines. Inline padding keeps both columns
+     on screen after the tilt. */
+  @media (max-width: 480px) {
+    .about-marquee__stage {
+      padding: 2rem 12%;
+      transform: rotateX(14deg) rotateY(-8deg) rotateZ(5deg) scale(1.05);
+    }
+    .about-marquee__col {
+      flex-basis: 0;
+    }
+    .about-marquee__col:nth-child(n + 3) {
+      display: none;
+    }
+  }
 </style>

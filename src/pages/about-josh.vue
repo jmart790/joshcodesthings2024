@@ -264,6 +264,29 @@
     }
   }
 
+  /* Phones: raise the earth to sit midway between the sun and the moon's horizon */
+  @media (max-width: 480px) and (orientation: portrait) {
+    .about-me-page__planet--earth {
+      bottom: 29vh;
+    }
+  }
+
+  /* Phones: the desktop shadow is sized in rem, so it dwarfed the much smaller
+     figure. Here it's a flat ellipse under his feet, sized off the figure's
+     width (cqi). */
+  @media (max-width: 480px) {
+    .about-me-page__mirror-man-wrap {
+      container-type: inline-size;
+    }
+    .about-me-page__mirror-man-wrap::after {
+      left: 12%;
+      right: 14%;
+      bottom: 1cqi;
+      height: 14cqi;
+      transform: none;
+    }
+  }
+
   @keyframes hover-sun {
     0%,
     100% {
