@@ -86,13 +86,14 @@
   }
   @media (max-width: 580px) {
     .slider {
-      left: 10%;
+      left: calc(50% - 152px); /* even space from Yosh to the left wall and the active card to the right */
       top: 15%;
       --active-rotate-y-adjust: -9deg;
     }
   }
   @media (max-width: 425px) {
     .slider {
+      left: calc(50% - 143px); /* the -10deg turn moves the card right */
       --active-rotate-y-adjust: -10deg;
     }
   }
