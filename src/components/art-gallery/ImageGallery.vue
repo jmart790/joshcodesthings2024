@@ -421,10 +421,11 @@
   /* --- Control bar: a Mega Man X style life gauge on the left, from under the
      back button down to just above the standing girl (--girl-top). Arrows sit
      in the caps; the cells drain from the top as you walk the hallway, and the
-     pink pointer is the draggable tracker. --- */
+     blue pointer is the draggable tracker. Colors come from the art girl:
+     pink, yellow, white, black. --- */
   .gallery-bar {
     --thumb: 6px; /* tracker thickness along the gauge */
-    --cell: #f8d870;
+    --pink: #ff5fa2;
 
     position: absolute;
     left: var(--page-gutter);
@@ -437,20 +438,28 @@
     align-items: center;
     gap: 4px;
     padding: 6px 4px;
-    /* casing: black outline, steel-blue rim, dark well */
-    background: #1b1b2f;
-    border: 2px solid #000;
-    border-radius: 8px 8px 3px 3px;
+    /* casing: white with a pink outline, blush rim, hard pixel drop shadow */
+    background: #fff;
+    border: 3px solid var(--pink);
+    border-radius: 10px 10px 4px 4px;
     box-shadow:
-      inset 0 0 0 2px #8fa0c0,
-      inset 0 0 0 4px #2c3350,
-      2px 2px 0 #000;
+      inset 0 0 0 2px #ffd6ea,
+      3px 3px 0 #000;
   }
 
   /* < and > turned to point up and down (the whole button: its gradient text
      doesn't paint onto a separately rotated child) */
-  .gallery-bar__step {
+  .gallery-bar .gallery-bar__step {
     rotate: 90deg;
+    /* pink in place of RetroButton's blue */
+    background: linear-gradient(to bottom, #ff8cc6 0%, #ff5fa2 50%, #ff3d8b 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    filter: drop-shadow(1px 1px 0 #ffd6ea);
+  }
+
+  .gallery-bar .gallery-bar__step:disabled {
+    opacity: 0.35;
   }
 
   .gallery-bar__track {
@@ -460,13 +469,13 @@
     container-type: size;
   }
 
-  /* Cells: 4px bars on a 6px pitch, anchored to the bottom so the empty and
-     full layers line up. Full cells fill from the tracker down. */
+  /* Cells: 9px bars on a 12px pitch, anchored to the bottom so the empty and
+     full layers line up. Full (yellow) cells fill from the tracker down. */
   .gallery-bar__gauge {
     position: absolute;
     inset: 0 6px;
     border: 2px solid #000;
-    background: repeating-linear-gradient(to top, #3a3a52 0 4px, #000 4px 6px) bottom / 100% 6px;
+    background: repeating-linear-gradient(to top, #ffc2df 0 9px, #000 9px 12px) bottom / 100% 12px;
   }
 
   .gallery-bar__gauge::after {
@@ -476,12 +485,12 @@
     top: calc(var(--thumb) / 2 + var(--progress) * (100% - var(--thumb)));
     background: repeating-linear-gradient(
         to top,
-        #b08a30 0 1px,
-        var(--cell) 1px 3px,
-        #fff2b0 3px 4px,
-        #000 4px 6px
+        #e0a800 0 2px,
+        #ffd23f 2px 7px,
+        #fff3a8 7px 9px,
+        #000 9px 12px
       )
-      bottom / 100% 6px;
+      bottom / 100% 12px;
   }
 
   /* lies along the track's height: rotated 90deg about its top-left corner,
@@ -518,23 +527,23 @@
     background: transparent;
   }
 
-  /* tracker: a pink pointer across the full gauge width */
+  /* tracker: a blue pointer across the full gauge width */
   .gallery-bar__range::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: var(--thumb);
     height: 100%;
-    background: #ff0055;
+    background: #2fa8ff;
     border: 1px solid #000;
     border-radius: 0;
-    box-shadow: 0 0 6px rgba(255, 0, 85, 0.8);
+    box-shadow: 1px 1px 0 #000;
   }
   .gallery-bar__range::-moz-range-thumb {
     width: var(--thumb);
     height: 100%;
-    background: #ff0055;
+    background: #2fa8ff;
     border: 1px solid #000;
     border-radius: 0;
-    box-shadow: 0 0 6px rgba(255, 0, 85, 0.8);
+    box-shadow: 1px 1px 0 #000;
   }
 
   .gallery-bar__range:focus-visible {
@@ -559,15 +568,15 @@
     top: 0;
     width: 2px;
     height: 5px;
-    background: #8fa0c0;
+    background: #ffb6d9;
   }
 
   .gallery-bar__tick--exit::before {
-    background: #fff;
+    background: #ffcf3f;
   }
 
   .gallery-bar__tick.is-current::before {
-    background: #ff0055;
+    background: #ff3d8b;
   }
 
   /* Portrait: the background is cropped around its center (art-gallery.vue),
