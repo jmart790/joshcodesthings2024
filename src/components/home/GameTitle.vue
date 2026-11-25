@@ -403,6 +403,39 @@
     }
   }
 
+  /* Phones: the 720px title (all fixed px) is ~405px wide, wider than the screen.
+     Scale the whole composition down around its visual center, which sits 200px
+     into the header box (the gold X hangs past its right edge). */
+  @media (max-width: 480px) {
+    header {
+      transform-origin: 200px 50%;
+      scale: 0.86;
+    }
+  }
+  @media (max-width: 375px) {
+    header {
+      scale: 0.8;
+    }
+  }
+  @media (max-width: 340px) {
+    header {
+      scale: 0.7;
+    }
+  }
+
+  /* Phones held sideways: wide enough for the 1200px-tier title (72px) but too
+     short for it; the gold X rose off the top. Scale it around its visual
+     center (328px, 30px into the header box) and tighten the spacing. */
+  @media (max-height: 500px) and (orientation: landscape) {
+    header {
+      --title-margin-block: 0 0.5rem;
+      --title-shift-y: 40px;
+
+      transform-origin: 328px 30px;
+      scale: 0.55;
+    }
+  }
+
   /* short-screen: mirrors --breakpoint-short-screen */
   @media (max-height: 620px) {
     header {

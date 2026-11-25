@@ -232,11 +232,34 @@
 
   /* mobile: mirrors --breakpoint-mobile */
   @media (max-width: 480px) {
+    .container {
+      --cta-button-font-size: 18px;
+    }
+
+    /* 44px touch rows: 18px text + 13px margin above and below; the row gap
+       (used to place the character) matches the two margins */
     .menu {
       --character-height: 112px;
       --character-left: -76%;
       --wave-start: -68%;
       --wave-end: 330%;
+      --button-margin-block: 13px;
+      --menu-row-gap: 26px;
+    }
+
+    /* the bigger first-row margin (13px vs 8px) pushed START down; drop the
+       character and wave by the same 5px so they still line up with it */
+    .character-image,
+    .wave-image {
+      top: 5px;
+    }
+
+    /* stretch each button's tap area over its margins without changing its look
+       (the selected brackets still hug the text) */
+    .menu :deep(.retro-button)::before {
+      content: '';
+      position: absolute;
+      inset: -13px -16px;
     }
   }
 
