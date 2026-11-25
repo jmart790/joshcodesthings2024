@@ -27,7 +27,7 @@ export const yoshDialogue = [
   'You’re not off the hook yet, History-Man. I need more!',
   "Alright, you've told me about his recent exploits, but where did Josh start in tech?",
   'That’s some solid tech experience. But what built that foundation?',
-  'You’ve given me bits and pieces, but I need the full picture. What’s Josh’s story, History-Man? Why should anyone hire him?'
+  'You’ve given me bits and pieces, but I need the full picture. What’s Josh’s story, History-Man? Why should anyone want to work with him?'
 ];
 
 export const historyManDialogue = [
