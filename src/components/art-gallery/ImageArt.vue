@@ -109,17 +109,31 @@
   }
 
   /* Portrait: the art sits right of center (aimed down the hallway), so mirror
-   desktop's label to the left side, outside the frame. */
-  @media (orientation: portrait) {
-    .art-info {
-      left: auto;
-      right: 80%;
-      text-align: right;
-      transform: translateY(-150%) translateX(-20px);
-    }
-
-    .art-info.visible {
-      transform: translateY(-150%) translateX(-50%);
-    }
+   desktop's label to the left side, just outside the frame. Capped width and
+   wrapping keep long names (Master Splinter) on screen. */
+@media (orientation: portrait) {
+  .art-info {
+    left: auto;
+    right: 100%;
+    width: max-content;
+    max-width: 60%;
+    text-align: right;
+    transform: translateY(-50%) translateX(0);
   }
+
+  .art-info.visible {
+    transform: translateY(-50%) translateX(-24px);
+  }
+
+  .art-name,
+  .art-desc {
+    white-space: normal;
+  }
+
+  /* longest single word (MICHELANGELO) must fit the 60% cap unbroken */
+  .art-name {
+    font-size: 2.25rem;
+    letter-spacing: 3px;
+  }
+}
 </style>

@@ -1,16 +1,19 @@
 <script setup lang="ts">
   defineProps<{
-    themeOne: string;
-    themeTwo: string;
+    themeOne?: string;
+    themeTwo?: string;
   }>();
 </script>
 
 <template>
   <div class="gallery-title-card frame">
     <div class="title-content">
-      <span class="theme">{{ themeOne }}</span>
-      <span class="x">X</span>
-      <span class="theme">{{ themeTwo }}</span>
+      <!-- Default: the theme title. The gallery's exit card passes its own content. -->
+      <slot>
+        <span class="theme">{{ themeOne }}</span>
+        <span class="x">X</span>
+        <span class="theme">{{ themeTwo }}</span>
+      </slot>
     </div>
   </div>
 </template>
@@ -29,6 +32,7 @@
     box-sizing: border-box;
     image-rendering: pixelated;
     padding: 2rem;
+    container-type: inline-size; /* text below sizes off the card's width */
   }
 
   .title-content {
@@ -43,8 +47,10 @@
     text-align: center;
   }
 
+  /* Press Start glyphs are 1em wide; the longest word (SLAYER) is 6 chars,
+     so 16cqi keeps it inside the card at any width, capped at desktop's 8rem. */
   .theme {
-    font-size: 8rem;
+    font-size: min(8rem, 16cqi);
     background: linear-gradient(to bottom, #02a7f9 0%, #47c2ff 50%, #00aaff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -52,7 +58,7 @@
   }
 
   .x {
-    font-size: 4rem;
+    font-size: min(4rem, 8cqi);
     color: #ffcc00; /* Yellow X */
     filter: drop-shadow(2px 2px 0px black);
   }

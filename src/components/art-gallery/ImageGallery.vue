@@ -4,11 +4,27 @@
       <div class="wrap">
         <figure class="girl"></figure>
 
+        <!-- Dims the hallway and lights the piece at viewing distance (spotStyle). -->
+        <div class="spotlight" :style="spotStyle" aria-hidden="true"></div>
+
         <div class="container">
           <div class="wrapper">
             <ul class="list">
-              <li v-for="(item, index) in flatItems" :key="index" class="item" :style="getItemStyle(index)">
+              <li
+                v-for="(item, index) in flatItems"
+                :key="index"
+                :ref="(el) => (itemEls[index] = el)"
+                class="item"
+                :class="{ 'item--art': item.type === 'image' }"
+                :style="getItemStyle(index)"
+                @click="item.type === 'image' && openViewer(index)"
+              >
                 <GalleryTitleCard v-if="item.type === 'title'" :theme-one="item.themeOne" :theme-two="item.themeTwo" />
+                <GalleryTitleCard v-else-if="item.type === 'exit'">
+                  <span class="exit-title">Thanks for visiting</span>
+                  <RetroButton @click.stop="backToTop">Back to top</RetroButton>
+                  <RetroButton @click.stop="$router.push('/stage-select')">Stage select</RetroButton>
+                </GalleryTitleCard>
                 <ImageArt
                   v-else
                   :src="item.img"
@@ -21,8 +37,60 @@
             </ul>
           </div>
         </div>
+
+        <!-- Vertical scrubber above the standing girl, synced to the gallery's
+             scroll: shows where you are; drag it, tap the track, or step with
+             the arrows to move. Tapping a piece opens the viewer. -->
+        <nav class="gallery-bar" aria-label="Gallery navigation">
+          <RetroButton
+            class="gallery-bar__step"
+            small
+            :disabled="currentIndex === 0"
+            aria-label="Previous piece"
+            @click="stepTo(-1)"
+          >
+            &lt;
+          </RetroButton>
+          <div class="gallery-bar__track">
+            <!-- life-gauge cells: full below the tracker, drained above it -->
+            <div class="gallery-bar__gauge" :style="{ '--progress': scrollProgress }"></div>
+            <!-- a horizontal range turned 90deg: native vertical sliders aren't reliable everywhere -->
+            <div class="gallery-bar__rail">
+              <!-- marks only: tapping the track jumps the thumb (and scroll) there -->
+              <template v-for="(item, index) in flatItems" :key="index">
+                <span
+                  v-if="item.type !== 'title'"
+                  class="gallery-bar__tick"
+                  :class="[`gallery-bar__tick--${item.type}`, { 'is-current': index === currentIndex }]"
+                  :style="{ left: `calc(${viewProgress(index)} * (100% - var(--thumb)))` }"
+                ></span>
+              </template>
+              <input
+                class="gallery-bar__range"
+                type="range"
+                min="0"
+                max="1000"
+                :value="Math.round(scrollProgress * 1000)"
+                aria-label="Gallery position"
+                :aria-valuetext="currentLabel"
+                @input="scrollToProgress($event.target.value / 1000, 'instant')"
+              />
+            </div>
+          </div>
+          <RetroButton
+            class="gallery-bar__step"
+            small
+            :disabled="currentIndex === flatItems.length - 1"
+            aria-label="Next piece"
+            @click="stepTo(1)"
+          >
+            &gt;
+          </RetroButton>
+        </nav>
       </div>
     </div>
+
+    <GalleryViewer ref="viewer" :pieces="pieces" @close="onViewerClose" />
   </section>
 </template>
 
@@ -30,6 +98,8 @@
   import { onMounted, onUnmounted, ref, computed } from 'vue';
   import ImageArt from './ImageArt.vue';
   import GalleryTitleCard from './GalleryTitleCard.vue';
+  import GalleryViewer from './GalleryViewer.vue';
+  import RetroButton from '../shared/RetroButton.vue';
   import { galleryImages } from '../../constants/galleryImages';
 
   const flatItems = computed(() => {
@@ -47,6 +117,8 @@
         });
       });
     });
+    // Exit card: the scroll ends with it resting at viewing distance.
+    items.push({ type: 'exit' });
     return items;
   });
 
@@ -65,23 +137,49 @@
     scaleReduction: 0 // Disable index-based shrinking
   };
 
+  // Depth where a piece is "being viewed": just past where its label appears
+  // (getIsInfoVisible), and where the last item rests when the scroll ends.
+  const VIEW_Z = -2000;
+
   const galleryRoot = ref(null);
   const scrollProgress = ref(0); // 0 to 1
 
+  const baseZ = (index) => config.initialZPosition + index * config.imageZSpacing;
+  // Z travelled over the whole scroll: brings the last item to VIEW_Z.
+  const zTravel = computed(() => baseZ(flatItems.value.length - 1) - VIEW_Z);
+
   function calculateTotalZ(index) {
-    const startZ = config.initialZPosition;
-
-    // Calculate total distance needed to bring the last item to the front (Z=0)
-    // We add a buffer (e.g. 1 extra spacing) to ensure it clears nicely
-    const totalItems = flatItems.value.length;
-    const lastItemZ = startZ + (totalItems - 1) * config.imageZSpacing;
-    const zScrollTotal = -(lastItemZ + 2000); // 2000px buffer to scroll past the last item
-
-    const zOffset = scrollProgress.value * zScrollTotal;
-
-    const baseZ = startZ + index * config.imageZSpacing;
-    return baseZ + zOffset;
+    return baseZ(index) - scrollProgress.value * zTravel.value;
   }
+
+  // scroll progress (0-1) at which an item sits at VIEW_Z
+  function viewProgress(index) {
+    return Math.min(1, Math.max(0, (baseZ(index) - VIEW_Z) / zTravel.value));
+  }
+
+  // the item nearest viewing distance
+  const currentIndex = computed(() => {
+    let best = 0;
+    flatItems.value.forEach((_, i) => {
+      if (Math.abs(viewProgress(i) - scrollProgress.value) < Math.abs(viewProgress(best) - scrollProgress.value)) {
+        best = i;
+      }
+    });
+    return best;
+  });
+
+  const pieces = computed(() => flatItems.value.filter((item) => item.type === 'image'));
+  // position among the pieces (title/exit excluded), for the viewer and labels
+  const pieceNumber = (index) => flatItems.value.slice(0, index).filter((item) => item.type === 'image').length;
+
+  function itemLabel(index) {
+    const item = flatItems.value[index];
+    if (item.type === 'title') return `${item.themeOne} x ${item.themeTwo}`;
+    if (item.type === 'exit') return 'Exit';
+    return `${item.name} · ${pieceNumber(index) + 1}/${pieces.value.length}`;
+  }
+
+  const currentLabel = computed(() => itemLabel(currentIndex.value));
 
   function getIsInfoVisible(index) {
     const totalZ = calculateTotalZ(index);
@@ -112,7 +210,69 @@
         1 - index * config.scaleReduction
       )})`,
       opacity: opacity,
+      // invisible items (faded, or not yet arrived) must not catch taps meant for the one on view
+      'pointer-events': opacity > 0.05 ? 'auto' : 'none',
       'z-index': flatItems.value.length - index
+    };
+  }
+
+  // --- Scrolling to a position (control bar, exit card, viewer close) ---
+  function scrollToProgress(progress, behavior = 'smooth') {
+    const el = galleryRoot.value;
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top: top + progress * (el.offsetHeight - window.innerHeight), behavior });
+  }
+
+  const scrollToItem = (index) => scrollToProgress(viewProgress(index));
+
+  // the page top (plaza), not the gallery's start
+  const backToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  function stepTo(dir) {
+    const next = Math.min(flatItems.value.length - 1, Math.max(0, currentIndex.value + dir));
+    scrollToItem(next);
+  }
+
+  // --- Viewer ---
+  const viewer = ref(null);
+
+  function openViewer(index) {
+    viewer.value?.open(pieceNumber(index));
+  }
+
+  // land the hallway on the last piece viewed
+  function onViewerClose(pieceIndex) {
+    const index = flatItems.value.indexOf(pieces.value[pieceIndex]);
+    scrollToProgress(viewProgress(index), 'instant');
+  }
+
+  // --- Spotlight: follows the current piece's on-screen box ---
+  const itemEls = [];
+  const spot = ref({ x: 0, y: 0, r: 0, strength: 0 });
+
+  const spotStyle = computed(() => ({
+    '--spot-x': `${spot.value.x}px`,
+    '--spot-y': `${spot.value.y}px`,
+    '--spot-r': `${spot.value.r}px`,
+    opacity: spot.value.strength
+  }));
+
+  function updateSpot() {
+    const index = currentIndex.value;
+    const el = itemEls[index];
+    if (!el || flatItems.value[index].type !== 'image') {
+      spot.value = { ...spot.value, strength: 0 };
+      return;
+    }
+    const box = el.getBoundingClientRect();
+    // full strength at viewing distance, gone halfway to the next piece
+    const off = Math.abs(calculateTotalZ(index) - VIEW_Z);
+    spot.value = {
+      x: box.left + box.width / 2,
+      y: box.top + box.height / 2,
+      r: Math.max(box.width, box.height) / 2,
+      strength: Math.max(0, 1 - off / (config.imageZSpacing / 2))
     };
   }
 
@@ -120,24 +280,16 @@
     if (!galleryRoot.value) return;
 
     const rect = galleryRoot.value.getBoundingClientRect();
-    const windowHeight = window.innerHeight;
-    const elementHeight = rect.height;
+    // The sticky wrapper pins at top; the scrollable distance is elementHeight - windowHeight.
+    const progress = -rect.top / (rect.height - window.innerHeight);
+    scrollProgress.value = Math.min(1, Math.max(0, progress));
 
-    // Calculate how far we've scrolled into the element
-    // When rect.top is 0, we are at the start.
-    // When rect.bottom is windowHeight, we are at the end.
-    // Actually, we want sticky behavior.
-    // The sticky wrapper pins at top.
-    // The scrollable distance is elementHeight - windowHeight.
-
-    const scrolled = -rect.top;
-    const scrollableDistance = elementHeight - windowHeight;
-
-    let progress = scrolled / scrollableDistance;
-    progress = Math.min(1, Math.max(0, progress));
-
-    scrollProgress.value = progress;
+    // items ease their transform over 0.1s, so measure again once they settle
+    requestAnimationFrame(updateSpot);
+    clearTimeout(spotTimer);
+    spotTimer = setTimeout(updateSpot, 150);
   }
+  let spotTimer;
 
   onMounted(() => {
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -147,6 +299,7 @@
 
   onUnmounted(() => {
     window.removeEventListener('scroll', handleScroll);
+    clearTimeout(spotTimer);
   });
 </script>
 
@@ -154,6 +307,7 @@
   .image-gallery {
     --girl-width: 450px;
     --girl-height: 600px;
+    --girl-top: 30%; /* the control bar ends just above her */
     width: 100%;
     height: 500vh; /* Make component tall to allow scrolling */
     position: relative;
@@ -181,7 +335,7 @@
     width: var(--girl-width);
     height: var(--girl-height);
     bottom: 0%;
-    top: 30%;
+    top: var(--girl-top);
     position: absolute;
     transform: scaleX(-1);
     filter: drop-shadow(-2px 2px 6px black);
@@ -207,6 +361,15 @@
     transform: translateX(-50%) rotateX(359deg) rotateY(354deg) translateZ(226px);
   }
 
+  /* In 3D, these flat layers sit at depth 0, in front of the receding art, and
+     would swallow every tap. Only the items (pointer-events set inline by
+     visibility) take clicks. */
+  .container,
+  .wrapper,
+  .list {
+    pointer-events: none;
+  }
+
   .list {
     transform-style: preserve-3d;
     height: 100%;
@@ -227,6 +390,185 @@
       opacity 0.1s linear; /* Fast transition for scroll sync */
   }
 
+  .item--art {
+    cursor: zoom-in;
+  }
+
+  /* Exit card content (slotted into GalleryTitleCard, which is the size container) */
+  .exit-title {
+    font-size: min(3rem, 8cqi);
+    color: #ff0055;
+    filter: drop-shadow(3px 3px 0 black);
+  }
+
+  /* Dims the hallway around the piece on view and casts a warm light on it.
+     Sits under the art (.container paints later) and over the hallway/girl. */
+  .spotlight {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    background: radial-gradient(
+      circle at var(--spot-x) var(--spot-y),
+      rgba(255, 236, 210, 0.16) 0,
+      rgba(255, 236, 210, 0.05) calc(var(--spot-r) * 0.9),
+      rgba(0, 0, 0, 0.45) calc(var(--spot-r) * 1.6),
+      rgba(0, 0, 0, 0.6)
+    );
+  }
+
+  /* --- Control bar: a Mega Man X style life gauge on the left, from under the
+     back button down to just above the standing girl (--girl-top). Arrows sit
+     in the caps; the cells drain from the top as you walk the hallway, and the
+     pink pointer is the draggable tracker. --- */
+  .gallery-bar {
+    --thumb: 6px; /* tracker thickness along the gauge */
+    --cell: #f8d870;
+
+    position: absolute;
+    left: var(--page-gutter);
+    top: calc(var(--page-gutter) + 4rem);
+    /* her image has ~15% empty space above her head; stop 1rem above the head */
+    bottom: calc(100% - var(--girl-top) - var(--girl-height) * 0.15 + 1rem);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 4px;
+    /* casing: black outline, steel-blue rim, dark well */
+    background: #1b1b2f;
+    border: 2px solid #000;
+    border-radius: 8px 8px 3px 3px;
+    box-shadow:
+      inset 0 0 0 2px #8fa0c0,
+      inset 0 0 0 4px #2c3350,
+      2px 2px 0 #000;
+  }
+
+  /* < and > turned to point up and down (the whole button: its gradient text
+     doesn't paint onto a separately rotated child) */
+  .gallery-bar__step {
+    rotate: 90deg;
+  }
+
+  .gallery-bar__track {
+    position: relative;
+    flex: 1;
+    width: 28px;
+    container-type: size;
+  }
+
+  /* Cells: 4px bars on a 6px pitch, anchored to the bottom so the empty and
+     full layers line up. Full cells fill from the tracker down. */
+  .gallery-bar__gauge {
+    position: absolute;
+    inset: 0 6px;
+    border: 2px solid #000;
+    background: repeating-linear-gradient(to top, #3a3a52 0 4px, #000 4px 6px) bottom / 100% 6px;
+  }
+
+  .gallery-bar__gauge::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    top: calc(var(--thumb) / 2 + var(--progress) * (100% - var(--thumb)));
+    background: repeating-linear-gradient(
+        to top,
+        #b08a30 0 1px,
+        var(--cell) 1px 3px,
+        #fff2b0 3px 4px,
+        #000 4px 6px
+      )
+      bottom / 100% 6px;
+  }
+
+  /* lies along the track's height: rotated 90deg about its top-left corner,
+     then shifted right by its own thickness so it lands inside the track */
+  .gallery-bar__rail {
+    position: absolute;
+    top: 0;
+    left: 28px;
+    width: 100cqh;
+    height: 28px;
+    transform-origin: top left;
+    rotate: 90deg;
+  }
+
+  .gallery-bar__range {
+    -webkit-appearance: none;
+    appearance: none;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  /* invisible track: the gauge cells are the visual */
+  .gallery-bar__range::-webkit-slider-runnable-track {
+    height: 100%;
+    background: transparent;
+  }
+  .gallery-bar__range::-moz-range-track {
+    height: 100%;
+    background: transparent;
+  }
+
+  /* tracker: a pink pointer across the full gauge width */
+  .gallery-bar__range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: var(--thumb);
+    height: 100%;
+    background: #ff0055;
+    border: 1px solid #000;
+    border-radius: 0;
+    box-shadow: 0 0 6px rgba(255, 0, 85, 0.8);
+  }
+  .gallery-bar__range::-moz-range-thumb {
+    width: var(--thumb);
+    height: 100%;
+    background: #ff0055;
+    border: 1px solid #000;
+    border-radius: 0;
+    box-shadow: 0 0 6px rgba(255, 0, 85, 0.8);
+  }
+
+  .gallery-bar__range:focus-visible {
+    outline: 2px solid #ffcc00;
+    outline-offset: 2px;
+  }
+
+  /* One notch per piece on the casing beside the cells (the rail's top edge
+     is the track's right side after the turn); `left` is set inline. */
+  .gallery-bar__tick {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    margin-left: calc(var(--thumb) / 2);
+    pointer-events: none;
+  }
+
+  .gallery-bar__tick::before {
+    content: '';
+    position: absolute;
+    left: -1px;
+    top: 0;
+    width: 2px;
+    height: 5px;
+    background: #8fa0c0;
+  }
+
+  .gallery-bar__tick--exit::before {
+    background: #fff;
+  }
+
+  .gallery-bar__tick.is-current::before {
+    background: #ff0055;
+  }
+
   /* Portrait: the background is cropped around its center (art-gallery.vue),
      which puts the hallway's vanishing point right of center. Aim the
      perspective there so receding art travels down the hallway; the standing
@@ -240,10 +582,10 @@
     .image-gallery {
       --girl-width: 225px;
       --girl-height: 300px;
+      --girl-top: 50%;
     }
 
     .girl {
-      top: 50%;
       margin-left: var(--page-gutter);
     }
 
