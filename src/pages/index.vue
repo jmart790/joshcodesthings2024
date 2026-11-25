@@ -239,19 +239,21 @@
     /* 44px touch rows: 18px text + 13px margin above and below; the row gap
        (used to place the character) matches the two margins */
     .menu {
-      --character-height: 112px;
-      --character-left: -76%;
+      --character-height: 135px;
+      --character-left: -92%;
+      /* a row is the 18px text plus the button's 1px top and bottom padding */
+      --menu-item-height: calc(var(--button-font-size) + 2px);
       --wave-start: -68%;
       --wave-end: 330%;
       --button-margin-block: 13px;
       --menu-row-gap: 26px;
     }
 
-    /* the bigger first-row margin (13px vs 8px) pushed START down; drop the
-       character and wave by the same 5px so they still line up with it */
+    /* center the character and wave on the START row (they're shifted up by
+       half their height, then down a row per selected item) */
     .character-image,
     .wave-image {
-      top: 5px;
+      top: calc(var(--button-margin-block) + var(--menu-item-height) / 2);
     }
 
     /* stretch each button's tap area over its margins without changing its look
