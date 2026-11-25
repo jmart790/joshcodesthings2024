@@ -312,7 +312,12 @@
     /* room for the selected bracket (inset -6px) inside the card's overflow clip */
     margin-right: 1rem;
   }
-  /* phones: tighter Go button so the sheet's text keeps more room */
+  /* tighter Go button so the text keeps more room: tablets, then phones */
+  @media (max-width: 1024px) {
+    .retro-button .type-writer {
+      margin: 8px;
+    }
+  }
   @media (max-width: 767px) {
     .retro-button .type-writer {
       margin: 4px;
