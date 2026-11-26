@@ -33,9 +33,21 @@ export const yoshDialogue = [
 export const historyManDialogue = [
   'At Ford, Josh builds fast, polished web experiences with React, Next.js, and Vanilla JS. He is also mastering agentic AI workflows to speed engineering, reduce toil, and help teams ship better software faster.',
   'At Sion Central, Josh led front-end work on a Storybook design system, improved cross-team delivery, cut vulnerabilities from 57 to 2, migrated Webpack 4 to 5, and strengthened testing with Cypress.',
-  'At Juniper Market, Josh built Vue and Nuxt experiences that moved the business. He improved search performance by 136%, helped raise conversions by 23%, mentored developers, and shaped checkout UX.',
+  'At Andmore, Josh built Vue and Nuxt experiences that moved the business. He improved search performance by 136%, helped raise conversions by 23%, mentored developers, and shaped checkout UX.',
   'At Health Karma, Josh built Nuxt apps connecting providers and consumers. He handled complex healthcare data, partnered with design on UX, launched a static blog, and helped create a Vue Storybook system.',
   'At Claro, Josh began in tech as a Software QA Intern. He tested across staging environments, documented bugs clearly, and worked with engineers to troubleshoot issues before they reached users.',
   'Before tech, Josh served in the U.S. Navy as a Petty Officer Second Class. He led teams, moved 2,700 sailors daily, managed ordnance readiness, and built the discipline that still powers his work.',
   'There is the picture, Yosh. Josh blends front-end craft, design systems, testing, AI-assisted engineering, mentorship, and Navy-tested leadership. He raises the quality and velocity of any team he joins.'
+];
+
+/** Each slide's years, from the resume (no end = present). The last slide is
+ *  the summary, so it has none. */
+export const workHistoryYears: ({ start: number; end?: number } | null)[] = [
+  { start: 2023 }, // Ford
+  { start: 2023, end: 2023 }, // Sion
+  { start: 2021, end: 2022 }, // Andmore
+  { start: 2019, end: 2021 }, // Health Karma
+  { start: 2019, end: 2019 }, // Claro
+  { start: 2010, end: 2016 }, // U.S. Navy
+  null
 ];

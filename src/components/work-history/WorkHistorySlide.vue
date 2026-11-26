@@ -20,6 +20,8 @@
         size="sm"
         :is-name-blue="speaker === 'yosh'"
       />
+      <!-- the page's slide markers -->
+      <slot />
     </div>
     <picture
       class="slide-image left"
@@ -254,6 +256,81 @@
     align-self: start;
     width: 100%;
     margin-bottom: 1rem;
+    /* the box's row is its final height, so the markers under it stay put
+       while it expands open */
+    display: grid;
+    grid-template-rows: 32vh auto;
+    /* minmax(0, ...): the expand animation's 1000px width can't widen the column */
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Phones: the box starts under the Back button (top left), and every pose
+     stands the same height whatever its shape. Wide poses can't fit half the
+     screen at that height, so both figures share the full width, each pinned
+     to its own edge; wide poses meet in the middle and the speaker draws on
+     top. History Man's art has ~22% empty space above him, so his images are
+     taller to match. */
+  @media (max-width: 767px) {
+    .slide.cutscene {
+      --char-h: min(24vh, 52vw);
+
+      grid-template-areas:
+        'box box'
+        'chars chars';
+      padding-top: calc(var(--page-gutter) + 4rem);
+    }
+
+    .cutscene .slide-image.left {
+      grid-area: chars;
+      justify-content: flex-start;
+    }
+
+    .cutscene .slide-image.right {
+      grid-area: chars;
+      justify-content: flex-end;
+    }
+
+    .cutscene .slide-image.speaking {
+      z-index: 12;
+    }
+
+    .cutscene .slide-image img,
+    .cutscene .slide-image.left img,
+    .cutscene .slide-image.right img {
+      flex: none;
+      max-width: none;
+      max-height: none;
+      height: var(--char-h);
+    }
+
+    .cutscene .slide-image.right img {
+      height: calc(var(--char-h) * 1.28);
+    }
+
+    /* Yosh on the ground (not the mid-air slides 5 and 7): a little bigger, and
+       lifted so his feet line up with History Man's, whose art has ~12% empty
+       space under his feet vs Yosh's ~4% */
+    .cutscene .slide-image.left:not(.left-4):not(.left-6) {
+      margin-bottom: calc(var(--char-h) * 0.075);
+    }
+
+    .cutscene .slide-image.left:not(.left-4):not(.left-6) img {
+      height: calc(var(--char-h) * 1.1);
+    }
+
+    /* Slides 3, 4 and 7 have wide poses that crowd each other: let both
+       figures out into the side gutters, stopping 4px short of the screen edge */
+    .cutscene :is(.left-2, .left-3, .left-6, .right-2, .right-3, .right-6) {
+      /* stretch over the negative margins */
+      width: auto;
+      justify-self: stretch;
+      margin-inline: calc(4px - var(--page-gutter));
+    }
+
+    /* the last pose has less empty space above him */
+    .cutscene .slide-image.right-6 img {
+      height: calc(var(--char-h) * 1.11);
+    }
   }
 
   /* beats DialogCard's .size-sm caps (650px wide, 350px tall) */
