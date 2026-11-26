@@ -364,6 +364,15 @@
       --sheet-bottom: calc(var(--page-gutter) + 3rem);
     }
 
+    /* Prev / Next on the left, Select on the right */
+    .buttons {
+      left: var(--page-gutter);
+    }
+
+    .select-button {
+      margin-left: auto;
+    }
+
     .slider-container {
       transition:
         transform 1s ease-out,
