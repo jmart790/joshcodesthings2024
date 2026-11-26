@@ -59,6 +59,24 @@
   <path class="grid-line" d="M0,850 C250,675 750,675 1000,850" />
   <path class="grid-line" d="M0,900 C250,700 750,700 1000,900" />
   <path class="grid-line" d="M0,950 C250,725 750,725 1000,950" />
+  <!-- Extra horizontal lines past the top and bottom (like the vertical lines
+       past the sides). Only a tall screen's center strip shows their middles,
+       which would otherwise leave the top and bottom of the sphere bare. -->
+  <path class="grid-line grid-line--extra" d="M0,-50 C250,225 750,225 1000,-50" />
+  <path class="grid-line grid-line--extra" d="M0,-100 C250,200 750,200 1000,-100" />
+  <path class="grid-line grid-line--extra" d="M0,-150 C250,175 750,175 1000,-150" />
+  <path class="grid-line grid-line--extra" d="M0,-200 C250,150 750,150 1000,-200" />
+  <path class="grid-line grid-line--extra" d="M0,-250 C250,125 750,125 1000,-250" />
+  <path class="grid-line grid-line--extra" d="M0,-300 C250,100 750,100 1000,-300" />
+  <path class="grid-line grid-line--extra" d="M0,-350 C250,75 750,75 1000,-350" />
+  <path class="grid-line grid-line--extra" d="M0,1000 C250,750 750,750 1000,1000" />
+  <path class="grid-line grid-line--extra" d="M0,1050 C250,775 750,775 1000,1050" />
+  <path class="grid-line grid-line--extra" d="M0,1100 C250,800 750,800 1000,1100" />
+  <path class="grid-line grid-line--extra" d="M0,1150 C250,825 750,825 1000,1150" />
+  <path class="grid-line grid-line--extra" d="M0,1200 C250,850 750,850 1000,1200" />
+  <path class="grid-line grid-line--extra" d="M0,1250 C250,875 750,875 1000,1250" />
+  <path class="grid-line grid-line--extra" d="M0,1300 C250,900 750,900 1000,1300" />
+  <path class="grid-line grid-line--extra" d="M0,1350 C250,925 750,925 1000,1350" />
 </svg>
 </template>
 
@@ -67,5 +85,12 @@
     stroke: #c2c2c20e;
     stroke-width: 2;
     fill: none;
+  }
+
+  /* desktop/landscape shows the whole sphere, which these would clutter */
+  @media (orientation: landscape) {
+    .grid-line--extra {
+      display: none;
+    }
   }
 </style>

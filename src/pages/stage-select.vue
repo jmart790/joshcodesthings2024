@@ -221,6 +221,21 @@
     height: 200%;
   }
 
+  /* Portrait: the grid is a square SVG sized to the screen's width, which on a
+     tall screen left a small sphere with bare space above it. Size it off the
+     height instead, centered near Yosh's feet, so it fills the screen and he
+     still stands inside it. */
+  @media (orientation: portrait) {
+    .sphere-grid {
+      inset: auto;
+      top: 62%;
+      left: 50%;
+      width: 125vh;
+      height: 125vh;
+      translate: -50% -50%;
+    }
+  }
+
   .buttons {
     position: absolute;
     bottom: var(--page-gutter);
