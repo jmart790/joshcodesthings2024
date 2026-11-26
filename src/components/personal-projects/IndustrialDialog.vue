@@ -62,7 +62,7 @@
                 <source :src="`${project.video}.webm`" type="video/webm" />
                 <source :src="`${project.video}.mp4`" type="video/mp4" />
               </video>
-              <span class="video-expand-hint">Expand</span>
+              <span class="video-expand-hint"><span class="touch-only">Tap to </span>Expand</span>
             </button>
             <!-- Placeholder for screenshot -->
             <div v-else class="screenshot-placeholder">
@@ -166,8 +166,33 @@
     window.open(url, '_blank');
   }
 
+  // Phones: the frame can't get much bigger than the screen's width, so hand the
+  // video to the phone's own full-screen player instead (it fills the screen when turned sideways).
+  const phoneTouch = window.matchMedia('(max-width: 767px) and (pointer: coarse)');
+
+  async function openFullscreen(video: HTMLVideoElement) {
+    // iPhone Safari only supports full screen on the video itself, via its own API
+    const iosVideo = video as HTMLVideoElement & { webkitEnterFullscreen?: () => void };
+    if (!video.requestFullscreen && iosVideo.webkitEnterFullscreen) {
+      iosVideo.webkitEnterFullscreen();
+    } else {
+      // no orientation lock: it opens centered at full width in portrait, and
+      // turning the phone sideways fills the screen
+      await video.requestFullscreen();
+    }
+    video.play().catch(() => {});
+  }
+
   async function openModal() {
     const inline = inlineVideo.value;
+    if (inline && phoneTouch.matches) {
+      try {
+        await openFullscreen(inline);
+        return;
+      } catch {
+        /* full screen refused: fall back to the in-page view */
+      }
+    }
     inline?.pause();
     isModalOpen.value = true;
     modal.value?.showModal();
@@ -427,6 +452,40 @@
   .video-trigger:hover .video-expand-hint,
   .video-trigger:focus-visible .video-expand-hint {
     opacity: 1;
+  }
+
+  /* touch screens have no hover, so the hint always shows ("Tap to Expand") */
+  .touch-only {
+    display: none;
+  }
+  @media (hover: none) {
+    .video-expand-hint {
+      opacity: 1;
+    }
+    .touch-only {
+      display: inline;
+    }
+  }
+
+  /* Phones: thinner frame and the demo first, edge to edge on the blue screen,
+     so it gets as much of the narrow card as possible. The description takes
+     what's left below it and scrolls. */
+  @media (max-width: 767px) {
+    .industrial-dialog-card {
+      padding: 10px;
+    }
+    .inner-frame-border {
+      padding: 10px;
+    }
+    .screen-container {
+      padding: 1.25rem 0.75rem 0;
+    }
+    .project-screenshot-container {
+      order: -1;
+      width: calc(100% + 1.5rem);
+      margin-inline: -0.75rem;
+      border-inline: 0;
+    }
   }
 
   .video-trigger:focus-visible {
