@@ -158,4 +158,39 @@
       font-size: 2.25rem;
     }
   }
+
+  /* Phones: no room beside the art, so the bubble sits above it (clear of the
+     tape), as wide as the art, tail pointing down. */
+  @media (orientation: portrait) and (max-width: 767px) {
+    .art-info {
+      top: auto;
+      bottom: calc(100% + 28px);
+      left: 0;
+      right: 0;
+      width: auto;
+      max-width: none;
+      padding-inline: 0.8em;
+      text-align: center;
+      transform-origin: center bottom;
+      transform: translateY(16px) scale(0.6);
+    }
+
+    .art-info::before {
+      top: auto;
+      bottom: -14px;
+      left: 50%;
+      right: auto;
+      translate: -50% 0;
+      rotate: -45deg;
+    }
+
+    .art-info.visible {
+      transform: none;
+    }
+
+    /* MICHELANGELO fits the art's width unbroken */
+    .art-name {
+      font-size: 2rem;
+    }
+  }
 </style>

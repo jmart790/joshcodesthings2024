@@ -656,4 +656,18 @@
       bottom: 4vh;
     }
   }
+
+  /* Phones: a smaller girl (feet on the same spot) frees the left side, so the
+     art path shifts left and close-up pieces clear the right edge. */
+  @media (orientation: portrait) and (max-width: 767px) {
+    .image-gallery {
+      --girl-width: 165px;
+      --girl-height: 220px;
+      --girl-top: calc(50% + 80px);
+    }
+
+    .wrapper {
+      left: calc(50% + 3vh);
+    }
+  }
 </style>
