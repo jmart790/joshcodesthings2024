@@ -68,6 +68,27 @@
     }
   }
 
+  /* Phones: 3px rim, less padding for a wider list, and room under the last
+     track so it scrolls clear of the characters standing on the frame */
+  @media (max-width: 767px) {
+    .data-logs-section {
+      padding: 12px 10px 0;
+      box-shadow:
+        inset 0 0 40px rgba(0, 0, 0, 0.9),
+        inset 0 0 10px rgba(0, 0, 0, 0.8),
+        0 0 0 3px #555;
+    }
+
+    .logs-header {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .playlist {
+      padding-bottom: 80px;
+    }
+  }
+
   /* Rivets / Mechanical Details via Pseudo-elements */
   .data-logs-section::before,
   .data-logs-section::after {

@@ -46,7 +46,8 @@
       <div class="btn-group vol-group">
         <button class="retro-btn mini" @click="$emit('adjust-volume', -10)">-</button>
         <div class="vol-indicator">
-          <div v-for="n in 5" :key="n" class="vol-led" :class="{ active: currentVolume / 20 >= n }"></div>
+          <!-- one LED per volume step (the -/+ buttons move it by 10) -->
+          <div v-for="n in 10" :key="n" class="vol-led" :style="{ '--step': n }" :class="{ active: currentVolume / 10 >= n }"></div>
         </div>
         <button class="retro-btn mini" @click="$emit('adjust-volume', 10)">+</button>
       </div>
@@ -301,20 +302,107 @@
     align-items: center;
     gap: 4px;
   }
+  /* LEDs rise left to right: a ramp from quiet to loud */
   .vol-indicator {
     display: flex;
+    align-items: flex-end;
     gap: 1px;
+    height: 18px;
+    box-sizing: border-box;
     background: #000;
     padding: 2px;
     border: 1px solid #222;
   }
   .vol-led {
     width: 4px;
-    height: 8px;
+    height: calc(var(--step) * 10%);
     background: #333;
   }
   .vol-led.active {
     background: #0f0;
     box-shadow: 0 0 2px #0f0;
+  }
+
+  /* Phones: the full title (up to two lines), a full-width seek bar, then a
+     row of 44px-tall buttons: prev/play/next on the left, volume on the right. */
+  @media (max-width: 767px) {
+    .control-unit {
+      gap: 8px;
+      padding: 8px;
+    }
+
+    .display-panel {
+      height: auto;
+      align-items: flex-end;
+      gap: 8px;
+      padding: 6px 8px;
+    }
+
+    .info-row {
+      align-items: flex-start;
+      margin-right: 0;
+    }
+
+    .marquee-container {
+      white-space: normal;
+      mask-image: none;
+    }
+
+    .track-name {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      padding-inline: 0;
+      line-height: 1.3;
+    }
+
+    .control-deck {
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .slider-group {
+      order: -1;
+      flex-basis: 100%;
+      height: 32px;
+    }
+
+    .retro-slider::-webkit-slider-thumb {
+      height: 24px;
+      width: 14px;
+      margin-top: -11px;
+    }
+
+    .btn-group {
+      gap: 4px;
+    }
+
+    /* volume fills the rest of the row, set apart from the transport; the
+       meter stretches between -/+ at 3/4 of the buttons' height */
+    .vol-group {
+      flex: 1;
+      margin-left: 16px;
+    }
+
+    .vol-indicator {
+      flex: 1;
+      height: 30px;
+      gap: 2px;
+      padding: 3px;
+    }
+
+    .vol-led {
+      flex: 1;
+      width: auto;
+    }
+
+    /* square buttons, sized so the row fits a 375px phone with room for the meter */
+    .retro-btn,
+    .retro-btn.mini {
+      width: 40px;
+      height: 40px;
+    }
   }
 </style>

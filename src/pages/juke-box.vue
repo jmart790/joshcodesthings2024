@@ -185,9 +185,49 @@
       flex-direction: column;
     }
 
+    @media (max-width: 767px) {
+      .frame-content {
+        gap: 12px;
+        padding: 6px;
+        border-width: 2px;
+      }
+    }
+
     .mediaman-video,
     .yoshx-video {
       height: 150px;
+    }
+  }
+
+  /* Phones: Back at the top left like the other pages, and the thinner frame
+     ring (JukeboxFrame.vue) sits inside the gutter so the player gets the width.
+     The characters shrink and stand on the frame's bottom edge; the playlist
+     leaves room under its last track for them (MegaManPlaylist.vue). */
+  @media (max-width: 767px) {
+    .juke-box-page {
+      --frame-ring: 0px;
+
+      /* top: the Back button (46px) plus a gap above the 14px frame ring */
+      padding: calc(var(--page-gutter) + 4.5rem) var(--page-gutter) var(--page-gutter);
+    }
+
+    .back-button {
+      top: var(--page-gutter);
+      bottom: auto;
+    }
+
+    .mediaman-video,
+    .yoshx-video {
+      height: 96px;
+      bottom: -8px;
+    }
+
+    .mediaman-video {
+      transform: translateX(12%);
+    }
+
+    .yoshx-video {
+      transform: translateX(-16%);
     }
   }
 </style>

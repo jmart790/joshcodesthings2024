@@ -271,4 +271,13 @@
       aspect-ratio: 16 / 9;
     }
   }
+
+  /* Phones: a 3px rim instead of the 12px casing, so the video gets the width */
+  @media (max-width: 767px) {
+    .screen-section {
+      box-shadow:
+        inset 4px 4px 0 rgba(0, 0, 0, 0.5),
+        0 0 0 3px #555;
+    }
+  }
 </style>

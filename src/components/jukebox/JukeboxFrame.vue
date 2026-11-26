@@ -174,4 +174,33 @@
       font-size: clamp(12px, 3.2vw, 30px);
     }
   }
+
+  /* Phones: a thin case so the screens get the width, and a smaller, brighter
+     label that fits inside the panel. */
+  @media (max-width: 767px) {
+    .megaman-frame {
+      padding: 34px 8px 8px;
+      border-radius: 18px;
+      box-shadow: inset 3px 3px 0px rgba(255, 255, 255, 0.2), inset -3px -3px 0px rgba(0, 0, 0, 0.4), 0 0 0 3px #001020,
+        0 0 0 8px #5c5c70, 0 0 0 10px #333, 0 0 0 14px #707085, 10px 10px 30px rgba(0, 0, 0, 0.8);
+    }
+
+    .megaman-frame::before,
+    .megaman-frame::after {
+      display: none;
+    }
+
+    .corner-accent {
+      width: 120px;
+      height: 120px;
+    }
+
+    .frame-label {
+      top: 12px;
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: rgba(200, 235, 255, 0.75);
+      text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.6);
+    }
+  }
 </style>
