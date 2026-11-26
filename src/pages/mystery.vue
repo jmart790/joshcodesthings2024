@@ -16,11 +16,18 @@
         </div>
       </div>
 
-      <div class="arena" @pointermove="handlePointerMove">
-        <div class="center-line"></div>
-        <div class="paddle paddle--red" :style="{ top: `${(playerY / ARENA_HEIGHT) * 100}%` }"></div>
-        <div class="paddle paddle--blue" :style="{ top: `${(computerY / ARENA_HEIGHT) * 100}%` }"></div>
-        <div class="ball" :style="{ left: `${(ball.x / ARENA_WIDTH) * 100}%`, top: `${(ball.y / ARENA_HEIGHT) * 100}%` }"></div>
+      <!-- Phones turn the arena a quarter turn (CSS) so it plays vertically, red
+           at the bottom; the message sits outside it so it stays upright. -->
+      <div class="arena-frame">
+        <div class="arena" @pointermove="handlePointerMove">
+          <div class="center-line"></div>
+          <div class="paddle paddle--red" :style="{ top: `${(playerY / ARENA_HEIGHT) * 100}%` }"></div>
+          <div class="paddle paddle--blue" :style="{ top: `${(computerY / ARENA_HEIGHT) * 100}%` }"></div>
+          <div
+            class="ball"
+            :style="{ left: `${(ball.x / ARENA_WIDTH) * 100}%`, top: `${(ball.y / ARENA_HEIGHT) * 100}%` }"
+          ></div>
+        </div>
 
         <div v-if="gameState !== 'playing'" class="game-message">
           <h1>{{ gameState === 'won' ? 'YOU WIN' : gameState === 'lost' ? 'YOU LOSE' : 'PONG' }}</h1>
@@ -208,8 +215,11 @@
 
     const arena = event.currentTarget as HTMLElement;
     const rect = arena.getBoundingClientRect();
-    const scale = ARENA_HEIGHT / rect.height;
-    playerY.value = clamp((event.clientY - rect.top) * scale - PADDLE_HEIGHT / 2, 0, ARENA_HEIGHT - PADDLE_HEIGHT);
+    // On phones the arena is turned a quarter turn (taller than wide), so the
+    // paddles slide along the screen's x axis instead of its y.
+    const vertical = rect.height > rect.width;
+    const along = vertical ? (event.clientX - rect.left) / rect.width : (event.clientY - rect.top) / rect.height;
+    playerY.value = clamp(along * ARENA_HEIGHT - PADDLE_HEIGHT / 2, 0, ARENA_HEIGHT - PADDLE_HEIGHT);
   };
 
   onMounted(() => {
@@ -345,9 +355,13 @@
       0 0 1.2rem rgba(104, 221, 255, 0.8);
   }
 
+  .arena-frame {
+    position: relative;
+  }
+
   .game-message {
     position: absolute;
-    inset: 0;
+    inset: 4px; /* inside the arena's border */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -398,6 +412,38 @@
 
     .score strong {
       font-size: 1.7rem;
+    }
+  }
+
+  /* Phones: play vertically. The frame is the tall box; the arena keeps its
+     wide shape and game coordinates and is turned a quarter turn
+     counter-clockwise to fill it (red at the bottom, blue at the top). Sized
+     to leave room for the scoreboard and the Back button. */
+  @media (max-width: 767px) {
+    .pong-shell {
+      width: 100%;
+    }
+
+    .arena-frame {
+      container-type: size;
+      width: min(100%, calc((100vh - 13rem) * 520 / 900));
+      aspect-ratio: 520 / 900;
+      margin-inline: auto;
+    }
+
+    .arena {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      box-sizing: border-box;
+      width: 100cqh;
+      height: 100cqw;
+      translate: -50% -50%;
+      rotate: -90deg;
+    }
+
+    .game-message h1 {
+      font-size: clamp(1.5rem, 9vw, 3rem);
     }
   }
 </style>
