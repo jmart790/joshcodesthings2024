@@ -155,6 +155,9 @@
     }
   }
   .dialog-card {
+    /* space between the name and the description (smaller on small screens) */
+    --dialog-title-gap: 2rem;
+
     position: relative;
     background: black;
     color: white;
@@ -290,6 +293,7 @@
   }
 
   header .type-writer {
+    margin-bottom: 0;
     font-size: 125%;
     background: linear-gradient(to bottom, #fe9900 0%, #fe9900 25%, #f9e5bd 50%, #ff9900 100%);
     background-clip: text; /* Standard property */
@@ -324,8 +328,25 @@
     }
   }
 
+  /* Smaller text on small screens so more of the description shows; the
+     name (125%) scales with it. Every page's dialog box uses these sizes
+     (mirror --breakpoint-tablet and --breakpoint-mobile). */
+  @media (max-width: 720px) {
+    .dialog-card {
+      --dialog-title-gap: 0.75rem;
+
+      font-size: 0.9rem;
+    }
+  }
+  @media (max-width: 480px) {
+    .dialog-card {
+      font-size: 0.85rem;
+    }
+  }
+
   /* long words (accomplishments.) wrap instead of scrolling sideways in narrow cards */
   section .type-writer {
+    margin-top: var(--dialog-title-gap);
     overflow-wrap: anywhere;
   }
 </style>

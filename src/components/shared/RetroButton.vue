@@ -31,6 +31,14 @@
     -webkit-text-fill-color: transparent;
   }
 
+  /* phones and small tablets: same size as the stage select page's buttons
+     (mirrors --breakpoint-tablet); pages that size their own buttons win */
+  @media (max-width: 720px) {
+    .retro-button {
+      font-size: clamp(14px, 4vw, 20px);
+    }
+  }
+
   .retro-button.small {
     font-size: 14px; /* Maintain pixel look but smaller */
     margin: 0; /* consistent with inline context */

@@ -582,6 +582,27 @@
     }
   }
 
+  /* same text sizes as the shared dialog box (DialogCard.vue) on small
+     screens: body 0.9rem / 0.85rem, title 125% of that */
+  @media (max-width: 720px) {
+    .description-text {
+      font-size: 0.9rem;
+    }
+
+    .dialog-title {
+      font-size: 1.125rem;
+    }
+  }
+  @media (max-width: 480px) {
+    .description-text {
+      font-size: 0.85rem;
+    }
+
+    .dialog-title {
+      font-size: 1.0625rem;
+    }
+  }
+
   .screenshot-placeholder {
     color: #fff;
   }

@@ -454,22 +454,8 @@
     }
   }
 
-  /* mobile→tablet band: shrink the description card text slightly. font-size on
-     the card scales the header (125%) and Go button along with the body. */
-  @media (min-width: 481px) and (max-width: 720px) {
-    .char-desc :deep(.dialog-card) {
-      font-size: 0.9rem;
-    }
-  }
-
   /* mobile: mirrors --breakpoint-mobile */
   @media (max-width: 480px) {
-    /* smaller sheet text so more of the description shows (the name and Go
-       scale with it) */
-    .char-desc :deep(.dialog-card) {
-      font-size: 0.85rem;
-    }
-
     .char-name {
       --scramble-font-size: clamp(24px, 9vw, 40px);
       --scramble-letter-spacing: 0.03rem;
